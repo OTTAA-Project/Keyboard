@@ -32,11 +32,10 @@ class KeyWidget extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: selectedValue == text ? Colors.black : Colors.white,
-              fontSize: verticalSize * 0.04,
-              fontWeight: FontWeight.w700,
-              height: 1.0
-            ),
+                color: selectedValue == text ? Colors.black : Colors.white,
+                fontSize: verticalSize * 0.04,
+                fontWeight: FontWeight.w700,
+                height: 1.0),
           ),
         ),
       ),

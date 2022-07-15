@@ -217,6 +217,7 @@ class QwertyLayout extends StatelessWidget {
                           size: verticalSize * 0.2,
                         ),
                       ),
+
                       /// just a place holder
                       Opacity(
                         opacity: 0,
@@ -234,11 +235,27 @@ class QwertyLayout extends StatelessWidget {
                         ),
                       ),
                       //todo: 1st
-                      PredictionWidget(verticalSize: verticalSize, text: '1st', onTap: (){},),
+                      PredictionWidget(
+                        verticalSize: verticalSize,
+                        text: '1st',
+                        onTap: () {},
+                      ),
                       //todo: 2nd
-                      PredictionWidget(verticalSize: verticalSize, text: '2nd', onTap: (){},),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                        child: PredictionWidget(
+                          verticalSize: verticalSize,
+                          text: '2nd',
+                          onTap: () {},
+                        ),
+                      ),
                       //todo: 3rd
-                      PredictionWidget(verticalSize: verticalSize, text: '3rd', onTap: (){},),
+                      PredictionWidget(
+                        verticalSize: verticalSize,
+                        text: '3rd',
+                        onTap: () {},
+                      ),
                     ],
                   ),
                 ),
