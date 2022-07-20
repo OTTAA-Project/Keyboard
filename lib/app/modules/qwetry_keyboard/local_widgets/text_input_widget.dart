@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:provider/provider.dart';
 
 class TextInputWidget extends StatelessWidget {
   const TextInputWidget({
     Key? key,
     required this.height,
     required this.width,
+    required this.controller,
+    // required this.focusNode,
   }) : super(key: key);
 
   final double height, width;
-
+  final TextEditingController controller;
+  // final FocusNode focusNode;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -22,15 +27,18 @@ class TextInputWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextFormField(
+            // focusNode: focusNode,
+            controller: controller,
             decoration: const InputDecoration(
               border: InputBorder.none,
             ),
             cursorColor: Colors.white,
-            initialValue: 'Hello',
             style: TextStyle(
               fontSize: height * 0.023,
               color: Colors.white,
             ),
+            maxLines: 2,
+            enabled: false,
           ),
           //todo: add the callbacks for the functions
           Padding(
@@ -38,22 +46,28 @@ class TextInputWidget extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Icon(
-                  Icons.space_bar_outlined,
-                  size: height * 0.03,
-                  color: Colors.white,
+                IconWidget(
+                  height: height,
+                  onTap: () {
+                    context.read<QwertyLayoutProvider>().addSpace();
+                  },
+                  iconData: Icons.space_bar_outlined,
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: width * 0.02),
                   child: IconWidget(
                     height: height,
-                    onTap: () {},
+                    onTap: () {
+                      context.read<QwertyLayoutProvider>().deleteLastCharacter();
+                    },
                     iconData: Icons.backspace_outlined,
                   ),
                 ),
                 IconWidget(
                   height: height,
-                  onTap: () {},
+                  onTap: () async{
+                    await context.read<QwertyLayoutProvider>().deleteWholeSentence();
+                  },
                   iconData: Icons.delete,
                 ),
                 Padding(

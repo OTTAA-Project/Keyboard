@@ -3,6 +3,8 @@ import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_row_widg
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/prediction_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/text_input_widget.dart';
+import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:provider/provider.dart';
 
 class QwertyLayout extends StatelessWidget {
   const QwertyLayout({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class QwertyLayout extends StatelessWidget {
     final verticalSize = MediaQuery.of(context).size.height;
     final horizontalSize = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
@@ -26,8 +29,11 @@ class QwertyLayout extends StatelessWidget {
                 child: Column(
                   children: [
                     TextInputWidget(
+                      controller:
+                          context.watch<QwertyLayoutProvider>().qwertyController,
                       height: verticalSize,
                       width: horizontalSize,
+                      // focusNode: context.read<QwertyLayoutProvider>().focusNode,
                     ),
                     Padding(
                       padding:
@@ -47,7 +53,8 @@ class QwertyLayout extends StatelessWidget {
                           'o',
                           'p',
                         ],
-                        selectedValue: 'p',
+                        selectedValue:
+                            context.watch<QwertyLayoutProvider>().selectedString,
                       ),
                     ),
                     KeyRowWidget(
@@ -65,7 +72,8 @@ class QwertyLayout extends StatelessWidget {
                         'l',
                         ';',
                       ],
-                      selectedValue: 'p',
+                      selectedValue:
+                          context.watch<QwertyLayoutProvider>().selectedString,
                     ),
                     Padding(
                       padding:
@@ -85,7 +93,8 @@ class QwertyLayout extends StatelessWidget {
                           '.',
                           '?',
                         ],
-                        selectedValue: 'p',
+                        selectedValue:
+                            context.watch<QwertyLayoutProvider>().selectedString,
                       ),
                     ),
                     Row(
@@ -199,65 +208,62 @@ class QwertyLayout extends StatelessWidget {
               ),
               Expanded(
                 flex: 2,
-                child: Container(
-                  // color: Colors.white38,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: verticalSize * 0.2,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[700],
-                          borderRadius:
-                              BorderRadius.circular(verticalSize * 0.02),
-                        ),
-                        child: Icon(
-                          Icons.volume_up_sharp,
-                          color: Colors.white,
-                          size: verticalSize * 0.2,
-                        ),
+                child: Column(
+                  children: [
+                    Container(
+                      height: verticalSize * 0.2,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[700],
+                        borderRadius:
+                            BorderRadius.circular(verticalSize * 0.02),
                       ),
+                      child: Icon(
+                        Icons.volume_up_sharp,
+                        color: Colors.white,
+                        size: verticalSize * 0.2,
+                      ),
+                    ),
 
-                      /// just a place holder
-                      Opacity(
-                        opacity: 0,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: verticalSize * 0.03),
-                          child: KeyRowWidget(
-                            horizontalSize: horizontalSize,
-                            verticalSize: verticalSize,
-                            rowElements: const [
-                              '?',
-                            ],
-                            selectedValue: 'p',
-                          ),
-                        ),
-                      ),
-                      //todo: 1st
-                      PredictionWidget(
-                        verticalSize: verticalSize,
-                        text: '1st',
-                        onTap: () {},
-                      ),
-                      //todo: 2nd
-                      Padding(
+                    /// just a place holder
+                    Opacity(
+                      opacity: 0,
+                      child: Padding(
                         padding:
                             EdgeInsets.symmetric(vertical: verticalSize * 0.03),
-                        child: PredictionWidget(
+                        child: KeyRowWidget(
+                          horizontalSize: horizontalSize,
                           verticalSize: verticalSize,
-                          text: '2nd',
-                          onTap: () {},
+                          rowElements: const [
+                            '?',
+                          ],
+                          selectedValue: 'p',
                         ),
                       ),
-                      //todo: 3rd
-                      PredictionWidget(
+                    ),
+                    //todo: 1st
+                    PredictionWidget(
+                      verticalSize: verticalSize,
+                      text: '1st',
+                      onTap: () {},
+                    ),
+                    //todo: 2nd
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                      child: PredictionWidget(
                         verticalSize: verticalSize,
-                        text: '3rd',
+                        text: '2nd',
                         onTap: () {},
                       ),
-                    ],
-                  ),
+                    ),
+                    //todo: 3rd
+                    PredictionWidget(
+                      verticalSize: verticalSize,
+                      text: '3rd',
+                      onTap: () {},
+                    ),
+                  ],
                 ),
               ),
             ],
