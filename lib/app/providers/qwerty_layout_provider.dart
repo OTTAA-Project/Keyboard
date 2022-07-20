@@ -7,11 +7,26 @@ class QwertyLayoutProvider extends ChangeNotifier {
   String selectedString = '';
   final HttpClient httpClient = HttpClient();
 
-  void predictNextValue(String value) {
+  Future<void> predictNextValue(String value)async{
     qwertyController.text = qwertyController.text + value;
     print(qwertyController.text);
-
+await receivePredictedWords();
     notifyListeners();
+  }
+
+  Future<void> receivePredictedWords()async{
+    final ans = await httpClient.post(
+      /// change values after testing
+      data: {
+        "sentence": qwertyController.text,
+        "userName": "juanma",
+        "model": "test",
+        // "language": "es"
+      },
+      url:
+      'https://us-central1-questions-abd23.cloudfunctions.net/viterbi/predict',
+    );
+    print(ans.toString());
   }
 
   void addSpace() {

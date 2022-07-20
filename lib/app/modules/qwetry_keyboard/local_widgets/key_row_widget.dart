@@ -24,9 +24,9 @@ class KeyRowWidget extends StatelessWidget {
             (e) => KeyWidget(
               verticalSize: verticalSize,
               horizontalSize: horizontalSize,
-              onTap: () {
+              onTap: () async {
                 context.read<QwertyLayoutProvider>().selectedString = e;
-                context.read<QwertyLayoutProvider>().predictNextValue(e);
+                await context.read<QwertyLayoutProvider>().predictNextValue(e);
               },
               text: e,
               selectedValue: selectedValue,
