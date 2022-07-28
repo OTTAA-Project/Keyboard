@@ -30,8 +30,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
     final response = await httpClient.postPredict(
       data: map,
       url:
-          'https://us-central1-questions-abd23.cloudfunctions.net/viterbi/predict',
+          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
     );
+    print(response);
     final data = jsonDecode(response);
     print(data);
     final cacheSource = jsonEncode(data[0]);
@@ -60,7 +61,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
         predictions.add(element!.name!);
       });
       int i = 0;
-      for (var el in hintsValues) {
+      for (var el in predictions) {
         if (predictions.length < i) {
           hintsValues[i] = '';
         }
@@ -78,7 +79,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
       mainResponse.results!.forEach((element) {
         predictions.add(element!.name!);
       });
-      int i = 0;
+      int i = predictions.length;
       for (var el in hintsValues) {
         hintsValues[i] = predictions[i];
         i++;
@@ -124,7 +125,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
         "language": "es"
       },
       url:
-          'https://us-central1-questions-abd23.cloudfunctions.net/viterbi/learn',
+          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
     );
     print(ans.toString());
   }
