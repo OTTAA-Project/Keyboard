@@ -9,4 +9,12 @@ class HttpClient {
     );
     return response.body;
   }
+  Future<String> postPredict({required dynamic data, required String url}) async {
+    var uri = Uri.parse(url);
+    var response = await http.post(
+      uri,
+      body: data,
+    );
+    return response.body;
+  }
 }

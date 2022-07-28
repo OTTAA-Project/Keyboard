@@ -29,8 +29,9 @@ class QwertyLayout extends StatelessWidget {
                 child: Column(
                   children: [
                     TextInputWidget(
-                      controller:
-                          context.watch<QwertyLayoutProvider>().qwertyController,
+                      controller: context
+                          .watch<QwertyLayoutProvider>()
+                          .qwertyController,
                       height: verticalSize,
                       width: horizontalSize,
                       // focusNode: context.read<QwertyLayoutProvider>().focusNode,
@@ -53,8 +54,9 @@ class QwertyLayout extends StatelessWidget {
                           'o',
                           'p',
                         ],
-                        selectedValue:
-                            context.watch<QwertyLayoutProvider>().selectedString,
+                        selectedValue: context
+                            .watch<QwertyLayoutProvider>()
+                            .selectedString,
                       ),
                     ),
                     KeyRowWidget(
@@ -93,8 +95,9 @@ class QwertyLayout extends StatelessWidget {
                           '.',
                           '?',
                         ],
-                        selectedValue:
-                            context.watch<QwertyLayoutProvider>().selectedString,
+                        selectedValue: context
+                            .watch<QwertyLayoutProvider>()
+                            .selectedString,
                       ),
                     ),
                     Row(
@@ -210,18 +213,25 @@ class QwertyLayout extends StatelessWidget {
                 flex: 2,
                 child: Column(
                   children: [
-                    Container(
-                      height: verticalSize * 0.2,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[700],
-                        borderRadius:
-                            BorderRadius.circular(verticalSize * 0.02),
-                      ),
-                      child: Icon(
-                        Icons.volume_up_sharp,
-                        color: Colors.white,
-                        size: verticalSize * 0.2,
+                    GestureDetector(
+                      onTap: () async {
+                        await context
+                            .read<QwertyLayoutProvider>()
+                            .speakSentenceAndSendItToLearn();
+                      },
+                      child: Container(
+                        height: verticalSize * 0.2,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[700],
+                          borderRadius:
+                              BorderRadius.circular(verticalSize * 0.02),
+                        ),
+                        child: Icon(
+                          Icons.volume_up_sharp,
+                          color: Colors.white,
+                          size: verticalSize * 0.2,
+                        ),
                       ),
                     ),
 
@@ -241,26 +251,29 @@ class QwertyLayout extends StatelessWidget {
                         ),
                       ),
                     ),
-                    //todo: 1st
+
+                    /// first value
                     PredictionWidget(
                       verticalSize: verticalSize,
-                      text: '1st',
+                      text: context.watch<QwertyLayoutProvider>().hintsValues[0],
                       onTap: () {},
                     ),
-                    //todo: 2nd
+
+                    ///second value
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: verticalSize * 0.03),
                       child: PredictionWidget(
                         verticalSize: verticalSize,
-                        text: '2nd',
+                        text: context.watch<QwertyLayoutProvider>().hintsValues[1],
                         onTap: () {},
                       ),
                     ),
-                    //todo: 3rd
+
+                    ///third value
                     PredictionWidget(
                       verticalSize: verticalSize,
-                      text: '3rd',
+                      text: context.watch<QwertyLayoutProvider>().hintsValues[2],
                       onTap: () {},
                     ),
                   ],

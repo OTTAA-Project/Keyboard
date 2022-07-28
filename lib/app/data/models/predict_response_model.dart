@@ -10,6 +10,7 @@ class PredictResponse {
   });
 
   String source;
+  @JsonKey(name: 'results',nullable: true)
   List<Result?>? results;
 
   factory PredictResponse.fromJson(Map<String, dynamic> json) =>
@@ -21,15 +22,14 @@ class PredictResponse {
 @JsonSerializable()
 class Result {
   Result({
-    required this.name,
-    required this.value,
+    this.name,
+    this.value,
   });
 
-  String name;
-  List<double> value;
+  String? name;
+  List<double?>? value;
 
-  factory Result.fromJson(Map<String, dynamic> json) =>
-      _$ResultFromJson(json);
+  factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ResultToJson(this);
 }
