@@ -1,5 +1,4 @@
 import 'package:keyboards/app/utils/http_client.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
 class QwertyLayoutProvider extends ChangeNotifier {
@@ -7,31 +6,33 @@ class QwertyLayoutProvider extends ChangeNotifier {
   String selectedString = '';
   final HttpClient httpClient = HttpClient();
 
-  Future<void> predictNextValue(String value)async{
+  Future<void> predictNextValue(String value) async {
     qwertyController.text = qwertyController.text + value;
-    print(qwertyController.text);
-await receivePredictedWords();
     notifyListeners();
   }
 
-  Future<void> receivePredictedWords()async{
+  Future<void> receivePredictedWords() async {
+    final map = {
+      'sentence': 'yo quiero ir a',
+      'userName': 'asim',
+      'model': 'test',
+      'language': 'es',
+    };
+    // var data = jsonEncode(map);
+    // print(data);
     final ans = await httpClient.post(
       /// change values after testing
-      data: {
-        "sentence": qwertyController.text,
-        "userName": "juanma",
-        "model": "test",
-        // "language": "es"
-      },
+      data: map,
       url:
-      'https://us-central1-questions-abd23.cloudfunctions.net/viterbi/predict',
+          'https://us-central1-questions-abd23.cloudfunctions.net/viterbi/predict',
     );
     print(ans.toString());
   }
 
-  void addSpace() {
+  Future<void> addSpace() async {
     qwertyController.text = qwertyController.text + ' ';
     print(qwertyController.text);
+    await receivePredictedWords();
     notifyListeners();
   }
 
@@ -48,7 +49,7 @@ await receivePredictedWords();
     notifyListeners();
   }
 
-  Future<void> deleteWholeSentence() async{
+  Future<void> deleteWholeSentence() async {
     await sendSentenceForLearning();
     qwertyController.text = '';
     selectedString = '';

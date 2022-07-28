@@ -48,8 +48,8 @@ class TextInputWidget extends StatelessWidget {
               children: [
                 IconWidget(
                   height: height,
-                  onTap: () {
-                    context.read<QwertyLayoutProvider>().addSpace();
+                  onTap: ()async{
+                    await context.read<QwertyLayoutProvider>().addSpace();
                   },
                   iconData: Icons.space_bar_outlined,
                 ),
