@@ -105,7 +105,11 @@ class QwertyLayout extends StatelessWidget {
                       children: [
                         //todo: Atras onTap
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            await context
+                                .read<QwertyLayoutProvider>()
+                                .getTheModelsList();
+                          },
                           child: Container(
                             height: verticalSize * 0.1,
                             width: horizontalSize * 0.22,
@@ -125,6 +129,15 @@ class QwertyLayout extends StatelessWidget {
                                 ),
                               ),
                             ),
+                          ),
+                        ),
+                        Container(
+                          height: verticalSize * 0.1,
+                          width: horizontalSize * 0.4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[700],
+                            borderRadius:
+                                BorderRadius.circular(verticalSize * 0.01),
                           ),
                         ),
                         Row(
@@ -203,6 +216,48 @@ class QwertyLayout extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: verticalSize * 0.04,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: horizontalSize * 0.02),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        // value: _.isEnglish.value ? 'English' : 'Spanish',
+                        value: context.watch<QwertyLayoutProvider>().modelType,
+                        iconSize: 20,
+                        elevation: 16,
+                        underline: Container(),
+                        onChanged: (newValue) {
+                          context
+                              .read<QwertyLayoutProvider>()
+                              .onChangedDropDownMenu(value: newValue!);
+                        },
+                        items: context
+                                .read<QwertyLayoutProvider>()
+                                .isModelTypeDataLoaded
+                            ?
+                            // DropdownMenuItem(
+                            //   child: Text('English'),
+                            //   value: 'English',
+                            // ),
+                            context
+                                .read<QwertyLayoutProvider>()
+                                .modelTypeModel
+                                .value
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    child: Text(e),
+                                    value: e,
+                                  ),
+                                )
+                                .toList()
+                            : [],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -255,7 +310,8 @@ class QwertyLayout extends StatelessWidget {
                     /// first value
                     PredictionWidget(
                       verticalSize: verticalSize,
-                      text: context.watch<QwertyLayoutProvider>().hintsValues[0],
+                      text:
+                          context.watch<QwertyLayoutProvider>().hintsValues[0],
                       onTap: () {},
                     ),
 
@@ -265,7 +321,9 @@ class QwertyLayout extends StatelessWidget {
                           EdgeInsets.symmetric(vertical: verticalSize * 0.03),
                       child: PredictionWidget(
                         verticalSize: verticalSize,
-                        text: context.watch<QwertyLayoutProvider>().hintsValues[1],
+                        text: context
+                            .watch<QwertyLayoutProvider>()
+                            .hintsValues[1],
                         onTap: () {},
                       ),
                     ),
@@ -273,7 +331,8 @@ class QwertyLayout extends StatelessWidget {
                     ///third value
                     PredictionWidget(
                       verticalSize: verticalSize,
-                      text: context.watch<QwertyLayoutProvider>().hintsValues[2],
+                      text:
+                          context.watch<QwertyLayoutProvider>().hintsValues[2],
                       onTap: () {},
                     ),
                   ],

@@ -17,4 +17,11 @@ class HttpClient {
     );
     return response.body;
   }
+
+  Future<String> getRequest({required String url,})async{
+    var uri = Uri.parse(url);
+    var response = await http.get(uri);
+    return response.body;
+  }
+
 }

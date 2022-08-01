@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (_) => QwertyLayoutProvider(),
+      lazy: false,
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
         home: QwertyLayout(),

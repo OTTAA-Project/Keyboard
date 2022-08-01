@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:keyboards/app/data/models/model_type_model.dart';
 import 'package:keyboards/app/data/models/predict_response_model.dart';
 import 'package:keyboards/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,22 @@ class QwertyLayoutProvider extends ChangeNotifier {
   late PredictResponse cacheResponse;
   List<String> hintsValues = ['', '', ''];
   List<String> predictions = [];
+  late ModelTypeModel modelTypeModel;
+  String modelType = '';
+  bool isModelTypeDataLoaded = false;
+
+  QwertyLayoutProvider() {
+    inIt();
+  }
+
+  void inIt() async {
+    await getTheModelsList();
+  }
+
+  void onChangedDropDownMenu({required String value}) {
+    modelType = value;
+    notifyListeners();
+  }
 
   Future<void> predictNextValue(String value) async {
     qwertyController.text = qwertyController.text + value;
@@ -22,7 +39,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     final map = {
       'sentence': qwertyController.text,
       'userName': 'user',
-      'model': 'test',
+      'model': modelType == '' ? 'test' : modelType,
       'language': 'es',
     };
     // var data = jsonEncode(map);
@@ -121,7 +138,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
       data: {
         "sentence": qwertyController.text,
         "userName": "user",
-        "model": "test",
+        "model": modelType == '' ? 'test' : modelType,
         "language": "es"
       },
       url:
@@ -131,7 +148,15 @@ class QwertyLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> getTheModelsList() async {
-    final url =
-        'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es';
+    final response = await httpClient.getRequest(
+      url:
+          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es',
+    );
+    final json = jsonDecode(response);
+    modelTypeModel = ModelTypeModel.fromJson(json);
+    modelType = modelTypeModel.value[0];
+    isModelTypeDataLoaded = true;
+    print(modelTypeModel.value.toString());
+    notifyListeners();
   }
 }
