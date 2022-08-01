@@ -129,4 +129,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
     );
     print(ans.toString());
   }
+
+  Future<void> getTheModelsList() async {
+    final url =
+        'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es';
+  }
 }
