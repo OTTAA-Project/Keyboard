@@ -11,11 +11,12 @@ class QwertyLayoutProvider extends ChangeNotifier {
   final HttpClient httpClient = HttpClient();
   late PredictResponse mainResponse;
   late PredictResponse cacheResponse;
-  List<String> hintsValues = ['', '', ''];
+  List<String> hintsValues = ['', '', '',''];
   List<String> predictions = [];
   late ModelTypeModel modelTypeModel;
   String modelType = '';
   bool isModelTypeDataLoaded = false;
+  int hintsCounter = 0;
 
   QwertyLayoutProvider() {
     inIt();
@@ -69,7 +70,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
 
   Future<void> showPredictions() async {
     ///creating a list to add all of the predictions
+    hintsCounter = 0;
     predictions = [];
+    hintsValues = ['', '', '',''];
     if (cacheResponse.results!.isEmpty) {
       print('result is empty');
     } else {
@@ -77,31 +80,82 @@ class QwertyLayoutProvider extends ChangeNotifier {
       cacheResponse.results!.forEach((element) {
         predictions.add(element!.name!);
       });
-      int i = 0;
-      for (var el in predictions) {
-        if (predictions.length < i) {
-          hintsValues[i] = '';
-        }
-        hintsValues[i] = predictions[i];
-        i++;
-      }
+      // int i = 0;
+      // for (var el in predictions) {
+      //   if (predictions.length < i) {
+      //     hintsValues[i] = '';
+      //   }
+      //   hintsValues[i] = predictions[i];
+      //   i++;
+      // }
     }
     if (mainResponse.results!.isEmpty) {
       print('empty data');
     } else {
       print('we got it');
-      if (cacheResponse.results!.isEmpty) {
-        predictions = [];
-      }
+      // if (cacheResponse.results!.isEmpty) {
+      //   predictions = [];
+      // }
       mainResponse.results!.forEach((element) {
         predictions.add(element!.name!);
       });
-      int i = predictions.length;
-      for (var el in hintsValues) {
-        hintsValues[i] = predictions[i];
-        i++;
+      // int i = predictions.length;
+      // for (var el in hintsValues) {
+      //   hintsValues[i] = predictions[i];
+      //   i++;
+      // }
+    }
+    int i = 0;
+    int counter = 0;
+    if (predictions.length >= 4) {
+      counter = 4;
+    } else {
+      counter = predictions.length - 1;
+    }
+    while (i < counter) {
+      hintsValues[i] = predictions[i];
+      i++;
+    }
+    hintsCounter++;
+    notifyListeners();
+  }
+
+  void updateHints() {
+    if (predictions.length == hintsCounter * 4) {
+      return;
+    }
+    if (predictions.length > hintsCounter * 4) {
+      // if (predictions.length % (hintsCounter * 3) == 1) {
+      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
+      //   hintsValues[1] = '';
+      //   hintsValues[2] = '';
+      // } else if (predictions.length - (hintsCounter * 3) == 2) {
+      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
+      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
+      //   hintsValues[2] = '';
+      // } else if (predictions.length - (hintsCounter * 3) == 3) {
+      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
+      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
+      //   hintsValues[2] = predictions[(hintsCounter * 3) + 3];
+      // }
+      hintsValues[0] = predictions[hintsCounter * 4];
+      if (predictions.length > (hintsCounter * 4) + 1) {
+        hintsValues[1] = predictions[(hintsCounter * 3) + 1];
+      } else {
+        hintsValues[1] = '';
+      }
+      if (predictions.length > (hintsCounter * 4) + 2) {
+        hintsValues[2] = predictions[(hintsCounter * 3) + 2];
+      } else {
+        hintsValues[2] = '';
+      }
+      if (predictions.length > (hintsCounter * 4) + 3) {
+        hintsValues[3] = predictions[(hintsCounter * 3) + 3];
+      } else {
+        hintsValues[3] = '';
       }
     }
+    hintsCounter++;
     notifyListeners();
   }
 
@@ -122,7 +176,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     await sendSentenceForLearning();
     qwertyController.text = '';
     selectedString = '';
-    hintsValues = ['', '', ''];
+    hintsValues = ['', '', '',''];
     notifyListeners();
   }
 
@@ -157,6 +211,12 @@ class QwertyLayoutProvider extends ChangeNotifier {
     modelType = modelTypeModel.value[0];
     isModelTypeDataLoaded = true;
     print(modelTypeModel.value.toString());
+    notifyListeners();
+  }
+
+  void addHintToSentence({required String text}) async {
+    qwertyController.text = qwertyController.text + text;
+    await addSpace();
     notifyListeners();
   }
 }

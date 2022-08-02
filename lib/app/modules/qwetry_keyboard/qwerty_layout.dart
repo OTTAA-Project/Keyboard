@@ -131,19 +131,36 @@ class QwertyLayout extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          height: verticalSize * 0.1,
-                          width: horizontalSize * 0.4,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[700],
-                            borderRadius:
-                                BorderRadius.circular(verticalSize * 0.01),
+
+                        /// space button
+                        GestureDetector(
+                          onTap: () async => await context
+                              .read<QwertyLayoutProvider>()
+                              .addSpace(),
+                          child: Container(
+                            height: verticalSize * 0.1,
+                            width: horizontalSize * 0.4,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius:
+                                  BorderRadius.circular(verticalSize * 0.01),
+                            ),
                           ),
                         ),
                         Row(
                           children: [
                             //todo: smiley onTap
                             GestureDetector(
+                              onTap: () {
+                                print(context
+                                    .read<QwertyLayoutProvider>()
+                                    .predictions
+                                    .toString());
+                                print(context
+                                    .read<QwertyLayoutProvider>()
+                                    .predictions
+                                    .length);
+                              },
                               child: Container(
                                 height: verticalSize * 0.1,
                                 width: horizontalSize * 0.09,
@@ -194,7 +211,9 @@ class QwertyLayout extends StatelessWidget {
                             ),
                             //todo: arrowForward onTap
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () async => context
+                                  .read<QwertyLayoutProvider>()
+                                  .updateHints(),
                               child: Container(
                                 height: verticalSize * 0.1,
                                 width: horizontalSize * 0.21,
@@ -220,7 +239,8 @@ class QwertyLayout extends StatelessWidget {
                       height: verticalSize * 0.04,
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: horizontalSize * 0.02),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: horizontalSize * 0.02),
                       decoration: const BoxDecoration(
                         color: Colors.white,
                       ),
@@ -290,32 +310,7 @@ class QwertyLayout extends StatelessWidget {
                       ),
                     ),
 
-                    /// just a place holder
-                    Opacity(
-                      opacity: 0,
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: verticalSize * 0.03),
-                        child: KeyRowWidget(
-                          horizontalSize: horizontalSize,
-                          verticalSize: verticalSize,
-                          rowElements: const [
-                            '?',
-                          ],
-                          selectedValue: 'p',
-                        ),
-                      ),
-                    ),
-
-                    /// first value
-                    PredictionWidget(
-                      verticalSize: verticalSize,
-                      text:
-                          context.watch<QwertyLayoutProvider>().hintsValues[0],
-                      onTap: () {},
-                    ),
-
-                    ///second value
+                    /// first one
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: verticalSize * 0.03),
@@ -323,17 +318,82 @@ class QwertyLayout extends StatelessWidget {
                         verticalSize: verticalSize,
                         text: context
                             .watch<QwertyLayoutProvider>()
-                            .hintsValues[1],
-                        onTap: () {},
+                            .hintsValues[0],
+                        onTap: context
+                                    .watch<QwertyLayoutProvider>()
+                                    .hintsValues[0] ==
+                                ''
+                            ? () {}
+                            : () async => context
+                                .read<QwertyLayoutProvider>()
+                                .addHintToSentence(
+                                  text: context
+                                      .read<QwertyLayoutProvider>()
+                                      .hintsValues[0],
+                                ),
                       ),
                     ),
 
-                    ///third value
+                    /// second value
                     PredictionWidget(
                       verticalSize: verticalSize,
                       text:
-                          context.watch<QwertyLayoutProvider>().hintsValues[2],
-                      onTap: () {},
+                          context.watch<QwertyLayoutProvider>().hintsValues[1],
+                      onTap: context
+                                  .watch<QwertyLayoutProvider>()
+                                  .hintsValues[1] ==
+                              ''
+                          ? () {}
+                          : () async => context
+                              .read<QwertyLayoutProvider>()
+                              .addHintToSentence(
+                                text: context
+                                    .read<QwertyLayoutProvider>()
+                                    .hintsValues[1],
+                              ),
+                    ),
+
+                    ///third value
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                      child: PredictionWidget(
+                        verticalSize: verticalSize,
+                        text: context
+                            .watch<QwertyLayoutProvider>()
+                            .hintsValues[2],
+                        onTap: context
+                                    .watch<QwertyLayoutProvider>()
+                                    .hintsValues[2] ==
+                                ''
+                            ? () {}
+                            : () async => context
+                                .read<QwertyLayoutProvider>()
+                                .addHintToSentence(
+                                  text: context
+                                      .read<QwertyLayoutProvider>()
+                                      .hintsValues[2],
+                                ),
+                      ),
+                    ),
+
+                    ///fourth value
+                    PredictionWidget(
+                      verticalSize: verticalSize,
+                      text:
+                          context.watch<QwertyLayoutProvider>().hintsValues[3],
+                      onTap: context
+                                  .watch<QwertyLayoutProvider>()
+                                  .hintsValues[3] ==
+                              ''
+                          ? () {}
+                          : () async => context
+                              .read<QwertyLayoutProvider>()
+                              .addHintToSentence(
+                                text: context
+                                    .read<QwertyLayoutProvider>()
+                                    .hintsValues[3],
+                              ),
                     ),
                   ],
                 ),
