@@ -10,7 +10,7 @@ class PredictResponse {
   });
 
   String source;
-  @JsonKey(name: 'results',nullable: true)
+  @JsonKey(name: 'results', nullable: true)
   List<Result?>? results;
 
   factory PredictResponse.fromJson(Map<String, dynamic> json) =>
@@ -24,10 +24,12 @@ class Result {
   Result({
     this.name,
     this.value,
+    this.scores,
   });
 
   String? name;
   List<double?>? value;
+  List<double>? scores;
 
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
 
