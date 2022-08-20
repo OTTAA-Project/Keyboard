@@ -3,6 +3,8 @@ import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_row_widg
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/prediction_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/text_input_widget.dart';
+import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:provider/provider.dart';
 
 class QwertyLayout extends StatelessWidget {
   const QwertyLayout({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class QwertyLayout extends StatelessWidget {
     final verticalSize = MediaQuery.of(context).size.height;
     final horizontalSize = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Padding(
@@ -26,8 +29,12 @@ class QwertyLayout extends StatelessWidget {
                 child: Column(
                   children: [
                     TextInputWidget(
+                      controller: context
+                          .watch<QwertyLayoutProvider>()
+                          .qwertyController,
                       height: verticalSize,
                       width: horizontalSize,
+                      // focusNode: context.read<QwertyLayoutProvider>().focusNode,
                     ),
                     Padding(
                       padding:
@@ -47,7 +54,9 @@ class QwertyLayout extends StatelessWidget {
                           'o',
                           'p',
                         ],
-                        selectedValue: 'p',
+                        selectedValue: context
+                            .watch<QwertyLayoutProvider>()
+                            .selectedString,
                       ),
                     ),
                     KeyRowWidget(
@@ -65,7 +74,8 @@ class QwertyLayout extends StatelessWidget {
                         'l',
                         ';',
                       ],
-                      selectedValue: 'p',
+                      selectedValue:
+                          context.watch<QwertyLayoutProvider>().selectedString,
                     ),
                     Padding(
                       padding:
@@ -85,7 +95,9 @@ class QwertyLayout extends StatelessWidget {
                           '.',
                           '?',
                         ],
-                        selectedValue: 'p',
+                        selectedValue: context
+                            .watch<QwertyLayoutProvider>()
+                            .selectedString,
                       ),
                     ),
                     Row(
@@ -93,7 +105,11 @@ class QwertyLayout extends StatelessWidget {
                       children: [
                         //todo: Atras onTap
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async {
+                            await context
+                                .read<QwertyLayoutProvider>()
+                                .getTheModelsList();
+                          },
                           child: Container(
                             height: verticalSize * 0.1,
                             width: horizontalSize * 0.22,
@@ -115,10 +131,36 @@ class QwertyLayout extends StatelessWidget {
                             ),
                           ),
                         ),
+
+                        /// space button
+                        GestureDetector(
+                          onTap: () async => await context
+                              .read<QwertyLayoutProvider>()
+                              .addSpace(),
+                          child: Container(
+                            height: verticalSize * 0.1,
+                            width: horizontalSize * 0.4,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius:
+                                  BorderRadius.circular(verticalSize * 0.01),
+                            ),
+                          ),
+                        ),
                         Row(
                           children: [
                             //todo: smiley onTap
                             GestureDetector(
+                              onTap: () {
+                                print(context
+                                    .read<QwertyLayoutProvider>()
+                                    .predictions
+                                    .toString());
+                                print(context
+                                    .read<QwertyLayoutProvider>()
+                                    .predictions
+                                    .length);
+                              },
                               child: Container(
                                 height: verticalSize * 0.1,
                                 width: horizontalSize * 0.09,
@@ -169,7 +211,9 @@ class QwertyLayout extends StatelessWidget {
                             ),
                             //todo: arrowForward onTap
                             GestureDetector(
-                              onTap: () {},
+                              onTap: () async => context
+                                  .read<QwertyLayoutProvider>()
+                                  .updateHints(),
                               child: Container(
                                 height: verticalSize * 0.1,
                                 width: horizontalSize * 0.21,
@@ -191,6 +235,49 @@ class QwertyLayout extends StatelessWidget {
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: verticalSize * 0.04,
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: horizontalSize * 0.02),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      child: DropdownButton<String>(
+                        isExpanded: true,
+                        // value: _.isEnglish.value ? 'English' : 'Spanish',
+                        value: context.watch<QwertyLayoutProvider>().modelType,
+                        iconSize: 20,
+                        elevation: 16,
+                        underline: Container(),
+                        onChanged: (newValue) {
+                          context
+                              .read<QwertyLayoutProvider>()
+                              .onChangedDropDownMenu(value: newValue!);
+                        },
+                        items: context
+                                .read<QwertyLayoutProvider>()
+                                .isModelTypeDataLoaded
+                            ?
+                            // DropdownMenuItem(
+                            //   child: Text('English'),
+                            //   value: 'English',
+                            // ),
+                            context
+                                .read<QwertyLayoutProvider>()
+                                .modelTypeModel
+                                .value
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    child: Text(e),
+                                    value: e,
+                                  ),
+                                )
+                                .toList()
+                            : [],
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -199,11 +286,15 @@ class QwertyLayout extends StatelessWidget {
               ),
               Expanded(
                 flex: 2,
-                child: Container(
-                  // color: Colors.white38,
-                  child: Column(
-                    children: [
-                      Container(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await context
+                            .read<QwertyLayoutProvider>()
+                            .speakSentenceAndSendItToLearn();
+                      },
+                      child: Container(
                         height: verticalSize * 0.2,
                         width: double.infinity,
                         decoration: BoxDecoration(
@@ -217,47 +308,94 @@ class QwertyLayout extends StatelessWidget {
                           size: verticalSize * 0.2,
                         ),
                       ),
+                    ),
 
-                      /// just a place holder
-                      Opacity(
-                        opacity: 0,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: verticalSize * 0.03),
-                          child: KeyRowWidget(
-                            horizontalSize: horizontalSize,
-                            verticalSize: verticalSize,
-                            rowElements: const [
-                              '?',
-                            ],
-                            selectedValue: 'p',
-                          ),
-                        ),
-                      ),
-                      //todo: 1st
-                      PredictionWidget(
+                    /// first one
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                      child: PredictionWidget(
                         verticalSize: verticalSize,
-                        text: '1st',
-                        onTap: () {},
+                        text: context
+                            .watch<QwertyLayoutProvider>()
+                            .hintsValues[0],
+                        onTap: context
+                                    .watch<QwertyLayoutProvider>()
+                                    .hintsValues[0] ==
+                                ''
+                            ? () {}
+                            : () async => context
+                                .read<QwertyLayoutProvider>()
+                                .addHintToSentence(
+                                  text: context
+                                      .read<QwertyLayoutProvider>()
+                                      .hintsValues[0],
+                                ),
                       ),
-                      //todo: 2nd
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: verticalSize * 0.03),
-                        child: PredictionWidget(
-                          verticalSize: verticalSize,
-                          text: '2nd',
-                          onTap: () {},
-                        ),
-                      ),
-                      //todo: 3rd
-                      PredictionWidget(
+                    ),
+
+                    /// second value
+                    PredictionWidget(
+                      verticalSize: verticalSize,
+                      text:
+                          context.watch<QwertyLayoutProvider>().hintsValues[1],
+                      onTap: context
+                                  .watch<QwertyLayoutProvider>()
+                                  .hintsValues[1] ==
+                              ''
+                          ? () {}
+                          : () async => context
+                              .read<QwertyLayoutProvider>()
+                              .addHintToSentence(
+                                text: context
+                                    .read<QwertyLayoutProvider>()
+                                    .hintsValues[1],
+                              ),
+                    ),
+
+                    ///third value
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                      child: PredictionWidget(
                         verticalSize: verticalSize,
-                        text: '3rd',
-                        onTap: () {},
+                        text: context
+                            .watch<QwertyLayoutProvider>()
+                            .hintsValues[2],
+                        onTap: context
+                                    .watch<QwertyLayoutProvider>()
+                                    .hintsValues[2] ==
+                                ''
+                            ? () {}
+                            : () async => context
+                                .read<QwertyLayoutProvider>()
+                                .addHintToSentence(
+                                  text: context
+                                      .read<QwertyLayoutProvider>()
+                                      .hintsValues[2],
+                                ),
                       ),
-                    ],
-                  ),
+                    ),
+
+                    ///fourth value
+                    PredictionWidget(
+                      verticalSize: verticalSize,
+                      text:
+                          context.watch<QwertyLayoutProvider>().hintsValues[3],
+                      onTap: context
+                                  .watch<QwertyLayoutProvider>()
+                                  .hintsValues[3] ==
+                              ''
+                          ? () {}
+                          : () async => context
+                              .read<QwertyLayoutProvider>()
+                              .addHintToSentence(
+                                text: context
+                                    .read<QwertyLayoutProvider>()
+                                    .hintsValues[3],
+                              ),
+                    ),
+                  ],
                 ),
               ),
             ],
