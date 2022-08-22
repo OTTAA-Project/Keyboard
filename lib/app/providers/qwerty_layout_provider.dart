@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:keyboards/app/data/models/model_type_model.dart';
 import 'package:keyboards/app/data/models/predict_response_model.dart';
+import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 
@@ -11,18 +12,20 @@ class QwertyLayoutProvider extends ChangeNotifier {
   final HttpClient httpClient = HttpClient();
   late PredictResponse mainResponse;
   late PredictResponse cacheResponse;
-  List<String> hintsValues = ['', '', '',''];
+  List<String> hintsValues = ['', '', '', ''];
   List<String> predictions = [];
   late ModelTypeModel modelTypeModel;
   String modelType = '';
   bool isModelTypeDataLoaded = false;
   int hintsCounter = 0;
+  late FlutterTTS flutterTTS;
 
   QwertyLayoutProvider() {
     inIt();
   }
 
   void inIt() async {
+    flutterTTS = FlutterTTS();
     await getTheModelsList();
   }
 
@@ -72,7 +75,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     ///creating a list to add all of the predictions
     hintsCounter = 0;
     predictions = [];
-    hintsValues = ['', '', '',''];
+    hintsValues = ['', '', '', ''];
     if (cacheResponse.results!.isEmpty) {
       print('result is empty');
     } else {
@@ -176,13 +179,12 @@ class QwertyLayoutProvider extends ChangeNotifier {
     await sendSentenceForLearning();
     qwertyController.text = '';
     selectedString = '';
-    hintsValues = ['', '', '',''];
+    hintsValues = ['', '', '', ''];
     notifyListeners();
   }
 
   Future<void> speakSentenceAndSendItToLearn() async {
-    //todo: add here the feature to speak
-
+    flutterTTS.speak(qwertyController.text);
     await deleteWholeSentence();
   }
 
