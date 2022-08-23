@@ -28,7 +28,7 @@ class Result {
   });
 
   String? name;
-  List<double?>? value;
+  double? value;
   List<double>? scores;
 
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
