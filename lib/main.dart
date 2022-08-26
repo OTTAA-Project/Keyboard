@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
+import 'package:keyboards/app/modules/login/temporary_login.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/qwerty_layout.dart';
 import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
 import 'package:provider/provider.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
       ],
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: QwertyLayout(),
+        home: TemporaryLogin(),
       ),
     );
   }
