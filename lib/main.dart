@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/login/temporary_login.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/qwerty_layout.dart';
+import 'package:keyboards/app/modules/splash/splash_screen.dart';
 import 'package:keyboards/app/providers/login_provider.dart';
 import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboards/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -24,22 +27,35 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) {
-            return LoginProvider();
+            return SharedPreferencesController();
           },
           lazy: false,
         ),
         ChangeNotifierProvider(
           create: (_) {
-            return QwertyLayoutProvider();
+            return SplashProvider();
+          },
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            return LoginProvider();
           },
           lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            return QwertyLayoutProvider();
+          },
+          lazy: false,
         ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         initialRoute: '/',
         routes: {
-          '/': (context) => const TemporaryLogin(),
+          '/': (context) => const SplashScreen(),
+          '/login': (context) => const TemporaryLogin(),
           '/qwerty_keyboard': (context) => const QwertyLayout(),
         },
       ),

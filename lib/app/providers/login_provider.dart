@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:keyboards/app/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -40,6 +42,7 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<void> trySignIn() async {
+    final SharedPreferences _sharedPref = await SharedPreferences.getInstance();
     try {
       final userCredentials = await signInWithGoogle();
       // if ok firebase will return a user else will throw an exception
@@ -56,6 +59,7 @@ class LoginProvider extends ChangeNotifier {
       // }
       if (userCredentials.user != null) {
         signIn = true;
+        _sharedPref.setBool(isLoggedInString, true);
         print('yes');
       }
     } catch (e) {

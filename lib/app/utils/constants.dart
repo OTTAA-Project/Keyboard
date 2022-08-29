@@ -6,3 +6,5 @@ Color kPrimaryBG = const Color(0xFF1A1A1A);
 Color kPrimaryFont = Colors.white;
 Color kBorderColor = Colors.pink;
 Color addButtonClr = const Color(0x00ff6a00);
+
+String isLoggedInString = 'is_logged_in';

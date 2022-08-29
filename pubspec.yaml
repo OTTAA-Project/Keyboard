@@ -41,7 +41,6 @@ dependencies:
   build_runner: ^2.2.0
   json_annotation: ^4.6.0
   flutter_tts: ^3.5.0
-  responsive_sizer: ^3.1.0
   google_sign_in: ^5.4.1
   firebase_auth: ^3.4.2
   shared_preferences: ^2.0.15

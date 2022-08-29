@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:keyboards/app/data/models/model_type_model.dart';
 import 'package:keyboards/app/data/models/predict_response_model.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
