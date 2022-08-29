@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:keyboards/app/providers/login_provider.dart';
 import 'package:keyboards/app/utils/constants.dart';
+import 'package:provider/provider.dart';
 
 class TemporaryLogin extends StatelessWidget {
   const TemporaryLogin({Key? key}) : super(key: key);
@@ -58,6 +60,14 @@ class TemporaryLogin extends StatelessWidget {
                         // GOOGLE BUTTON
                         GestureDetector(
                           onTap: () async {
+                            await context.read<LoginProvider>().trySignIn();
+                            if (context.read<LoginProvider>().signIn) {
+                              Navigator.popAndPushNamed(
+                                context,
+                                '/qwerty_keyboard',
+                              );
+                              print('here');
+                            }
                             //todo: add the login procedure here
                             /*log('Google Button Tapped');
                             if (true) {

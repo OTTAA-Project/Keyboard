@@ -1,11 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/login/temporary_login.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/qwerty_layout.dart';
+import 'package:keyboards/app/providers/login_provider.dart';
 import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
+  await Future.delayed(const Duration(milliseconds: 1000));
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -19,17 +24,24 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (_) {
-            return QwertyLayoutProvider();
+            return LoginProvider();
           },
           lazy: false,
         ),
-        ChangeNotifierProvider(create: (_) {
-          return FlutterTTS();
-        })
+        ChangeNotifierProvider(
+          create: (_) {
+            return QwertyLayoutProvider();
+          },
+          lazy: true,
+        ),
       ],
-      child: const MaterialApp(
+      child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: TemporaryLogin(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const TemporaryLogin(),
+          '/qwerty_keyboard': (context) => const QwertyLayout(),
+        },
       ),
     );
   }
