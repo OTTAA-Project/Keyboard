@@ -43,6 +43,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) {
+            return FlutterTTS();
+          },
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
             return SplashProvider();
           },
           lazy: false,
@@ -57,7 +63,7 @@ class MyApp extends StatelessWidget {
           create: (_) {
             return QwertyLayoutProvider();
           },
-          lazy: false,
+          lazy: true,
         ),
       ],
       child: MaterialApp(
