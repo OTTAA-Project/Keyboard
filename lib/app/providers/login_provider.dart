@@ -24,8 +24,8 @@ class LoginProvider extends ChangeNotifier {
     final GoogleSignInAuthentication googleAuth =
         await googleUser!.authentication;
     final name = googleUser.displayName!;
-    debugPrint('name from the google auth');
-    debugPrint(name);
+    print('name from the google auth');
+    print(name);
     final auth.OAuthCredential credential = auth.GoogleAuthProvider.credential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
@@ -33,11 +33,11 @@ class LoginProvider extends ChangeNotifier {
     UserCredential userCredentials =
         await _firebaseAuth.signInWithCredential(credential);
     if (userCredentials.user != null) {
-      debugPrint(userCredentials.user.toString());
-      debugPrint(userCredentials.user!.email);
+      print(userCredentials.user.toString());
+      print(userCredentials.user!.email);
     }
-    debugPrint('name from the firebae auth');
-    debugPrint(userCredentials.user!.displayName);
+    print('name from the firebae auth');
+    print(userCredentials.user!.displayName);
     return userCredentials;
   }
 

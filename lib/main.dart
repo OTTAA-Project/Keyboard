@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
@@ -13,7 +14,16 @@ import 'package:provider/provider.dart';
 void main() async {
   await Future.delayed(const Duration(milliseconds: 1000));
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  kIsWeb
+      ? await Firebase.initializeApp(
+          options: FirebaseOptions(
+            apiKey: "AIzaSyC6AQmv6NkjzWxjMXf31pB64hv_-vo6WOM",
+            appId: "1:703376507167:web:54e10180ee9035d4f1f02a",
+            messagingSenderId: "703376507167",
+            projectId: "keyboard-98820",
+          ),
+        )
+      : await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
