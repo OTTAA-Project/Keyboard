@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/login/temporary_login.dart';
@@ -13,14 +14,15 @@ import 'package:provider/provider.dart';
 
 void main() async {
   await Future.delayed(const Duration(milliseconds: 1000));
+  await dotenv.load(fileName: "dotenv");
   WidgetsFlutterBinding.ensureInitialized();
   kIsWeb
       ? await Firebase.initializeApp(
           options: FirebaseOptions(
-            apiKey: "AIzaSyC6AQmv6NkjzWxjMXf31pB64hv_-vo6WOM",
-            appId: "1:703376507167:web:54e10180ee9035d4f1f02a",
-            messagingSenderId: "703376507167",
-            projectId: "keyboard-98820",
+            apiKey: dotenv.env['API_KEY'] ?? 'add Proper Values',
+            appId: dotenv.env['APP_ID'] ?? 'add Proper Values',
+            messagingSenderId: dotenv.env['MESSAGING_SENDER_ID'] ?? 'add Proper Values',
+            projectId: dotenv.env['PROJECT_ID'] ?? 'add Proper Values',
           ),
         )
       : await Firebase.initializeApp();
