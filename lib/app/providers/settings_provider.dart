@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 class SettingsProvider extends ChangeNotifier {
   late FlutterTTS _ttsController;
+  late String language;
 
   FlutterTTS get ttsController => _ttsController;
 
@@ -11,13 +12,18 @@ class SettingsProvider extends ChangeNotifier {
   // AuthController get authController => this._authController;
   bool isEnglish = false;
 
-  SettingsProvider({BuildContext? context}){
+  SettingsProvider({BuildContext? context}) {
     _inIt(context: context!);
   }
 
   void _inIt({BuildContext? context}) async {
     _ttsController = context!.read<FlutterTTS>();
-    print('settings Controller');
+    language = _ttsController.languaje;
+    final res = _ttsController.availableTTS.contains(language);
+    if (res) {
+    } else {
+      language = _ttsController.availableTTS.first;
+    }
   }
 
   toggleIsCustomTTSEnable(bool value) {

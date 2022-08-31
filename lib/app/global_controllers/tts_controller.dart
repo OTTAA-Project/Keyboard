@@ -108,7 +108,6 @@ class FlutterTTS extends ChangeNotifier {
   _initTTS()async{
     _flutterTTS = FlutterTts();
     availableTTS = await _flutterTTS.getLanguages;
-    print('lists are from here');
 
     if (isAndroid) {
       _getDefaultEngine();
