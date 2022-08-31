@@ -171,6 +171,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     } else {
       qwertyController.text =
           qwertyController.text.substring(0, qwertyController.text.length - 1);
+      hintsValues = ['', '', '', ''];
     }
     final char = qwertyController.text.characters;
     if (qwertyController.text.length >= 2 && char.last == ' ') {
