@@ -4,6 +4,7 @@ import 'package:keyboards/app/data/models/predict_response_model.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class QwertyLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
@@ -19,12 +20,12 @@ class QwertyLayoutProvider extends ChangeNotifier {
   int hintsCounter = 0;
   late FlutterTTS flutterTTS;
 
-  QwertyLayoutProvider() {
-    inIt();
+  QwertyLayoutProvider({required BuildContext context}) {
+    inIt(context:context);
   }
 
-  void inIt() async {
-    flutterTTS = FlutterTTS();
+  void inIt({required BuildContext context}) async {
+    flutterTTS = context.read<FlutterTTS>();
     await getTheModelsList();
   }
 

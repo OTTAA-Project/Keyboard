@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_row_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/prediction_widget.dart';
@@ -14,6 +15,31 @@ class QwertyLayout extends StatelessWidget {
     final verticalSize = MediaQuery.of(context).size.height;
     final horizontalSize = MediaQuery.of(context).size.height;
     return Scaffold(
+      drawer: Padding(
+        padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(horizontalSize * 0.02),
+              bottomRight: Radius.circular(horizontalSize * 0.02),
+            ),
+          ),
+          height: verticalSize,
+          width: horizontalSize * 0.4,
+          child: Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.settings),
+                title: const Text('Settings'),
+                onTap: () {
+                  Navigator.pushNamed(context, '/settings');
+                },
+              )
+            ],
+          ),
+        ),
+      ),
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -152,14 +178,7 @@ class QwertyLayout extends StatelessWidget {
                             //todo: smiley onTap
                             GestureDetector(
                               onTap: () {
-                                print(context
-                                    .read<QwertyLayoutProvider>()
-                                    .predictions
-                                    .toString());
-                                print(context
-                                    .read<QwertyLayoutProvider>()
-                                    .predictions
-                                    .length);
+                                print(context.read<FlutterTTS>().languaje);
                               },
                               child: Container(
                                 height: verticalSize * 0.1,

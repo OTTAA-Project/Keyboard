@@ -9,6 +9,7 @@ enum TTSState { playing, stopped, paused, continued }
 class FlutterTTS extends ChangeNotifier {
   late FlutterTts _flutterTTS;
   String _language = 'es-AR';
+  late List<dynamic> availableTTS;
 
   String get languaje => _language;
 
@@ -104,8 +105,10 @@ class FlutterTTS extends ChangeNotifier {
     _initTTS();
   }
 
-  _initTTS() {
+  _initTTS()async{
     _flutterTTS = FlutterTts();
+    availableTTS = await _flutterTTS.getLanguages;
+    print('lists are from here');
 
     if (isAndroid) {
       _getDefaultEngine();
