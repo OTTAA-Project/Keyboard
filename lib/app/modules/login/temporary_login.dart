@@ -66,7 +66,7 @@ class TemporaryLogin extends StatelessWidget {
                                 context,
                                 '/qwerty_keyboard',
                               );
-                              print('here');
+                              debugPrint('here');
                             }
                             //todo: add the login procedure here
                             /*log('Google Button Tapped');

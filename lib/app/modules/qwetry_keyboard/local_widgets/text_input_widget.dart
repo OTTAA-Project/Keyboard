@@ -109,7 +109,7 @@ class IconWidget extends StatelessWidget {
       onTap: onTap,
       child: Icon(
         iconData,
-        size: height * 0.03,
+        size: height * 0.05,
         color: Colors.white,
       ),
     );

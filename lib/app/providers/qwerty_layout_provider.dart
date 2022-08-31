@@ -46,15 +46,15 @@ class QwertyLayoutProvider extends ChangeNotifier {
       'language': 'es',
     };
     // var data = jsonEncode(map);
-    // print(data);
+    // debugPrint(data);
     final response = await httpClient.postPredict(
       data: map,
       url:
           'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
     );
-    print(response);
+    debugPrint(response);
     final data = jsonDecode(response);
-    print(data);
+    debugPrint(data.toString());
     final cacheSource = jsonEncode(data[0]);
     final mainSource = jsonEncode(data[1]);
     final mainDecoded = jsonDecode(mainSource);
@@ -76,12 +76,12 @@ class QwertyLayoutProvider extends ChangeNotifier {
     predictions = [];
     hintsValues = ['', '', '', ''];
     if (cacheResponse.results!.isEmpty) {
-      print('result is empty');
+      debugPrint('result is empty');
     } else {
-      print('we have something');
-      cacheResponse.results!.forEach((element) {
+      debugPrint('we have something');
+      for (var element in cacheResponse.results!) {
         predictions.add(element!.name!);
-      });
+      }
       // int i = 0;
       // for (var el in predictions) {
       //   if (predictions.length < i) {
@@ -92,9 +92,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
       // }
     }
     if (mainResponse.results!.isEmpty) {
-      print('empty data');
+      debugPrint('empty data');
     } else {
-      print('we got it');
+      debugPrint('we got it');
       // if (cacheResponse.results!.isEmpty) {
       //   predictions = [];
       // }
@@ -161,16 +161,25 @@ class QwertyLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteLastCharacter() {
+  void deleteLastCharacter() async {
     if (qwertyController.text.isEmpty) {
+      // hintsValues = ['', '', '', ''];
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
+      hintsValues = ['', '', '', ''];
     } else {
       qwertyController.text =
           qwertyController.text.substring(0, qwertyController.text.length - 1);
     }
-    print(qwertyController.text);
+    final char = qwertyController.text.characters;
+    if (qwertyController.text.length >= 2 && char.last == ' ') {
+      selectedString = '';
+      await receivePredictedWords();
+      notifyListeners();
+      await showPredictions();
+    }
+    debugPrint(qwertyController.text);
     notifyListeners();
   }
 
@@ -199,7 +208,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
       url:
           'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
     );
-    print(ans.toString());
+    debugPrint(ans.toString());
   }
 
   Future<void> getTheModelsList() async {
@@ -211,7 +220,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     modelTypeModel = ModelTypeModel.fromJson(json);
     modelType = modelTypeModel.value[0];
     isModelTypeDataLoaded = true;
-    print(modelTypeModel.value.toString());
+    debugPrint(modelTypeModel.value.toString());
     notifyListeners();
   }
 
