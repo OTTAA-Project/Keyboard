@@ -64,10 +64,13 @@ class QwertyLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> addSpace() async {
-    qwertyController.text = qwertyController.text + ' ';
-    await receivePredictedWords();
-    notifyListeners();
-    await showPredictions();
+    if (qwertyController.text.isEmpty) {
+    } else {
+      qwertyController.text = qwertyController.text + ' ';
+      await receivePredictedWords();
+      notifyListeners();
+      await showPredictions();
+    }
   }
 
   Future<void> showPredictions() async {
