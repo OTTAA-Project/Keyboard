@@ -66,8 +66,17 @@ class QwertyLayoutProvider extends ChangeNotifier {
   Future<void> addSpace() async {
     qwertyController.text = qwertyController.text + ' ';
     await receivePredictedWords();
-    notifyListeners();
     await showPredictions();
+    notifyListeners();
+  }
+
+  Iterable distinct(Iterable i) {
+    var set = new Set();
+    return i.where((e) {
+      var isNew = !set.contains(e);
+      set.add(e);
+      return isNew;
+    });
   }
 
   Future<void> showPredictions() async {
@@ -98,15 +107,24 @@ class QwertyLayoutProvider extends ChangeNotifier {
       // if (cacheResponse.results!.isEmpty) {
       //   predictions = [];
       // }
-      mainResponse.results!.forEach((element) {
+      for (var element in mainResponse.results!) {
         predictions.add(element!.name!);
-      });
+      }
       // int i = predictions.length;
       // for (var el in hintsValues) {
       //   hintsValues[i] = predictions[i];
       //   i++;
       // }
     }
+    print('length is ${predictions.length}');
+    final pre = distinct(predictions).toList() as List<String>;
+    predictions.clear();
+    predictions = pre;
+    // final ids = Set();
+    // predictions.retainWhere((x) => ids.add(x));
+    // print(predictions.toSet().toList().length);
+    print(predictions.toList());
+    print('length is ${predictions.length}');
     int i = 0;
     int counter = 0;
     if (predictions.length >= 4) {
@@ -140,19 +158,19 @@ class QwertyLayoutProvider extends ChangeNotifier {
       //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
       //   hintsValues[2] = predictions[(hintsCounter * 3) + 3];
       // }
-      hintsValues[0] = predictions[hintsCounter * 4];
+      hintsValues[0] = predictions[(hintsCounter * 4)];
       if (predictions.length > (hintsCounter * 4) + 1) {
-        hintsValues[1] = predictions[(hintsCounter * 3) + 1];
+        hintsValues[1] = predictions[(hintsCounter * 4) + 1];
       } else {
         hintsValues[1] = '';
       }
       if (predictions.length > (hintsCounter * 4) + 2) {
-        hintsValues[2] = predictions[(hintsCounter * 3) + 2];
+        hintsValues[2] = predictions[(hintsCounter * 4) + 2];
       } else {
         hintsValues[2] = '';
       }
       if (predictions.length > (hintsCounter * 4) + 3) {
-        hintsValues[3] = predictions[(hintsCounter * 3) + 3];
+        hintsValues[3] = predictions[(hintsCounter * 4) + 3];
       } else {
         hintsValues[3] = '';
       }
