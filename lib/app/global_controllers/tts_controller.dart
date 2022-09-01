@@ -6,7 +6,7 @@ import 'package:flutter_tts/flutter_tts.dart';
 
 enum TTSState { playing, stopped, paused, continued }
 
-class FlutterTTS extends ChangeNotifier {
+class TTSController extends ChangeNotifier {
   late FlutterTts _flutterTTS;
   String _language = 'es-AR';
   late List<dynamic> availableTTS;
@@ -101,7 +101,7 @@ class FlutterTTS extends ChangeNotifier {
 
   bool get isWeb => kIsWeb;
 
-  FlutterTTS() {
+  TTSController() {
     _initTTS();
   }
 

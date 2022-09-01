@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:keyboards/app/global_controllers/auth_provider.dart';
 import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/login/temporary_login.dart';
@@ -50,7 +51,13 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) {
-            return FlutterTTS();
+            return AuthProvider();
+          },
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) {
+            return TTSController();
           },
           lazy: false,
         ),
@@ -65,8 +72,8 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (_) {
-            return LoginProvider();
+          create: (context) {
+            return LoginProvider(context: context);
           },
           lazy: true,
         ),

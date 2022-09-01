@@ -18,14 +18,14 @@ class QwertyLayoutProvider extends ChangeNotifier {
   String modelType = '';
   bool isModelTypeDataLoaded = false;
   int hintsCounter = 0;
-  late FlutterTTS flutterTTS;
+  late TTSController flutterTTS;
 
   QwertyLayoutProvider({required BuildContext context}) {
     inIt(context:context);
   }
 
   void inIt({required BuildContext context}) async {
-    flutterTTS = context.read<FlutterTTS>();
+    flutterTTS = context.read<TTSController>();
     await getTheModelsList();
   }
 

@@ -44,21 +44,16 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                 elevation: 16,
                 underline: Container(),
                 onChanged: (newValue) {
-                  //todo: set value
-                  context.read<SettingsProvider>().ttsController.languaje =
-                      newValue;
-                  context.read<SettingsProvider>().language = newValue!;
+                  context
+                      .read<SettingsProvider>()
+                      .changeLanguage(newValue: newValue!);
                 },
-                items: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .availableTTS
-                    .map<DropdownMenuItem<String>>((value) {
-                  return DropdownMenuItem<String>(
-                    value: value.toString(),
-                    child: Text(value.toString()),
-                  );
-                }).toList(),
+                items: const [
+                  DropdownMenuItem<String>(
+                    value: 'es-AR',
+                    child: Text('es'),
+                  )
+                ],
               ),
               const Divider(),
               const Text(
@@ -123,8 +118,9 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                   if (context
                       .read<SettingsProvider>()
                       .ttsController
-                      .isCustomTTSEnable)
+                      .isCustomTTSEnable) {
                     context.read<SettingsProvider>().setRate(value);
+                  }
                 },
               ),
               const Divider(),
@@ -159,8 +155,9 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                   if (context
                       .read<SettingsProvider>()
                       .ttsController
-                      .isCustomTTSEnable)
+                      .isCustomTTSEnable) {
                     context.read<SettingsProvider>().setPitch(value);
+                  }
                 },
               ),
               const Text(
