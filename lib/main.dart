@@ -1,26 +1,34 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:keyboards/app/global_controllers/auth_provider.dart';
 import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboards/app/global_controllers/tts_controller.dart';
 import 'package:keyboards/app/modules/login/temporary_login.dart';
 import 'package:keyboards/app/modules/qwetry_keyboard/qwerty_layout.dart';
+import 'package:keyboards/app/modules/settings/language_page.dart';
+import 'package:keyboards/app/modules/settings/settings_page.dart';
+import 'package:keyboards/app/modules/settings/voice_and_subtitle_page.dart';
 import 'package:keyboards/app/modules/splash/splash_screen.dart';
 import 'package:keyboards/app/providers/login_provider.dart';
 import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboards/app/providers/settings_provider.dart';
 import 'package:keyboards/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   await Future.delayed(const Duration(milliseconds: 1000));
+  await dotenv.load(fileName: "dotenv");
   WidgetsFlutterBinding.ensureInitialized();
   kIsWeb
       ? await Firebase.initializeApp(
           options: FirebaseOptions(
-            apiKey: "AIzaSyC6AQmv6NkjzWxjMXf31pB64hv_-vo6WOM",
-            appId: "1:703376507167:web:54e10180ee9035d4f1f02a",
-            messagingSenderId: "703376507167",
-            projectId: "keyboard-98820",
+            apiKey: dotenv.env['API_KEY'] ?? 'add Proper Values',
+            appId: dotenv.env['APP_ID'] ?? 'add Proper Values',
+            messagingSenderId:
+                dotenv.env['MESSAGING_SENDER_ID'] ?? 'add Proper Values',
+            projectId: dotenv.env['PROJECT_ID'] ?? 'add Proper Values',
           ),
         )
       : await Firebase.initializeApp();
@@ -43,10 +51,20 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) {
-            return FlutterTTS();
+            return AuthProvider();
           },
           lazy: false,
         ),
+        ChangeNotifierProvider(
+          create: (_) {
+            return TTSController();
+          },
+          lazy: false,
+        ),
+        // ChangeNotifierProxyProvider<FlutterTTS, SettingsProvider>(
+        //   update: (context, flutterTTS, settingsProvider) => settingsProvider(null),
+        //   create: (BuildContext context) => SettingsProvider(null),
+        // ),
         ChangeNotifierProvider(
           create: (_) {
             return SplashProvider();
@@ -54,14 +72,20 @@ class MyApp extends StatelessWidget {
           lazy: false,
         ),
         ChangeNotifierProvider(
-          create: (_) {
-            return LoginProvider();
+          create: (context) {
+            return LoginProvider(context: context);
           },
           lazy: true,
         ),
         ChangeNotifierProvider(
-          create: (_) {
-            return QwertyLayoutProvider();
+          create: (context) {
+            return QwertyLayoutProvider(context: context);
+          },
+          lazy: true,
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return SettingsProvider(context: context);
           },
           lazy: true,
         ),
@@ -73,6 +97,9 @@ class MyApp extends StatelessWidget {
           '/': (context) => const SplashScreen(),
           '/login': (context) => const TemporaryLogin(),
           '/qwerty_keyboard': (context) => const QwertyLayout(),
+          '/settings': (context) => const SettingsPage(),
+          '/language': (context) => const LanguagePage(),
+          '/voice_and_subtitles': (context) => const VoiceAndSubtitlesPage(),
         },
       ),
     );
