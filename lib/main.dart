@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
       providers: ProvidersList.providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute:AppRoutes.SPLASH,
+        initialRoute: AppRoutes.SPLASH,
         routes: AppPages.pages,
       ),
     );
