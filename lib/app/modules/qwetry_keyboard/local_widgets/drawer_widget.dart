@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboards/app/global_controllers/auth_provider.dart';
+import 'package:keyboards/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboards/app/utils/constants.dart';
 
@@ -94,7 +95,7 @@ class DrawerWidget extends StatelessWidget {
                           icon: Icons.settings,
                           title: 'Settings',
                           onTap: () async {
-                            Navigator.pushNamed(context, '/settings');
+                            Navigator.pushNamed(context, AppRoutes.SETTINGS);
                           },
                         ),
                         ListTileWidget(
