@@ -38,6 +38,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
   void muteFunction() {
     muteOrNot = !muteOrNot;
     ttsController.setVolume = muteOrNot ? 0.8 : 0.0;
+    notifyListeners();
     print(ttsController.volume);
   }
 

@@ -8,28 +8,35 @@ class KeyRowWidget extends StatelessWidget {
     Key? key,
     required this.rowElements,
     required this.selectedValue,
-    required this.verticalSize,
-    required this.horizontalSize,
   }) : super(key: key);
   final List<String> rowElements;
   final String selectedValue;
-  final double verticalSize, horizontalSize;
+
+  // final double verticalSize, horizontalSize;
 
   @override
   Widget build(BuildContext context) {
+    final horizontalSize = MediaQuery.of(context).size.width;
+    final verticalSize = MediaQuery.of(context).size.height;
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: rowElements
           .map(
-            (e) => KeyWidget(
-              verticalSize: verticalSize,
-              horizontalSize: horizontalSize,
-              onTap: () async {
-                context.read<QwertyLayoutProvider>().selectedString = e;
-                await context.read<QwertyLayoutProvider>().predictNextValue(e);
-              },
-              text: e,
-              selectedValue: selectedValue,
+            (e) => Padding(
+              padding: EdgeInsets.only(
+                  left: e == rowElements.first ? 0 : horizontalSize * 0.028),
+              child: KeyWidget(
+                verticalSize: verticalSize,
+                horizontalSize: horizontalSize,
+                onTap: () async {
+                  context.read<QwertyLayoutProvider>().selectedString = e;
+                  await context
+                      .read<QwertyLayoutProvider>()
+                      .predictNextValue(e);
+                },
+                text: e,
+                selectedValue: selectedValue,
+              ),
             ),
           )
           .toList(),

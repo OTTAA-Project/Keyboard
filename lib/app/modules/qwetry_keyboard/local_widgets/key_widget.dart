@@ -23,7 +23,7 @@ class KeyWidget extends StatelessWidget {
         //   horizontal: horizontalSize * 0.03,
         // ),
         height: verticalSize * 0.1,
-        width: horizontalSize * 0.09,
+        width: horizontalSize * 0.05,
         decoration: BoxDecoration(
           color: selectedValue == text ? Colors.white : Colors.grey[700],
           borderRadius: BorderRadius.circular(verticalSize * 0.01),
@@ -33,7 +33,7 @@ class KeyWidget extends StatelessWidget {
             text,
             style: TextStyle(
                 color: selectedValue == text ? Colors.black : Colors.white,
-                fontSize: verticalSize * 0.04,
+                fontSize: verticalSize * 0.028,
                 fontWeight: FontWeight.w700,
                 height: 1.0),
           ),

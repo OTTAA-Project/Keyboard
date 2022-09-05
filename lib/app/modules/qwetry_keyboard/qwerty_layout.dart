@@ -14,7 +14,7 @@ class QwertyLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final verticalSize = MediaQuery.of(context).size.height;
-    final horizontalSize = MediaQuery.of(context).size.height;
+    final horizontalSize = MediaQuery.of(context).size.width;
     return Scaffold(
       // drawer: Padding(
       //   padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
@@ -66,10 +66,8 @@ class QwertyLayout extends StatelessWidget {
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                          EdgeInsets.symmetric(vertical: horizontalSize * 0.028),
                       child: KeyRowWidget(
-                        horizontalSize: horizontalSize,
-                        verticalSize: verticalSize,
                         rowElements: const [
                           'q',
                           'w',
@@ -88,8 +86,6 @@ class QwertyLayout extends StatelessWidget {
                       ),
                     ),
                     KeyRowWidget(
-                      horizontalSize: horizontalSize,
-                      verticalSize: verticalSize,
                       rowElements: const [
                         'a',
                         's',
@@ -107,10 +103,8 @@ class QwertyLayout extends StatelessWidget {
                     ),
                     Padding(
                       padding:
-                          EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                          EdgeInsets.symmetric(vertical: horizontalSize * 0.0285),
                       child: KeyRowWidget(
-                        horizontalSize: horizontalSize,
-                        verticalSize: verticalSize,
                         rowElements: const [
                           'z',
                           'x',
@@ -129,18 +123,18 @@ class QwertyLayout extends StatelessWidget {
                       ),
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         //todo: Atras onTap
                         GestureDetector(
                           onTap: () async {
-                            await context
-                                .read<QwertyLayoutProvider>()
-                                .getTheModelsList();
+                            // await context
+                            //     .read<QwertyLayoutProvider>()
+                            //     .getTheModelsList();
                           },
                           child: Container(
                             height: verticalSize * 0.1,
-                            width: horizontalSize * 0.22,
+                            width: horizontalSize * 0.131,
                             decoration: BoxDecoration(
                               color: Colors.grey[700],
                               borderRadius:

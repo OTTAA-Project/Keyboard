@@ -21,6 +21,6 @@ class SplashProvider extends ChangeNotifier {
     await Future.delayed(
       const Duration(seconds: 2),
     );
-    return _sharedPref.getBool(isLoggedInString) ?? false;
+    return _sharedPref.getBool(isLoggedInString) ?? true;
   }
 }
