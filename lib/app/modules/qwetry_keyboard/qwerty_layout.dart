@@ -65,8 +65,8 @@ class QwertyLayout extends StatelessWidget {
                       // focusNode: context.read<QwertyLayoutProvider>().focusNode,
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: horizontalSize * 0.028),
+                      padding: EdgeInsets.symmetric(
+                          vertical: horizontalSize * 0.028),
                       child: KeyRowWidget(
                         rowElements: const [
                           'q',
@@ -102,8 +102,8 @@ class QwertyLayout extends StatelessWidget {
                           context.watch<QwertyLayoutProvider>().selectedString,
                     ),
                     Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: horizontalSize * 0.0285),
+                      padding: EdgeInsets.symmetric(
+                          vertical: horizontalSize * 0.0285),
                       child: KeyRowWidget(
                         rowElements: const [
                           'z',
@@ -134,7 +134,7 @@ class QwertyLayout extends StatelessWidget {
                           },
                           child: Container(
                             height: verticalSize * 0.1,
-                            width: horizontalSize * 0.131,
+                            width: horizontalSize * 0.128,
                             decoration: BoxDecoration(
                               color: Colors.grey[700],
                               borderRadius:
@@ -159,94 +159,94 @@ class QwertyLayout extends StatelessWidget {
                           onTap: () async => await context
                               .read<QwertyLayoutProvider>()
                               .addSpace(),
-                          child: Container(
-                            height: verticalSize * 0.1,
-                            width: horizontalSize * 0.4,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[700],
-                              borderRadius:
-                                  BorderRadius.circular(verticalSize * 0.01),
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: horizontalSize * 0.028),
+                            child: Container(
+                              height: verticalSize * 0.1,
+                              width: horizontalSize * 0.205,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[700],
+                                borderRadius:
+                                    BorderRadius.circular(verticalSize * 0.01),
+                              ),
                             ),
                           ),
                         ),
-                        Row(
-                          children: [
-                            //todo: smiley onTap
-                            GestureDetector(
-                              onTap: () {
-                                print(context.read<TTSController>().languaje);
-                              },
-                              child: Container(
-                                height: verticalSize * 0.1,
-                                width: horizontalSize * 0.09,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[700],
-                                  borderRadius: BorderRadius.circular(
-                                      verticalSize * 0.01),
-                                ),
-                                child: Icon(
-                                  Icons.emoji_emotions_outlined,
-                                  size: verticalSize * 0.06,
-                                  color: Colors.white,
-                                ),
+                        //todo: smiley onTap
+                        GestureDetector(
+                          onTap: () {
+                            print(context.read<TTSController>().languaje);
+                          },
+                          child: Container(
+                            height: verticalSize * 0.1,
+                            width: horizontalSize * 0.05,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius: BorderRadius.circular(
+                                  verticalSize * 0.01),
+                            ),
+                            child: Icon(
+                              Icons.emoji_emotions_outlined,
+                              size: verticalSize * 0.06,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: horizontalSize * 0.028,
+                        ),
+                        KeyWidget(
+                          text: '123',
+                          onTap: () {},
+                          selectedValue: 'selectedValue',
+                          horizontalSize: horizontalSize,
+                          verticalSize: verticalSize,
+                        ),
+                        SizedBox(
+                          width: horizontalSize * 0.028,
+                        ),
+                        //todo: upArrow onTap
+                        GestureDetector(
+                          child: Container(
+                            height: verticalSize * 0.1,
+                            width: horizontalSize * 0.05,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius: BorderRadius.circular(
+                                  verticalSize * 0.01),
+                            ),
+                            child: Icon(
+                              Icons.arrow_upward,
+                              size: verticalSize * 0.06,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: horizontalSize * 0.028,
+                        ),
+                        //todo: arrowForward onTap
+                        GestureDetector(
+                          onTap: () async => context
+                              .read<QwertyLayoutProvider>()
+                              .updateHints(),
+                          child: Container(
+                            height: verticalSize * 0.1,
+                            width: horizontalSize * 0.13,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[700],
+                              borderRadius: BorderRadius.circular(
+                                  verticalSize * 0.01),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.arrow_forward,
+                                size: verticalSize * 0.1,
+                                color: Colors.white,
                               ),
                             ),
-                            SizedBox(
-                              width: horizontalSize * 0.025,
-                            ),
-                            KeyWidget(
-                              text: '123',
-                              onTap: () {},
-                              selectedValue: 'selectedValue',
-                              horizontalSize: horizontalSize,
-                              verticalSize: verticalSize,
-                            ),
-                            SizedBox(
-                              width: horizontalSize * 0.025,
-                            ),
-                            //todo: upArrow onTap
-                            GestureDetector(
-                              child: Container(
-                                height: verticalSize * 0.1,
-                                width: horizontalSize * 0.09,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[700],
-                                  borderRadius: BorderRadius.circular(
-                                      verticalSize * 0.01),
-                                ),
-                                child: Icon(
-                                  Icons.arrow_upward,
-                                  size: verticalSize * 0.06,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: horizontalSize * 0.025,
-                            ),
-                            //todo: arrowForward onTap
-                            GestureDetector(
-                              onTap: () async => context
-                                  .read<QwertyLayoutProvider>()
-                                  .updateHints(),
-                              child: Container(
-                                height: verticalSize * 0.1,
-                                width: horizontalSize * 0.21,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[700],
-                                  borderRadius: BorderRadius.circular(
-                                      verticalSize * 0.01),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_forward,
-                                    size: verticalSize * 0.1,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
