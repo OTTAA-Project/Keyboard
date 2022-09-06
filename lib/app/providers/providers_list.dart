@@ -1,10 +1,10 @@
-import 'package:keyboards/app/global_controllers/auth_provider.dart';
-import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
-import 'package:keyboards/app/global_controllers/tts_controller.dart';
-import 'package:keyboards/app/providers/login_provider.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
-import 'package:keyboards/app/providers/settings_provider.dart';
-import 'package:keyboards/app/providers/splash_provider.dart';
+import 'package:keyboard/app/global_controllers/auth_provider.dart';
+import 'package:keyboard/app/global_controllers/shared_preferences_controller.dart';
+import 'package:keyboard/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/providers/login_provider.dart';
+import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboard/app/providers/settings_provider.dart';
+import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
