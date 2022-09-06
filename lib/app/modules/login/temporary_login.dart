@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/login_provider.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/providers/login_provider.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class TemporaryLogin extends StatelessWidget {

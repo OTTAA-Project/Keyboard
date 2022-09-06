@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
+import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
 import 'package:provider/provider.dart';
 
 class KeyRowWidget extends StatelessWidget {

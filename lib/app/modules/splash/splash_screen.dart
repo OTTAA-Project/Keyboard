@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/splash_provider.dart';
+import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreen extends StatelessWidget {

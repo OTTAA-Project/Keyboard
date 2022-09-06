@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/global_controllers/auth_provider.dart';
+import 'package:keyboard/app/global_controllers/auth_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/utils/constants.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({Key? key}) : super(key: key);

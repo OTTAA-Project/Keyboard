@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/global_controllers/tts_controller.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/drawer_widget.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_row_widget.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/prediction_widget.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/local_widgets/text_input_widget.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboard/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/drawer_widget.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/key_row_widget.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/key_widget.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/prediction_widget.dart';
+import 'package:keyboard/app/modules/qwetry_keyboard/local_widgets/text_input_widget.dart';
+import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
 import 'package:provider/provider.dart';
 
 class QwertyLayout extends StatelessWidget {

@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:keyboards/app/data/models/model_type_model.dart';
-import 'package:keyboards/app/data/models/predict_response_model.dart';
-import 'package:keyboards/app/global_controllers/tts_controller.dart';
-import 'package:keyboards/app/utils/http_client.dart';
+import 'package:keyboard/app/data/models/model_type_model.dart';
+import 'package:keyboard/app/data/models/predict_response_model.dart';
+import 'package:keyboard/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

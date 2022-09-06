@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashProvider extends ChangeNotifier {

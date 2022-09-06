@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/utils/constants.dart';
 
 class SharedPreferencesController extends ChangeNotifier {
   late SharedPreferences _instance;

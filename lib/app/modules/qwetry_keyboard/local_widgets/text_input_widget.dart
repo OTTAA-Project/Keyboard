@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
 import 'package:provider/provider.dart';
 
 class TextInputWidget extends StatelessWidget {

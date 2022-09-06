@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/global_controllers/tts_controller.dart';
 import 'package:provider/provider.dart';
 
 class SettingsProvider extends ChangeNotifier {

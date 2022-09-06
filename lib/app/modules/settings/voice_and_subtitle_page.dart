@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/settings_provider.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/providers/settings_provider.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/build_app_bar.dart';
 

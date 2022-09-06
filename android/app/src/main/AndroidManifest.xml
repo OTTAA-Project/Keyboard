@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.stonfacesoft.keyboards">
+    package="com.stonefacesoft.keyboard">
    <application
-        android:label="keyboards"
+        android:label="Keyboard by OTTAA"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
