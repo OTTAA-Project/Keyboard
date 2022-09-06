@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 class QwertyLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
   String selectedString = '';
+  bool muteOrNot = false;
   final HttpClient httpClient = HttpClient();
   late PredictResponse mainResponse;
   late PredictResponse cacheResponse;
@@ -18,20 +19,27 @@ class QwertyLayoutProvider extends ChangeNotifier {
   String modelType = '';
   bool isModelTypeDataLoaded = false;
   int hintsCounter = 0;
-  late TTSController flutterTTS;
+  late TTSController ttsController;
 
   QwertyLayoutProvider({required BuildContext context}) {
-    inIt(context:context);
+    inIt(context: context);
   }
 
   void inIt({required BuildContext context}) async {
-    flutterTTS = context.read<TTSController>();
+    ttsController = context.read<TTSController>();
     await getTheModelsList();
   }
 
   void onChangedDropDownMenu({required String value}) {
     modelType = value;
     notifyListeners();
+  }
+
+  void muteFunction() {
+    muteOrNot = !muteOrNot;
+    ttsController.setVolume = muteOrNot ? 0.8 : 0.0;
+    notifyListeners();
+    print(ttsController.volume);
   }
 
   Future<void> predictNextValue(String value) async {
@@ -212,7 +220,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> speakSentenceAndSendItToLearn() async {
-    flutterTTS.speak(qwertyController.text);
+    ttsController.speak(qwertyController.text);
     await deleteWholeSentence();
   }
 

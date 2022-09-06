@@ -2,19 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:keyboards/app/global_controllers/auth_provider.dart';
-import 'package:keyboards/app/global_controllers/shared_preferences_controller.dart';
-import 'package:keyboards/app/global_controllers/tts_controller.dart';
-import 'package:keyboards/app/modules/login/temporary_login.dart';
-import 'package:keyboards/app/modules/qwetry_keyboard/qwerty_layout.dart';
-import 'package:keyboards/app/modules/settings/language_page.dart';
-import 'package:keyboards/app/modules/settings/settings_page.dart';
-import 'package:keyboards/app/modules/settings/voice_and_subtitle_page.dart';
-import 'package:keyboards/app/modules/splash/splash_screen.dart';
-import 'package:keyboards/app/providers/login_provider.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
-import 'package:keyboards/app/providers/settings_provider.dart';
-import 'package:keyboards/app/providers/splash_provider.dart';
+import 'package:keyboards/app/providers/providers_list.dart';
+import 'package:keyboards/app/routes/app_pages.dart';
+import 'package:keyboards/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -42,65 +32,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(
-          create: (_) {
-            return SharedPreferencesController();
-          },
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (_) {
-            return AuthProvider();
-          },
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (_) {
-            return TTSController();
-          },
-          lazy: false,
-        ),
-        // ChangeNotifierProxyProvider<FlutterTTS, SettingsProvider>(
-        //   update: (context, flutterTTS, settingsProvider) => settingsProvider(null),
-        //   create: (BuildContext context) => SettingsProvider(null),
-        // ),
-        ChangeNotifierProvider(
-          create: (_) {
-            return SplashProvider();
-          },
-          lazy: false,
-        ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return LoginProvider(context: context);
-          },
-          lazy: true,
-        ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return QwertyLayoutProvider(context: context);
-          },
-          lazy: true,
-        ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return SettingsProvider(context: context);
-          },
-          lazy: true,
-        ),
-      ],
+      providers: ProvidersList.providers,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashScreen(),
-          '/login': (context) => const TemporaryLogin(),
-          '/qwerty_keyboard': (context) => const QwertyLayout(),
-          '/settings': (context) => const SettingsPage(),
-          '/language': (context) => const LanguagePage(),
-          '/voice_and_subtitles': (context) => const VoiceAndSubtitlesPage(),
-        },
+        initialRoute: AppRoutes.SPLASH,
+        routes: AppPages.pages,
       ),
     );
   }
