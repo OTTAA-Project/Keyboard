@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/utils/constants.dart';
+import 'package:keyboard/app/routes/app_routes.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -50,7 +51,7 @@ class SettingsPage extends StatelessWidget {
                   color: kOTTAAOrangeNew,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, '/voice_and_subtitles');
+                  Navigator.pushNamed(context, AppRoutes.SETTINGS_VOICE);
                 },
                 title: const Text('Voice and Subtitles'),
               ),
@@ -61,7 +62,7 @@ class SettingsPage extends StatelessWidget {
                   color: kOTTAAOrangeNew,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, '/language');
+                  Navigator.pushNamed(context, AppRoutes.SETTINGS_LANG);
                   // Get.to(LanguagePage());
                 },
                 title: const Text('Language'),
