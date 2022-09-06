@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/global_controllers/auth_provider.dart';
+import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 
@@ -62,14 +64,12 @@ class DrawerWidget extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         ListTileWidget(
-                          icon: Icons.volume_up,
+                          icon: context.watch<QwertyLayoutProvider>().muteOrNot
+                              ? Icons.volume_up
+                              : Icons.volume_off,
                           title: 'Mute',
                           onTap: () async {
-                            // _ttsController.setVolume =
-                            //     controller.muteOrNot.value ? 0.8 : 0.0;
-                            // controller.muteOrNot.value =
-                            //     !controller.muteOrNot.value;
-                            // print(_ttsController.volume);
+                           context.read<QwertyLayoutProvider>().muteFunction();
                           },
                         ),
                       ],
@@ -94,7 +94,7 @@ class DrawerWidget extends StatelessWidget {
                           icon: Icons.settings,
                           title: 'Settings',
                           onTap: () async {
-                            Navigator.pushNamed(context, '/settings');
+                            Navigator.pushNamed(context, AppRoutes.SETTINGS);
                           },
                         ),
                         ListTileWidget(
