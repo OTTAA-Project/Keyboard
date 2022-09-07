@@ -122,3 +122,9 @@ app.*.symbols
 /lib/app/data/models/grupos_model.g.dart
 /lib/app/data/models/pict_model.g.dart
 /lib/app/data/models/search_model.g.dart
+
+/lib/app/data/models/model_type_model.g.dart
+/lib/app/data/models/predict_response_model.g.dart
+
+
+dotenv

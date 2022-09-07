@@ -45,6 +45,8 @@ dependencies:
   firebase_auth: ^3.4.2
   shared_preferences: ^2.0.15
   firebase_core: ^1.21.1
+  google_fonts: ^3.0.1
+  emojis: ^0.9.9
 
 dev_dependencies:
   flutter_test:

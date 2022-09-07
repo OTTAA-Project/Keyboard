@@ -5,10 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:keyboards/app/providers/providers_list.dart';
 import 'package:keyboards/app/routes/app_pages.dart';
 import 'package:keyboards/app/routes/app_routes.dart';
+import 'package:keyboards/app/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  await Future.delayed(const Duration(milliseconds: 1000));
+  // await Future.delayed(const Duration(milliseconds: 1000));
   await dotenv.load(fileName: "dotenv");
   WidgetsFlutterBinding.ensureInitialized();
   kIsWeb
@@ -16,8 +17,7 @@ void main() async {
           options: FirebaseOptions(
             apiKey: dotenv.env['API_KEY'] ?? 'add Proper Values',
             appId: dotenv.env['APP_ID'] ?? 'add Proper Values',
-            messagingSenderId:
-                dotenv.env['MESSAGING_SENDER_ID'] ?? 'add Proper Values',
+            messagingSenderId: dotenv.env['MESSAGING_SENDER_ID'] ?? 'add Proper Values',
             projectId: dotenv.env['PROJECT_ID'] ?? 'add Proper Values',
           ),
         )
@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: ProvidersList.providers,
       child: MaterialApp(
+        theme: kAppTheme,
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.SPLASH,
         routes: AppPages.pages,

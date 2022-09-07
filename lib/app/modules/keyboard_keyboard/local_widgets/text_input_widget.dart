@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboards/app/providers/keyboard_layout_provider.dart';
+import 'package:keyboards/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class TextInputWidget extends StatelessWidget {
@@ -17,14 +18,13 @@ class TextInputWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: width * 0.01),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       height: height * 0.2,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(height * 0.02),
-        color: Colors.grey[700],
+        color: kButtonColor,
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
         children: [
           TextFormField(
             // focusNode: focusNode,
@@ -33,50 +33,44 @@ class TextInputWidget extends StatelessWidget {
               border: InputBorder.none,
             ),
             cursorColor: Colors.white,
-            style: TextStyle(
-              fontSize: height * 0.023,
+            style: const TextStyle(
               color: Colors.white,
             ),
             maxLines: 2,
             enabled: false,
           ),
           //todo: add the callbacks for the functions
-          Padding(
-            padding: EdgeInsets.only(bottom: height * 0.01),
+          Align(
+            alignment: Alignment.bottomRight,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconWidget(
                   height: height,
-                  onTap: ()async{
-                    await context.read<QwertyLayoutProvider>().addSpace();
+                  onTap: () async {
+                    await context.read<KeyboardLayoutProvider>().addSpace();
                   },
                   iconData: Icons.space_bar_outlined,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.02),
-                  child: IconWidget(
-                    height: height,
-                    onTap: () {
-                      context.read<QwertyLayoutProvider>().deleteLastCharacter();
-                    },
-                    iconData: Icons.backspace_outlined,
-                  ),
+                IconWidget(
+                  height: height,
+                  onTap: () {
+                    context.read<KeyboardLayoutProvider>().deleteLastCharacter();
+                  },
+                  iconData: Icons.backspace_outlined,
                 ),
                 IconWidget(
                   height: height,
-                  onTap: () async{
-                    await context.read<QwertyLayoutProvider>().deleteWholeSentence();
+                  onTap: () async {
+                    await context.read<KeyboardLayoutProvider>().deleteWholeSentence();
                   },
                   iconData: Icons.delete,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: width * 0.02),
-                  child: IconWidget(
-                    onTap: () {},
-                    height: height,
-                    iconData: Icons.arrow_back_ios_outlined,
-                  ),
+                IconWidget(
+                  onTap: () {},
+                  height: height,
+                  iconData: Icons.arrow_back_ios_outlined,
                 ),
                 IconWidget(
                   height: height,
@@ -105,11 +99,12 @@ class IconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Icon(
+    return IconButton(
+      onPressed: onTap,
+      splashRadius: 1,
+      icon: Icon(
         iconData,
-        size: height * 0.05,
+        size: height * 0.04,
         color: Colors.white,
       ),
     );

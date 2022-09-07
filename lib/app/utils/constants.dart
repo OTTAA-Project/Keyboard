@@ -1,10 +1,43 @@
 import 'package:flutter/material.dart';
 
-Color kColorAppbar = const Color(0xFF6200EE);
-Color kOTTAAOrangeNew = const Color(0xFFFF6900);
-Color kPrimaryBG = const Color(0xFF1A1A1A);
-Color kPrimaryFont = Colors.white;
-Color kBorderColor = Colors.pink;
-Color addButtonClr = const Color(0x00ff6a00);
+const Color kColorAppbar = Color(0xFFFF6900);
+const Color kOTTAAOrangeNew = Color(0xFFFF6900);
+const Color kPrimaryBG = Color(0xff040811);
+const Color kPrimaryFont = Colors.white;
+const Color kBorderColor = Colors.pink;
+const Color kButtonColor = Color(0xff1E1E1E);
 
-String isLoggedInString = 'is_logged_in';
+const String isLoggedInString = 'is_logged_in';
+
+const List<String> kLetters = [
+  'q',
+  'w',
+  'e',
+  'r',
+  't',
+  'y',
+  'u',
+  'i',
+  'o',
+  'p',
+  'a',
+  's',
+  'd',
+  'f',
+  'g',
+  'h',
+  'j',
+  'k',
+  'l',
+  'ñ',
+  'z',
+  'x',
+  'c',
+  'v',
+  'b',
+  'n',
+  'm',
+  '.',
+  ',',
+  '?',
+];
