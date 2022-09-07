@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/keyboard_layout_provider.dart';
+import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
 import 'package:provider/provider.dart';
 
 class EmojiWidget extends StatelessWidget {

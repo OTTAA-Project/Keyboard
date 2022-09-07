@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboards/app/themes/app_theme.dart';
+import 'package:keyboard/app/themes/app_theme.dart';
 
 class KeyWidget extends StatelessWidget {
   const KeyWidget({

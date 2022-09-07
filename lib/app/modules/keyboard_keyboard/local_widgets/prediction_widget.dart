@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/utils/constants.dart';
 
 class PredictionWidget extends StatelessWidget {
   const PredictionWidget({

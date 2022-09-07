@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:keyboards/app/modules/keyboard_keyboard/local_widgets/local_widgets.dart';
-import 'package:keyboards/app/modules/keyboard_layouts/emojis_layout.dart';
-import 'package:keyboards/app/modules/keyboard_layouts/numbers_layout.dart';
-import 'package:keyboards/app/modules/keyboard_layouts/qwerty_layout.dart';
-import 'package:keyboards/app/providers/keyboard_layout_provider.dart';
-import 'package:keyboards/app/themes/app_theme.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/local_widgets.dart';
+import 'package:keyboard/app/modules/keyboard_layouts/emojis_layout.dart';
+import 'package:keyboard/app/modules/keyboard_layouts/numbers_layout.dart';
+import 'package:keyboard/app/modules/keyboard_layouts/qwerty_layout.dart';
+import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
+import 'package:keyboard/app/themes/app_theme.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class KeyboardLayoutScreen extends StatefulWidget {

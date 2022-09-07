@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:keyboard/app/providers/providers_list.dart';
 import 'package:keyboard/app/routes/app_pages.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
-import 'package:keyboards/app/themes/app_theme.dart';
+import 'package:keyboard/app/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

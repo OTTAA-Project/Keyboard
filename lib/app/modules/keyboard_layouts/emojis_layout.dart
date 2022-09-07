@@ -1,9 +1,9 @@
 import 'package:emojis/emoji.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/data/enums/keyboard_layout.dart';
-import 'package:keyboards/app/modules/keyboard_keyboard/local_widgets/emoji_widget.dart';
-import 'package:keyboards/app/providers/keyboard_layout_provider.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/data/enums/keyboard_layout.dart';
+import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/emoji_widget.dart';
+import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
 class EmojisLayout extends StatelessWidget {

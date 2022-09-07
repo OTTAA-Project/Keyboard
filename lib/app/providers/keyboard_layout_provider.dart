@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:emojis/emoji.dart';
-import 'package:keyboards/app/data/enums/keyboard_layout.dart';
+import 'package:keyboard/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/data/models/model_type_model.dart';
 import 'package:keyboard/app/data/models/predict_response_model.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
