@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:keyboard/app/providers/providers_list.dart';
 import 'package:keyboard/app/routes/app_pages.dart';
@@ -10,8 +11,12 @@ import 'package:provider/provider.dart';
 
 void main() async {
   // await Future.delayed(const Duration(milliseconds: 1000));
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+
   await dotenv.load(fileName: "dotenv");
   WidgetsFlutterBinding.ensureInitialized();
+
   kIsWeb
       ? await Firebase.initializeApp(
           options: FirebaseOptions(

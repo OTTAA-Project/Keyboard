@@ -70,6 +70,7 @@ class KeyboardLayoutScreen extends StatelessWidget {
                     ),
                     keyboardLayouts[context.watch<KeyboardLayoutProvider>().currentLayout.index],
                     SizedBox(
+                      width: horizontalSize,
                       height: verticalSize * 0.1,
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
@@ -77,8 +78,8 @@ class KeyboardLayoutScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //todo: Atras onTap
-
                           Expanded(
+                            flex: 1,
                             child: GestureDetector(
                               onTap: () async {
                                 // await context
@@ -92,7 +93,7 @@ class KeyboardLayoutScreen extends StatelessWidget {
                                 ),
                                 child: const Center(
                                   child: Text(
-                                    'Atras',
+                                    'Atrás',
                                     textScaleFactor: 1.5,
                                     style: TextStyle(
                                       color: Colors.white,

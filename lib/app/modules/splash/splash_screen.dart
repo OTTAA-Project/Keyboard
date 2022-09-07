@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +8,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setPreferredOrientations([]);
-
     return Scaffold(
       body: FutureBuilder<bool>(
         future: context.read<SplashProvider>().isUserLogIn,
