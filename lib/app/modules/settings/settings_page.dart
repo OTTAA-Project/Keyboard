@@ -1,13 +1,32 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:keyboard/app/utils/constants.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
 
   @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  void dispose() {
+    super.dispose();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    SystemChrome.setPreferredOrientations([]);
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -17,13 +36,9 @@ class SettingsPage extends StatelessWidget {
         ),
         title: const Text(
           'Settings',
-          style: TextStyle(
-            color: Colors.black,
-          ),
         ),
         // leading: Placeholder(),
         centerTitle: false,
-        backgroundColor: Colors.grey[350],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(
@@ -34,17 +49,6 @@ class SettingsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'SETTINGS',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-              Divider(
-                height: 10,
-                color: Colors.grey[700],
-              ),
               ListTile(
                 leading: Icon(
                   Icons.record_voice_over,

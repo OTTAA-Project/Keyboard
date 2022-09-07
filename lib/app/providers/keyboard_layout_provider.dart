@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:emojis/emoji.dart';
+import 'package:keyboards/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/data/models/model_type_model.dart';
 import 'package:keyboard/app/data/models/predict_response_model.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
@@ -6,7 +8,7 @@ import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class QwertyLayoutProvider extends ChangeNotifier {
+class KeyboardLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
   String selectedString = '';
   bool muteOrNot = false;
@@ -21,7 +23,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
   int hintsCounter = 0;
   late TTSController ttsController;
 
-  QwertyLayoutProvider({required BuildContext context}) {
+  KeyboardLayout currentLayout = KeyboardLayout.qwerty;
+
+  KeyboardLayoutProvider({required BuildContext context}) {
     inIt(context: context);
   }
 
@@ -32,6 +36,11 @@ class QwertyLayoutProvider extends ChangeNotifier {
 
   void onChangedDropDownMenu({required String value}) {
     modelType = value;
+    notifyListeners();
+  }
+
+  void onChangeKeyboardLayout(KeyboardLayout layout) {
+    currentLayout = layout;
     notifyListeners();
   }
 
@@ -47,9 +56,9 @@ class QwertyLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> receivePredictedWords() async {
+  Future<void> receivePredictedWords(String text) async {
     final map = {
-      'sentence': qwertyController.text,
+      'sentence': text,
       'userName': 'user',
       'model': modelType == '' ? 'test' : modelType,
       'language': 'es',
@@ -58,8 +67,7 @@ class QwertyLayoutProvider extends ChangeNotifier {
     // debugPrint(data);
     final response = await httpClient.postPredict(
       data: map,
-      url:
-          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
+      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
     );
     debugPrint(response);
     final data = jsonDecode(response);
@@ -74,8 +82,13 @@ class QwertyLayoutProvider extends ChangeNotifier {
 
   Future<void> addSpace() async {
     qwertyController.text = qwertyController.text + ' ';
-    await receivePredictedWords();
-    await showPredictions();
+    print(qwertyController.text);
+    final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
+    print(searchTerm);
+    if (searchTerm.trim().isNotEmpty) {
+      await receivePredictedWords(searchTerm);
+      await showPredictions();
+    }
     notifyListeners();
   }
 
@@ -189,21 +202,23 @@ class QwertyLayoutProvider extends ChangeNotifier {
   }
 
   void deleteLastCharacter() async {
-    if (qwertyController.text.isEmpty) {
+    if (qwertyController.text.trim().isEmpty) {
       // hintsValues = ['', '', '', ''];
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
       hintsValues = ['', '', '', ''];
     } else {
-      qwertyController.text =
-          qwertyController.text.substring(0, qwertyController.text.length - 1);
+      qwertyController.text = qwertyController.text.substring(0, qwertyController.text.length - 1);
       hintsValues = ['', '', '', ''];
     }
     final char = qwertyController.text.characters;
-    if (qwertyController.text.length >= 2 && char.last == ' ') {
+
+    final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
+
+    if (searchTerm.length >= 2 && char.last == ' ') {
       selectedString = '';
-      await receivePredictedWords();
+      await receivePredictedWords(searchTerm);
       notifyListeners();
       await showPredictions();
     }
@@ -227,22 +242,15 @@ class QwertyLayoutProvider extends ChangeNotifier {
   Future<void> sendSentenceForLearning() async {
     final ans = await httpClient.post(
       /// change values after testing
-      data: {
-        "sentence": qwertyController.text,
-        "userName": "user",
-        "model": modelType == '' ? 'test' : modelType,
-        "language": "es"
-      },
-      url:
-          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
+      data: {"sentence": qwertyController.text, "userName": "user", "model": modelType == '' ? 'test' : modelType, "language": "es"},
+      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
     );
     debugPrint(ans.toString());
   }
 
   Future<void> getTheModelsList() async {
     final response = await httpClient.getRequest(
-      url:
-          'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es',
+      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es',
     );
     final json = jsonDecode(response);
     modelTypeModel = ModelTypeModel.fromJson(json);

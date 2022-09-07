@@ -10,7 +10,8 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar('Voice and subtitles'),
+      backgroundColor: Colors.white,
+      appBar: buildAppBar('Voces y subtitulos'),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,

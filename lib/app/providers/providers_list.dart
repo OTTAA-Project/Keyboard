@@ -2,7 +2,7 @@ import 'package:keyboard/app/global_controllers/auth_provider.dart';
 import 'package:keyboard/app/global_controllers/shared_preferences_controller.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
 import 'package:keyboard/app/providers/login_provider.dart';
-import 'package:keyboard/app/providers/qwerty_layout_provider.dart';
+import 'package:keyboards/app/providers/keyboard_layout_provider.dart';
 import 'package:keyboard/app/providers/settings_provider.dart';
 import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +46,7 @@ class ProvidersList{
     ),
     ChangeNotifierProvider(
       create: (context) {
-        return QwertyLayoutProvider(context: context);
+        return KeyboardLayoutProvider(context: context);
       },
       lazy: true,
     ),

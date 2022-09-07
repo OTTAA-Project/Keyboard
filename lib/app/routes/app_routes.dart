@@ -1,7 +1,7 @@
 class AppRoutes {
   static const SPLASH = "/";
   static const LOGIN = "/login";
-  static const QWERTYKEYBOARD = "/qwerty_keyboard";
+  static const KEYBOARD = "/keyboard";
   static const SENTENCES = "/sentences";
   static const SETTINGS = "/settings";
   static const SETTINGS_LANG = "/settings_lang";
