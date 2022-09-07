@@ -17,12 +17,13 @@ class KeyRowWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width / rowElements.length) * 0.6;
-    double screenHeight = MediaQuery.of(context).size.height;
+    final size = MediaQuery.of(context).size;
+    double width = (size.width / rowElements.length) - 40; // -40 for padding
+    double screenHeight = size.height;
     final height = screenHeight * 0.1;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: size.width,
       child: Wrap(
         spacing: 10,
         runSpacing: 5,

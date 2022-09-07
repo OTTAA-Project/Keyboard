@@ -7,6 +7,7 @@ class LanguagePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: buildAppBar('Language'),
       body: Padding(
         padding: const EdgeInsets.symmetric(

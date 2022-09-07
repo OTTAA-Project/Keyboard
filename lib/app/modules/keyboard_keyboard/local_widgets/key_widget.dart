@@ -17,6 +17,7 @@ class KeyWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: SizedBox(
@@ -41,7 +42,7 @@ class KeyWidget extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
-                textScaleFactor: 1 + (1 / height),
+                textScaleFactor: 1 + (1 / size.aspectRatio),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
