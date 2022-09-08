@@ -21,6 +21,11 @@ class KeyboardLayoutScreen extends StatelessWidget {
     final verticalSize = size.height;
     final horizontalSize = size.width;
 
+    final layoutProvider = context.watch<KeyboardLayoutProvider>();
+    final firstHint = layoutProvider.hintsValues[0];
+    final secondHint = layoutProvider.hintsValues[1];
+    final thirdHint = layoutProvider.hintsValues[2];
+    final fourthHint = layoutProvider.hintsValues[3];
     return Scaffold(
       // drawer: Padding(
       //   padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
@@ -52,9 +57,9 @@ class KeyboardLayoutScreen extends StatelessWidget {
       backgroundColor: kPrimaryMaterialColor.shade700,
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.symmetric(
-            horizontal: horizontalSize * 0.03,
-            vertical: verticalSize * 0.03,
+          padding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 24,
           ),
           child: Row(
             children: [
@@ -78,28 +83,15 @@ class KeyboardLayoutScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //todo: Atras onTap
-                          Expanded(
-                            flex: 1,
-                            child: GestureDetector(
-                              onTap: () async {
-                                // await context
-                                //     .read<QwertyLayoutProvider>()
-                                //     .getTheModelsList();
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: kButtonColor,
-                                  borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                ),
-                                child: const Center(
-                                  child: Text(
-                                    'Atrás',
-                                    textScaleFactor: 1.5,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                          const Expanded(
+                            flex: 2,
+                            child: ButtonWidget(
+                              child: Text(
+                                'Atrás',
+                                textScaleFactor: 1.5,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
@@ -110,14 +102,9 @@ class KeyboardLayoutScreen extends StatelessWidget {
                           // space button
                           Expanded(
                             flex: 5,
-                            child: GestureDetector(
+                            child: ButtonWidget(
                               onTap: () async => await context.read<KeyboardLayoutProvider>().addSpace(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: kButtonColor,
-                                  borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                ),
-                              ),
+                              child: const SizedBox(),
                             ),
                           ),
 
@@ -127,22 +114,14 @@ class KeyboardLayoutScreen extends StatelessWidget {
                               width: 10,
                             ),
                             Expanded(
-                              child: GestureDetector(
+                              child: ButtonWidget(
                                 onTap: () {
                                   context.read<KeyboardLayoutProvider>().onChangeKeyboardLayout(KeyboardLayout.emojis);
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: kButtonColor,
-                                    borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.emoji_emotions_outlined,
-                                      size: verticalSize * 0.06,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                child: Icon(
+                                  Icons.emoji_emotions_outlined,
+                                  size: verticalSize * 0.06,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -154,22 +133,14 @@ class KeyboardLayoutScreen extends StatelessWidget {
                           //todo: qwerty onTap
                           if (context.read<KeyboardLayoutProvider>().currentLayout != KeyboardLayout.qwerty) ...[
                             Expanded(
-                              child: GestureDetector(
+                              child: ButtonWidget(
                                 onTap: () {
                                   context.read<KeyboardLayoutProvider>().onChangeKeyboardLayout(KeyboardLayout.qwerty);
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: kButtonColor,
-                                    borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                  ),
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.abc,
-                                      size: verticalSize * 0.06,
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                                child: Icon(
+                                  Icons.abc,
+                                  size: verticalSize * 0.06,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -182,25 +153,17 @@ class KeyboardLayoutScreen extends StatelessWidget {
 
                           if (context.read<KeyboardLayoutProvider>().currentLayout != KeyboardLayout.numbers) ...[
                             Expanded(
-                              child: GestureDetector(
+                              child: ButtonWidget(
                                 onTap: () async {
                                   context.read<KeyboardLayoutProvider>().onChangeKeyboardLayout(KeyboardLayout.numbers);
                                 },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: kButtonColor,
-                                    borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                  ),
-                                  child: const Center(
-                                    child: Text(
-                                      '123',
-                                      textScaleFactor: 2,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        height: 1.0,
-                                      ),
-                                    ),
+                                child: const Text(
+                                  '123',
+                                  textScaleFactor: 2,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w700,
+                                    height: 1.0,
                                   ),
                                 ),
                               ),
@@ -212,21 +175,13 @@ class KeyboardLayoutScreen extends StatelessWidget {
 
                           //todo: upArrow onTap
                           Expanded(
-                            child: GestureDetector(
-                              onTap: () => {},
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: kButtonColor,
-                                  borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_upward,
-                                    size: verticalSize * 0.06,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                            child: ButtonWidget(
+                              child: Icon(
+                                Icons.arrow_upward,
+                                size: verticalSize * 0.06,
+                                color: Colors.white,
                               ),
+                              onTap: () => {},
                             ),
                           ),
                           const SizedBox(
@@ -235,20 +190,12 @@ class KeyboardLayoutScreen extends StatelessWidget {
                           // //todo: arrowForward onTap
                           Expanded(
                             flex: 2,
-                            child: GestureDetector(
+                            child: ButtonWidget(
                               onTap: () async => context.read<KeyboardLayoutProvider>().updateHints(),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: kButtonColor,
-                                  borderRadius: BorderRadius.circular(verticalSize * 0.01),
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.arrow_forward,
-                                    size: verticalSize * 0.08,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                              child: Icon(
+                                Icons.arrow_forward,
+                                size: verticalSize * 0.08,
+                                color: Colors.white,
                               ),
                             ),
                           ),
@@ -301,26 +248,22 @@ class KeyboardLayoutScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(
-                width: horizontalSize * 0.03,
+              const SizedBox(
+                width: 30,
               ),
 
               //Prediction
               Expanded(
                 flex: 2,
-                child: Column(
+                child: Flex(
+                  direction: Axis.vertical,
                   children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await context.read<KeyboardLayoutProvider>().speakSentenceAndSendItToLearn();
-                      },
-                      child: Container(
-                        height: verticalSize * 0.2,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: kButtonColor,
-                          borderRadius: BorderRadius.circular(verticalSize * 0.02),
-                        ),
+                    Flexible(
+                      flex: 1,
+                      child: ButtonWidget(
+                        onTap: () async {
+                          await context.read<KeyboardLayoutProvider>().speakSentenceAndSendItToLearn();
+                        },
                         child: Icon(
                           Icons.volume_up_sharp,
                           color: Colors.white54,
@@ -328,56 +271,60 @@ class KeyboardLayoutScreen extends StatelessWidget {
                         ),
                       ),
                     ),
+                    const SizedBox(height: 20),
 
                     /// first one
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                    // firstHint.isNotEmpty
+                    Expanded(
                       child: PredictionWidget(
-                        verticalSize: verticalSize,
-                        text: context.watch<KeyboardLayoutProvider>().hintsValues[0],
-                        onTap: context.watch<KeyboardLayoutProvider>().hintsValues[0] == ''
-                            ? () {}
+                        text: firstHint,
+                        onTap: firstHint.trim().isEmpty
+                            ? null
                             : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: context.read<KeyboardLayoutProvider>().hintsValues[0],
+                                  text: firstHint,
                                 ),
                       ),
                     ),
+                    const SizedBox(height: 20),
 
                     /// second value
-                    PredictionWidget(
-                      verticalSize: verticalSize,
-                      text: context.watch<KeyboardLayoutProvider>().hintsValues[1],
-                      onTap: context.watch<KeyboardLayoutProvider>().hintsValues[1] == ''
-                          ? () {}
-                          : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                text: context.read<KeyboardLayoutProvider>().hintsValues[1],
-                              ),
-                    ),
-
-                    ///third value
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
+                    Expanded(
                       child: PredictionWidget(
-                        verticalSize: verticalSize,
-                        text: context.watch<KeyboardLayoutProvider>().hintsValues[2],
-                        onTap: context.watch<KeyboardLayoutProvider>().hintsValues[2] == ''
-                            ? () {}
+                        text: secondHint,
+                        onTap: secondHint.trim().isEmpty
+                            ? null
                             : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: context.read<KeyboardLayoutProvider>().hintsValues[2],
+                                  text: secondHint,
                                 ),
                       ),
                     ),
+                    const SizedBox(height: 20),
+
+                    ///third value
+                    Expanded(
+                      child: PredictionWidget(
+                        text: thirdHint,
+                        onTap: thirdHint.trim().isEmpty
+                            ? null
+                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
+                                  text: thirdHint,
+                                ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
 
                     ///fourth value
-                    PredictionWidget(
-                      verticalSize: verticalSize,
-                      text: context.watch<KeyboardLayoutProvider>().hintsValues[3],
-                      onTap: context.watch<KeyboardLayoutProvider>().hintsValues[3] == ''
-                          ? () {}
-                          : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                text: context.read<KeyboardLayoutProvider>().hintsValues[3],
-                              ),
+                    Expanded(
+                      child: PredictionWidget(
+                        text: fourthHint,
+                        onTap: fourthHint.trim().isEmpty
+                            ? null
+                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
+                                  text: fourthHint,
+                                ),
+                      ),
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),

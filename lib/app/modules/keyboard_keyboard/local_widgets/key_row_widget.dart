@@ -18,30 +18,28 @@ class KeyRowWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    double width = (size.width / rowElements.length) - 40; // -40 for padding
+    // double width = (size.width / rowElements.length) - (40 * size.aspectRatio); // -40 for padding
     double screenHeight = size.height;
     final height = screenHeight * 0.1;
 
     return SizedBox(
       width: size.width,
-      child: Wrap(
-        spacing: 10,
-        runSpacing: 5,
-        runAlignment: WrapAlignment.spaceBetween,
-        crossAxisAlignment: WrapCrossAlignment.center,
-        alignment: WrapAlignment.start,
+      height: height,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: rowElements
             .map(
-              (letter) => KeyWidget(
-                text: letter,
-                onTap: () async {
-                  context.read<KeyboardLayoutProvider>().selectedString = letter;
-
-                  await context.read<KeyboardLayoutProvider>().predictNextValue(letter);
-                },
-                selectedValue: selectedValue,
-                height: height,
-                width: width,
+              (letter) => Expanded(
+                child: KeyWidget(
+                  isFirst: rowElements.indexOf(letter) == 0,
+                  text: letter,
+                  onTap: () async {
+                    context.read<KeyboardLayoutProvider>().selectedString = letter;
+                    await context.read<KeyboardLayoutProvider>().predictNextValue(letter);
+                  },
+                  selectedValue: selectedValue,
+                ),
               ),
             )
             .toList(),

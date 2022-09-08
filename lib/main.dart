@@ -7,26 +7,21 @@ import 'package:keyboard/app/providers/providers_list.dart';
 import 'package:keyboard/app/routes/app_pages.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:keyboard/app/themes/app_theme.dart';
+import 'package:keyboard/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   // await Future.delayed(const Duration(milliseconds: 1000));
+  WidgetsFlutterBinding.ensureInitialized();
+
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
 
   await dotenv.load(fileName: "dotenv");
-  WidgetsFlutterBinding.ensureInitialized();
 
-  kIsWeb
-      ? await Firebase.initializeApp(
-          options: FirebaseOptions(
-            apiKey: dotenv.env['API_KEY'] ?? 'add Proper Values',
-            appId: dotenv.env['APP_ID'] ?? 'add Proper Values',
-            messagingSenderId: dotenv.env['MESSAGING_SENDER_ID'] ?? 'add Proper Values',
-            projectId: dotenv.env['PROJECT_ID'] ?? 'add Proper Values',
-          ),
-        )
-      : await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
