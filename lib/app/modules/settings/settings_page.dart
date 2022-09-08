@@ -32,23 +32,23 @@ class SettingsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.record_voice_over,
                   color: kOTTAAOrangeNew,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.SETTINGS_VOICE);
+                  Navigator.pushNamed(context, AppRoutes.settingsVoice);
                 },
                 title: const Text('Voice and Subtitles'),
               ),
               const Divider(),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.language,
                   color: kOTTAAOrangeNew,
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.SETTINGS_LANG);
+                  Navigator.pushNamed(context, AppRoutes.settingsLang);
                   // Get.to(LanguagePage());
                 },
                 title: const Text('Language'),

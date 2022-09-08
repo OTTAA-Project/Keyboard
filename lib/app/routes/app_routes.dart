@@ -1,11 +1,11 @@
 class AppRoutes {
-  static const SPLASH = "/";
-  static const LOGIN = "/login";
-  static const KEYBOARD = "/keyboard";
-  static const SENTENCES = "/sentences";
-  static const SETTINGS = "/settings";
-  static const SETTINGS_LANG = "/settings_lang";
-  static const SETTINGS_VOICE = "/settings_voice";
+  static const splash = "/";
+  static const login = "/login";
+  static const keyboard = "/keyboard";
+  static const senteces = "/sentences";
+  static const settings = "/settings";
+  static const settingsLang = "/settings_lang";
+  static const settingsVoice = "/settings_voice";
  /* static const ONBOARDING = "/onboarding";
   static const TUTORIAL = "/tutorial";
   static const PICTOGRAMGROUP = "/pictogram_group";

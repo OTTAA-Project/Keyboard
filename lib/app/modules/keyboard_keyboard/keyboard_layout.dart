@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:keyboard/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/local_widgets.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/emojis_layout.dart';

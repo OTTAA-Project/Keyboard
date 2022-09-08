@@ -10,11 +10,10 @@ class PredictResponse {
   });
 
   String source;
-  @JsonKey(name: 'results', nullable: true)
+  @JsonKey(name: 'results', includeIfNull: true)
   List<Result?>? results;
 
-  factory PredictResponse.fromJson(Map<String, dynamic> json) =>
-      _$PredictResponseFromJson(json);
+  factory PredictResponse.fromJson(Map<String, dynamic> json) => _$PredictResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$PredictResponseToJson(this);
 }

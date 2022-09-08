@@ -15,12 +15,12 @@ class SplashScreen extends StatelessWidget {
           if (snapshot.data != null) {
             if (snapshot.hasData && snapshot.data! == true) {
               Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.KEYBOARD);
+                Navigator.of(context).pushReplacementNamed(AppRoutes.keyboard);
               });
             }
             if (snapshot.data! == false && snapshot.hasData) {
               Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.LOGIN);
+                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
               });
               // Navigator.of(context).pushReplacementNamed('/login');
             }

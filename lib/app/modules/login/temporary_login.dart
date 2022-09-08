@@ -53,7 +53,7 @@ class TemporaryLogin extends StatelessWidget {
                       if (context.read<LoginProvider>().signIn) {
                         Navigator.popAndPushNamed(
                           context,
-                          AppRoutes.KEYBOARD,
+                          AppRoutes.keyboard,
                         );
                         debugPrint('here');
                       }
