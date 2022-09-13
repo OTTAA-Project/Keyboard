@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/local_widgets.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/local_widgets.dart';
 import 'package:keyboard/app/themes/app_theme.dart';
 
 class KeyWidget extends StatelessWidget {

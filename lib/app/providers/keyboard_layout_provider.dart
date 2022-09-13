@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:emojis/emoji.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:keyboard/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/data/models/model_type_model.dart';
 import 'package:keyboard/app/data/models/predict_response_model.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +26,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   late TTSController ttsController;
 
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
+
+  final auth = FirebaseAuth.instance;
 
   KeyboardLayoutProvider({required BuildContext context}) {
     inIt(context: context);
@@ -48,7 +52,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     muteOrNot = !muteOrNot;
     ttsController.setVolume = muteOrNot ? 0.8 : 0.0;
     notifyListeners();
-    print(ttsController.volume);
+    debugPrint(ttsController.volume.toString());
   }
 
   Future<void> predictNextValue(String value) async {
@@ -57,34 +61,38 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> receivePredictedWords(String text) async {
-    final map = {
-      'sentence': text,
-      'userName': 'user',
-      'model': modelType == '' ? 'test' : modelType,
-      'language': 'es',
-    };
+    const uid = "0001";
+    final sentence = qwertyController.text;
+    final model = modelType == "" ? "test" : modelType;
+    const lng = 'es';
     // var data = jsonEncode(map);
     // debugPrint(data);
     final response = await httpClient.postPredict(
-      data: map,
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
+      data: {
+        "sentence": sentence,
+        "uid": uid,
+        "model": model,
+        "language": lng,
+      },
+      url: '$kServerUrl/predict',
     );
     debugPrint(response);
-    final data = jsonDecode(response);
+    List<dynamic> data = jsonDecode(response);
+
     debugPrint(data.toString());
-    final cacheSource = jsonEncode(data[0]);
-    final mainSource = jsonEncode(data[1]);
-    final mainDecoded = jsonDecode(mainSource);
-    final cacheDecoded = jsonDecode(cacheSource);
+
+    final mainDecoded = data[0];
+    final cacheDecoded = data[1];
+
     mainResponse = PredictResponse.fromJson(mainDecoded);
     cacheResponse = PredictResponse.fromJson(cacheDecoded);
   }
 
   Future<void> addSpace() async {
     qwertyController.text = qwertyController.text + ' ';
-    print(qwertyController.text);
+    debugPrint(qwertyController.text);
     final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
-    print(searchTerm);
+    debugPrint(searchTerm);
     if (searchTerm.trim().isNotEmpty) {
       await receivePredictedWords(searchTerm);
       await showPredictions();
@@ -138,15 +146,15 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       //   i++;
       // }
     }
-    print('length is ${predictions.length}');
+    debugPrint('length is ${predictions.length}');
     final pre = distinct(predictions).toList() as List<String>;
     predictions.clear();
     predictions = pre;
     // final ids = Set();
     // predictions.retainWhere((x) => ids.add(x));
-    // print(predictions.toSet().toList().length);
-    print(predictions.toList());
-    print('length is ${predictions.length}');
+    // debugPrint(predictions.toSet().toList().length);
+    debugPrint(predictions.toList().toString());
+    debugPrint('length is ${predictions.length}');
     int i = 0;
     int counter = 0;
     if (predictions.length >= 4) {
@@ -240,22 +248,45 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> sendSentenceForLearning() async {
+    const uid = "0001";
+    final sentence = qwertyController.text;
+    final model = modelType == "" ? "test" : modelType;
+    const lng = 'es';
+
+    if (sentence.trim().isEmpty) return;
+
     final ans = await httpClient.post(
       /// change values after testing
-      data: {"sentence": qwertyController.text, "userName": "user", "model": modelType == '' ? 'test' : modelType, "language": "es"},
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
+      data: {
+        "sentence": sentence,
+        "uid": uid,
+        "model": model,
+        "language": lng,
+      },
+      url: '$kServerUrl/users/learn',
     );
     debugPrint(ans.toString());
   }
 
   Future<void> getTheModelsList() async {
+    const uid = "0001"; //auth.currentUser!.uid;
+    const currentLng = "es";
+    //TODO: Current language is hardcoded && uid is hardcoded
     final response = await httpClient.getRequest(
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es',
+      url: '$kServerUrl/users/models?uid=$uid&language=$currentLng',
     );
-    final json = jsonDecode(response);
-    modelTypeModel = ModelTypeModel.fromJson(json);
+    Map<String, dynamic> json = jsonDecode(response);
+
+    if (!json.containsKey("data")) {
+      return;
+    }
+
+    List<ModelTypeModel> models = json['data'].map<ModelTypeModel>((json) => ModelTypeModel.fromJson(json)).toList();
+
+    modelTypeModel = models[0];
     modelType = modelTypeModel.value[0];
     isModelTypeDataLoaded = true;
+
     debugPrint(modelTypeModel.value.toString());
     notifyListeners();
   }

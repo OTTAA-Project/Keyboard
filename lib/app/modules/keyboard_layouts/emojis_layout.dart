@@ -1,6 +1,6 @@
 import 'package:emojis/emoji.dart';
 import 'package:flutter/material.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/emoji_widget.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/emoji_widget.dart';
 
 class EmojisLayout extends StatelessWidget {
   const EmojisLayout({Key? key}) : super(key: key);

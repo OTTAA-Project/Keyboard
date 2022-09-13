@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/global_controllers/auth_provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
+import 'package:keyboard/app/utils/http_client.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginProvider extends ChangeNotifier {
+  final HttpClient httpClient = HttpClient();
+
   late AuthProvider _authProvider;
   bool signIn = false;
 
@@ -40,6 +45,18 @@ class LoginProvider extends ChangeNotifier {
       //   // Get.offAllNamed(AppRoutes.ONBOARDING);
       // }
       if (userCredentials.user != null) {
+        const uid = '0001'; //userCredentials.user!.uid;
+        final response = await httpClient.post(url: '$kServerUrl/users', data: {"uid": uid});
+
+        Map<String, dynamic> json = jsonDecode(response);
+
+        if (json.containsKey('error') && json['error'] != 'UID already exists!') {
+          debugPrint(json['error']);
+          await _authProvider.logout();
+          signIn = false;
+          return;
+        }
+
         signIn = true;
         _sharedPref.setBool(isLoggedInString, true);
         debugPrint('yes');

@@ -38,7 +38,7 @@ class TemporaryLogin extends StatelessWidget {
                         child: Text(
                           'Regístrate con tu cuenta de Google para acceder a todas las funciones de la aplicación',
                           textAlign: TextAlign.center,
-                          style: textTheme.subtitle2!.copyWith(color: kPrimaryFont.withOpacity(.8), fontWeight: FontWeight.w400),
+                          style: textTheme.bodyMedium!.copyWith(color: kPrimaryFont.withOpacity(.8), fontWeight: FontWeight.w400),
                         ),
                       ),
                     ],

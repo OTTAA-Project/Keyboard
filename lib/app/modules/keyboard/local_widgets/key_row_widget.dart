@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/key_widget.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/key_widget.dart';
 import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
 import 'package:provider/provider.dart';
 

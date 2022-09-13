@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/button.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/button.dart';
+
 class PredictionWidget extends StatelessWidget {
   const PredictionWidget({
     Key? key,
