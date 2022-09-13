@@ -9,11 +9,11 @@ import 'package:keyboard/app/modules/login/temporary_login.dart';
 
 class AppPages {
   static final Map<String, Widget Function(BuildContext)> pages = {
-    AppRoutes.SPLASH: (context) => const SplashScreen(),
-    AppRoutes.LOGIN: (context) => const TemporaryLogin(),
-    AppRoutes.KEYBOARD: (context) => const KeyboardLayoutScreen(),
-    AppRoutes.SETTINGS: (context) => const SettingsPage(),
-    AppRoutes.SETTINGS_LANG: (context) => const LanguagePage(),
-    AppRoutes.SETTINGS_VOICE: (context) => const VoiceAndSubtitlesPage(),
+    AppRoutes.splash: (context) => const SplashScreen(),
+    AppRoutes.login: (context) => const TemporaryLogin(),
+    AppRoutes.keyboard: (context) => const KeyboardLayoutScreen(),
+    AppRoutes.settings: (context) => const SettingsPage(),
+    AppRoutes.settingsLang: (context) => const LanguagePage(),
+    AppRoutes.settingsVoice: (context) => const VoiceAndSubtitlesPage(),
   };
 }

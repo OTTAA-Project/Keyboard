@@ -93,7 +93,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Iterable distinct(Iterable i) {
-    var set = new Set();
+    var set = <dynamic>{};
     return i.where((e) {
       var isNew = !set.contains(e);
       set.add(e);

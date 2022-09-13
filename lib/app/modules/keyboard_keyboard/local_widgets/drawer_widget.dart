@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:keyboard/app/global_controllers/auth_provider.dart';
 import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
-import 'package:keyboard/app/themes/app_theme.dart';
 import 'package:provider/provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 
@@ -84,7 +83,7 @@ class DrawerWidget extends StatelessWidget {
                         title: 'Settings',
                         onTap: () async {
                           Navigator.pop(context);
-                          Navigator.pushNamed(context, AppRoutes.SETTINGS);
+                          Navigator.pushNamed(context, AppRoutes.settings);
                         },
                       ),
                       ListTileWidget(

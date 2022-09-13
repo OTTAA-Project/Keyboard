@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
@@ -9,9 +8,6 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setPreferredOrientations([]);
-
     return Scaffold(
       body: FutureBuilder<bool>(
         future: context.read<SplashProvider>().isUserLogIn,
@@ -19,12 +15,12 @@ class SplashScreen extends StatelessWidget {
           if (snapshot.data != null) {
             if (snapshot.hasData && snapshot.data! == true) {
               Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.KEYBOARD);
+                Navigator.of(context).pushReplacementNamed(AppRoutes.keyboard);
               });
             }
             if (snapshot.data! == false && snapshot.hasData) {
               Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.LOGIN);
+                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
               });
               // Navigator.of(context).pushReplacementNamed('/login');
             }

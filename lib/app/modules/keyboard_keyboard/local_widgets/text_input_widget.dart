@@ -37,7 +37,7 @@ class TextInputWidget extends StatelessWidget {
               color: Colors.white,
             ),
             maxLines: 2,
-            enabled: false,
+            readOnly: true,
           ),
           //todo: add the callbacks for the functions
           Align(
@@ -104,7 +104,6 @@ class IconWidget extends StatelessWidget {
       splashRadius: 1,
       icon: Icon(
         iconData,
-        size: height * 0.04,
         color: Colors.white,
       ),
     );

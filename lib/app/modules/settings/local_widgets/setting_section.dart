@@ -34,11 +34,9 @@ class SettingSection extends StatelessWidget {
                         value: true, // always true by default
                         onChanged: (value) {},
                         title: Text(item['title']),
-                        subtitle: item['subtitle'].toString().isEmpty
-                            ? null
-                            : Text(item['subtitle']),
+                        subtitle: item['subtitle'].toString().isEmpty ? null : Text(item['subtitle']),
                       ),
-                      Divider(),
+                      const Divider(),
                     ],
                   )
                 : Column(
@@ -47,11 +45,9 @@ class SettingSection extends StatelessWidget {
                         enabled: item['isEnabled'],
                         onTap: () {},
                         title: const Text('Language'),
-                        subtitle: item['subtitle'].toString().isEmpty
-                            ? null
-                            : Text(item['subtitle']),
+                        subtitle: item['subtitle'].toString().isEmpty ? null : Text(item['subtitle']),
                       ),
-                      Divider(),
+                      const Divider(),
                     ],
                   ),
         ],

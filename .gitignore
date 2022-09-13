@@ -126,5 +126,6 @@ app.*.symbols
 /lib/app/data/models/model_type_model.g.dart
 /lib/app/data/models/predict_response_model.g.dart
 
+GoogleService-Info.plist
 
 dotenv

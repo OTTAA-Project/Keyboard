@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashProvider extends ChangeNotifier {
   late SharedPreferences _sharedPref;
-  late bool _isUserLogIn;
+  // late bool _isUserLogIn;
   late BuildContext context;
 
   /*SplashProvider() {
