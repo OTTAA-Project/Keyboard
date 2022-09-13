@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:keyboards/app/providers/settings_provider.dart';
-import 'package:keyboards/app/utils/constants.dart';
+import 'package:keyboard/app/providers/settings_provider.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 import 'local_widgets/build_app_bar.dart';
 
@@ -10,7 +10,8 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar('Voice and subtitles'),
+      backgroundColor: Colors.white,
+      appBar: buildAppBar('Voces y subtitulos'),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,

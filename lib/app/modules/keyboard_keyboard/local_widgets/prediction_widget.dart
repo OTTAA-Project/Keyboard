@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard/app/utils/constants.dart';
 
 class PredictionWidget extends StatelessWidget {
   const PredictionWidget({
@@ -17,18 +18,18 @@ class PredictionWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: verticalSize * 0.1,
-        // width: horizontalSize * 0.09,
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Colors.grey[700],
+          color: kButtonColor,
           borderRadius: BorderRadius.circular(verticalSize * 0.02),
         ),
         child: Center(
           child: Text(
             text,
-            style: TextStyle(
+            textScaleFactor: 1 + (1 / verticalSize),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
               color: Colors.white,
-              fontSize: verticalSize * 0.04,
               fontWeight: FontWeight.w700,
               height: 1.0,
             ),

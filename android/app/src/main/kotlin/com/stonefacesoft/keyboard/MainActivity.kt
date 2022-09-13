@@ -1,4 +1,4 @@
-package com.stonfacesoft.keyboards
+package com.stonefacesoft.keyboard
 
 import io.flutter.embedding.android.FlutterActivity
 
