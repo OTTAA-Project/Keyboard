@@ -9,4 +9,4 @@ An open-source predictive keyboard to foster children writing capabilities.
 - run `flutter packages pub run build_runner build --delete-conflicting-outputs` if there are some errors for models building.
 
 # Run in web
-- run `flutter run -d chrome --port 3000` to run the project in web.
+- run `flutter run -d chrome --web-port 3000` to run the project in web.
