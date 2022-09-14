@@ -10,28 +10,39 @@ class ButtonWidget extends StatelessWidget {
     this.color,
     this.splashColor,
     this.highlightColor,
+    this.borderColor,
+    this.borderWidth = 0,
   }) : super(key: key);
   final Widget child;
-  final void Function()? onTap;
-  final Color? color, splashColor, highlightColor;
+  final Function? onTap;
+  final Color? color, splashColor, highlightColor, borderColor;
+  final double borderWidth;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Material(
-        type: MaterialType.button,
-        color: color ?? const Color(0xff1E1E1E),
-        child: InkWell(
-          highlightColor: highlightColor ?? kPrimaryMaterialColor.shade100,
-          splashColor: splashColor ?? Colors.white,
-          onTap: onTap != null
-              ? () {
-                  HapticFeedback.heavyImpact();
-                  onTap?.call();
-                }
-              : null,
-          child: Center(child: child),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          border: borderColor != null ? Border.all(color: borderColor!, width: borderWidth) : null,
+        ),
+        child: Material(
+          type: MaterialType.button,
+          color: color ?? const Color(0xff1E1E1E),
+          borderOnForeground: true,
+          borderRadius: BorderRadius.circular(8),
+          child: InkWell(
+            highlightColor: highlightColor ?? kPrimaryMaterialColor.shade100,
+            splashColor: splashColor ?? Colors.white,
+            onTap: onTap != null
+                ? () {
+                    HapticFeedback.heavyImpact();
+                    onTap?.call();
+                  }
+                : null,
+            child: Center(child: child),
+          ),
         ),
       ),
     );

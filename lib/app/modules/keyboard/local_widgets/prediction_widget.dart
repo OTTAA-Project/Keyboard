@@ -6,7 +6,10 @@ class PredictionWidget extends StatelessWidget {
     Key? key,
     required this.text,
     this.onTap,
+    this.isCached = false,
   }) : super(key: key);
+
+  final bool isCached;
   final String text;
   final void Function()? onTap;
 
@@ -15,6 +18,8 @@ class PredictionWidget extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return ButtonWidget(
       onTap: onTap,
+      borderColor: isCached ? Colors.white30 : Colors.transparent,
+      borderWidth: isCached ? 2 : 0,
       child: Text(
         text,
         textScaleFactor: 1 + (1 / size.height),

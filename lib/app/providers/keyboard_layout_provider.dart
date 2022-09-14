@@ -17,8 +17,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   final HttpClient httpClient = HttpClient();
   late PredictResponse mainResponse;
   late PredictResponse cacheResponse;
-  List<String> hintsValues = ['', '', '', ''];
-  List<String> predictions = [];
+  List<Result?> hintsValues = [];
+  List<Result> predictions = [];
   late ModelTypeModel modelTypeModel;
   String modelType = '';
   bool isModelTypeDataLoaded = false;
@@ -28,6 +28,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
 
   final auth = FirebaseAuth.instance;
+
+  bool isSpeaking = false;
 
   KeyboardLayoutProvider({required BuildContext context}) {
     inIt(context: context);
@@ -77,15 +79,15 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       url: '$kServerUrl/predict',
     );
     debugPrint(response);
-    List<dynamic> data = jsonDecode(response);
+    Map<String, dynamic> data = jsonDecode(response);
 
     debugPrint(data.toString());
 
-    final mainDecoded = data[0];
-    final cacheDecoded = data[1];
+    final mainDecoded = data['main'];
+    final cacheDecoded = data['cache'];
 
-    mainResponse = PredictResponse.fromJson(mainDecoded);
-    cacheResponse = PredictResponse.fromJson(cacheDecoded);
+    mainResponse = PredictResponse(source: 'main', results: mainDecoded.map<Result>((e) => Result.fromJson(e)).toList());
+    cacheResponse = PredictResponse(source: 'cache', results: cacheDecoded.map<Result>((e) => Result.fromJson(e)).toList());
   }
 
   Future<void> addSpace() async {
@@ -100,74 +102,63 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Iterable distinct(Iterable i) {
-    var set = <dynamic>{};
-    return i.where((e) {
-      var isNew = !set.contains(e);
-      set.add(e);
-      return isNew;
-    });
+  List<Result> distinct(List<Result> i) {
+    return i.toSet().toList(growable: true);
   }
 
   Future<void> showPredictions() async {
     ///creating a list to add all of the predictions
     hintsCounter = 0;
-    predictions = [];
-    hintsValues = ['', '', '', ''];
+    predictions.clear();
+    hintsValues.clear();
+
     if (cacheResponse.results!.isEmpty) {
-      debugPrint('result is empty');
+      debugPrint('there is not any cache response');
     } else {
-      debugPrint('we have something');
-      for (var element in cacheResponse.results!) {
-        predictions.add(element!.name!);
-      }
-      // int i = 0;
-      // for (var el in predictions) {
-      //   if (predictions.length < i) {
-      //     hintsValues[i] = '';
-      //   }
-      //   hintsValues[i] = predictions[i];
-      //   i++;
-      // }
+      debugPrint('Cache response is not empty');
+      predictions.addAll(cacheResponse.results!.map((e) => e!).toList());
     }
+
     if (mainResponse.results!.isEmpty) {
-      debugPrint('empty data');
+      debugPrint('there is not any main response');
     } else {
-      debugPrint('we got it');
-      // if (cacheResponse.results!.isEmpty) {
-      //   predictions = [];
-      // }
-      for (var element in mainResponse.results!) {
-        predictions.add(element!.name!);
-      }
-      // int i = predictions.length;
-      // for (var el in hintsValues) {
-      //   hintsValues[i] = predictions[i];
-      //   i++;
-      // }
+      debugPrint('Main response is not empty');
+      predictions.addAll(mainResponse.results!.map((e) => e!).toList());
     }
     debugPrint('length is ${predictions.length}');
-    final pre = distinct(predictions).toList() as List<String>;
-    predictions.clear();
-    predictions = pre;
+    // final pre = distinct(predictions);
+    // predictions.clear();
+    // predictions = pre;
     // final ids = Set();
     // predictions.retainWhere((x) => ids.add(x));
     // debugPrint(predictions.toSet().toList().length);
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
-    int i = 0;
-    int counter = 0;
-    if (predictions.length >= 4) {
-      counter = 4;
-    } else {
-      counter = predictions.length - 1;
-    }
-    while (i < counter) {
-      hintsValues[i] = predictions[i];
-      i++;
-    }
+
+    predictions = distinct(predictions);
+
     hintsCounter++;
     notifyListeners();
+
+    final cache = cacheResponse.results!.toList();
+    final main = mainResponse.results!.where((mainPredict) => !cache.any((cachePredict) => cachePredict!.name == mainPredict!.name!)).toList();
+
+    int lastCache = 0;
+    int lastMain = 0;
+
+    for (var i = 0; i < 4; i++) {
+      try {
+        if (i % 2 == 0) {
+          hintsValues.add(cache[lastCache]);
+          lastCache++;
+        } else {
+          hintsValues.add(main[lastMain]);
+          lastMain++;
+        }
+      } catch (e) {
+        continue;
+      }
+    }
   }
 
   void updateHints() {
@@ -188,21 +179,25 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
       //   hintsValues[2] = predictions[(hintsCounter * 3) + 3];
       // }
-      hintsValues[0] = predictions[(hintsCounter * 4)];
-      if (predictions.length > (hintsCounter * 4) + 1) {
-        hintsValues[1] = predictions[(hintsCounter * 4) + 1];
-      } else {
-        hintsValues[1] = '';
-      }
-      if (predictions.length > (hintsCounter * 4) + 2) {
-        hintsValues[2] = predictions[(hintsCounter * 4) + 2];
-      } else {
-        hintsValues[2] = '';
-      }
-      if (predictions.length > (hintsCounter * 4) + 3) {
-        hintsValues[3] = predictions[(hintsCounter * 4) + 3];
-      } else {
-        hintsValues[3] = '';
+      try {
+        hintsValues[0] = predictions[(hintsCounter * 4)];
+        if (predictions.length > (hintsCounter * 4) + 1) {
+          hintsValues[1] = predictions[(hintsCounter * 4) + 1];
+        } else {
+          hintsValues.removeAt(1);
+        }
+        if (predictions.length > (hintsCounter * 4) + 2) {
+          hintsValues[2] = predictions[(hintsCounter * 4) + 2];
+        } else {
+          hintsValues.removeAt(2);
+        }
+        if (predictions.length > (hintsCounter * 4) + 3) {
+          hintsValues[3] = predictions[(hintsCounter * 4) + 3];
+        } else {
+          hintsValues.removeAt(3);
+        }
+      } catch (e) {
+        debugPrintStack();
       }
     }
     hintsCounter++;
@@ -215,10 +210,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
-      hintsValues = ['', '', '', ''];
+      hintsValues.clear();
     } else {
       qwertyController.text = qwertyController.text.substring(0, qwertyController.text.length - 1);
-      hintsValues = ['', '', '', ''];
+      hintsValues.clear();
     }
     final char = qwertyController.text.characters;
 
@@ -235,15 +230,18 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> deleteWholeSentence() async {
-    await sendSentenceForLearning();
     qwertyController.text = '';
     selectedString = '';
-    hintsValues = ['', '', '', ''];
+    hintsValues.clear();
     notifyListeners();
   }
 
   Future<void> speakSentenceAndSendItToLearn() async {
-    ttsController.speak(qwertyController.text);
+    isSpeaking = true;
+    notifyListeners();
+    await sendSentenceForLearning();
+    await ttsController.speak(qwertyController.text);
+    isSpeaking = false;
     await deleteWholeSentence();
   }
 
@@ -275,15 +273,16 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     final response = await httpClient.getRequest(
       url: '$kServerUrl/users/models?uid=$uid&language=$currentLng',
     );
+
     Map<String, dynamic> json = jsonDecode(response);
 
-    if (!json.containsKey("data")) {
+    if (json.containsKey("error")) {
       return;
     }
 
-    List<ModelTypeModel> models = json['data'].map<ModelTypeModel>((json) => ModelTypeModel.fromJson(json)).toList();
+    ModelTypeModel models = ModelTypeModel(name: currentLng, value: List<String>.of((json["models"] as List<dynamic>).map((e) => e as String)));
 
-    modelTypeModel = models[0];
+    modelTypeModel = models;
     modelType = modelTypeModel.value[0];
     isModelTypeDataLoaded = true;
 

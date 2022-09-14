@@ -12,8 +12,7 @@ class ModelTypeModel {
   final String name;
   final List<String> value;
 
-  factory ModelTypeModel.fromJson(Map<String, dynamic> json) =>
-      _$ModelTypeModelFromJson(json);
+  factory ModelTypeModel.fromJson(Map<String, dynamic> json) => _$ModelTypeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$ModelTypeModelToJson(this);
 }

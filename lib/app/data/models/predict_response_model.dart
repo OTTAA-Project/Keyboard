@@ -33,4 +33,15 @@ class Result {
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ResultToJson(this);
+
+  @override
+  String toString() {
+    return 'Result{name: $name, value: $value, scores: $scores}';
+  }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is Result && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode;
 }

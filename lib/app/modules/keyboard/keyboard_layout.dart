@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/modules/keyboard/local_widgets/local_widgets.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/speaking_icon.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/emojis_layout.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/numbers_layout.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/qwerty_layout.dart';
@@ -21,10 +22,7 @@ class KeyboardLayoutScreen extends StatelessWidget {
     final horizontalSize = size.width;
 
     final layoutProvider = context.watch<KeyboardLayoutProvider>();
-    final firstHint = layoutProvider.hintsValues[0];
-    final secondHint = layoutProvider.hintsValues[1];
-    final thirdHint = layoutProvider.hintsValues[2];
-    final fourthHint = layoutProvider.hintsValues[3];
+
     return Scaffold(
       // drawer: Padding(
       //   padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
@@ -254,75 +252,31 @@ class KeyboardLayoutScreen extends StatelessWidget {
               //Prediction
               Expanded(
                 flex: 2,
-                child: Flex(
-                  direction: Axis.vertical,
+                child: Column(
                   children: [
-                    Flexible(
-                      flex: 1,
-                      child: ButtonWidget(
-                        onTap: () async {
-                          await context.read<KeyboardLayoutProvider>().speakSentenceAndSendItToLearn();
-                        },
-                        child: Icon(
-                          Icons.volume_up_sharp,
-                          color: Colors.white54,
-                          size: verticalSize * 0.09,
-                        ),
+                    Container(
+                      constraints: BoxConstraints(
+                        maxHeight: (verticalSize * 0.2),
                       ),
+                      child: const SpeakingIcon(),
                     ),
                     const SizedBox(height: 20),
-
-                    /// first one
-                    // firstHint.isNotEmpty
-                    Expanded(
-                      child: PredictionWidget(
-                        text: firstHint,
-                        onTap: firstHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: firstHint,
+                    ...layoutProvider.hintsValues
+                        .map((hint) => Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: PredictionWidget(
+                                  isCached: hint?.scores == null,
+                                  text: hint?.name ?? '',
+                                  onTap: hint?.name?.trim().isEmpty ?? true
+                                      ? null
+                                      : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
+                                            text: hint!.name!,
+                                          ),
                                 ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    /// second value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: secondHint,
-                        onTap: secondHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: secondHint,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    ///third value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: thirdHint,
-                        onTap: thirdHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: thirdHint,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    ///fourth value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: fourthHint,
-                        onTap: fourthHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: fourthHint,
-                                ),
-                      ),
-                    ),
+                              ),
+                            ))
+                        .toList(),
                     const SizedBox(height: 20),
                   ],
                 ),
