@@ -24,7 +24,12 @@ class KeyboardLayoutScreen extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      drawerEnableOpenDragGesture: true,
       backgroundColor: kPrimaryBG,
+      appBar: AppBar(),
+      drawer: const DrawerWidget(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
