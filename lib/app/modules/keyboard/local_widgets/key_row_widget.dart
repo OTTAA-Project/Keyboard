@@ -25,14 +25,20 @@ class KeyRowWidget extends StatelessWidget {
     return SizedBox(
       width: size.width,
       height: height,
-      child: Row(
+      child: Flex(
+        direction: Axis.horizontal,
+        mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: rowElements
-            .map(
-              (letter) => Expanded(
+        mainAxisAlignment: MainAxisAlignment.start,
+        verticalDirection: VerticalDirection.up,
+        children: rowElements.map(
+          (letter) {
+            int index = rowElements.indexOf(letter);
+
+            return Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: index != 0 ? 4 : 0, right: index != rowElements.length - 1 ? 4 : 0),
                 child: KeyWidget(
-                  isFirst: rowElements.indexOf(letter) == 0,
                   text: letter,
                   onTap: () async {
                     context.read<KeyboardLayoutProvider>().selectedString = letter;
@@ -41,8 +47,9 @@ class KeyRowWidget extends StatelessWidget {
                   selectedValue: selectedValue,
                 ),
               ),
-            )
-            .toList(),
+            );
+          },
+        ).toList(),
       ),
     );
   }

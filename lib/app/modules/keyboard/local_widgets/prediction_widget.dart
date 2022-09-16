@@ -19,7 +19,7 @@ class PredictionWidget extends StatelessWidget {
     return ButtonWidget(
       onTap: onTap,
       borderColor: isCached ? Colors.white30 : Colors.transparent,
-      borderWidth: isCached ? 2 : 0,
+      borderWidth: isCached ? 4 : 0,
       child: Text(
         text,
         textScaleFactor: 1 + (1 / size.height),

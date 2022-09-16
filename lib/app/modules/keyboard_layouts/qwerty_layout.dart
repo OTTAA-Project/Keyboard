@@ -10,6 +10,9 @@ class QwertyLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
       children: [
         const SizedBox(height: 20),
         KeyRowWidget(rowElements: kLetters.sublist(0, 10), selectedValue: context.watch<KeyboardLayoutProvider>().selectedString),

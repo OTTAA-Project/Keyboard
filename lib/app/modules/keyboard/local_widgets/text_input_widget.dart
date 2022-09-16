@@ -19,25 +19,29 @@ class TextInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
+      width: width,
       height: height * 0.2,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(height * 0.02),
+        borderRadius: BorderRadius.circular(8),
         color: kButtonColor,
       ),
       child: Stack(
         children: [
-          TextFormField(
-            // focusNode: focusNode,
-            controller: controller,
-            decoration: const InputDecoration(
-              border: InputBorder.none,
+          Positioned.fill(
+            child: TextFormField(
+              // focusNode: focusNode,
+              controller: controller,
+              decoration: const InputDecoration(
+                border: InputBorder.none,
+              ),
+              cursorColor: Colors.white,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+              maxLines: 2,
+              readOnly: true,
             ),
-            cursorColor: Colors.white,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-            maxLines: 2,
-            readOnly: true,
           ),
           //todo: add the callbacks for the functions
           Align(
@@ -47,21 +51,18 @@ class TextInputWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 IconWidget(
-                  height: height,
                   onTap: () async {
                     await context.read<KeyboardLayoutProvider>().addSpace();
                   },
                   iconData: Icons.space_bar_outlined,
                 ),
                 IconWidget(
-                  height: height,
                   onTap: () {
                     context.read<KeyboardLayoutProvider>().deleteLastCharacter();
                   },
                   iconData: Icons.backspace_outlined,
                 ),
                 IconWidget(
-                  height: height,
                   onTap: () async {
                     await context.read<KeyboardLayoutProvider>().deleteWholeSentence();
                   },
@@ -69,11 +70,9 @@ class TextInputWidget extends StatelessWidget {
                 ),
                 IconWidget(
                   onTap: () {},
-                  height: height,
                   iconData: Icons.arrow_back_ios_outlined,
                 ),
                 IconWidget(
-                  height: height,
                   onTap: () {},
                   iconData: Icons.arrow_forward_ios_outlined,
                 ),
@@ -89,11 +88,9 @@ class TextInputWidget extends StatelessWidget {
 class IconWidget extends StatelessWidget {
   const IconWidget({
     Key? key,
-    required this.height,
     required this.onTap,
     required this.iconData,
   }) : super(key: key);
-  final double height;
   final void Function()? onTap;
   final IconData iconData;
 

@@ -79,7 +79,6 @@ ThemeData kAppTheme = ThemeData(
     ),
   ),
   colorScheme: ColorScheme.fromSwatch(
-    primarySwatch: kPrimaryMaterialColor,
     backgroundColor: const Color(0xff1d2129),
   ),
   primarySwatch: kPrimaryMaterialColor,

@@ -22,7 +22,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   late ModelTypeModel modelTypeModel;
   String modelType = '';
   bool isModelTypeDataLoaded = false;
-  int hintsCounter = 0;
+  int predictionsPage = 0;
+  int maxPredictionsPage = 0;
   late TTSController ttsController;
 
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
@@ -102,13 +103,13 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Result> distinct(List<Result> i) {
-    return i.toSet().toList(growable: true);
+  List<Result> buildPredictions(List<Result> i) {
+    return i.toSet().toList(growable: true)..sort((a, b) => a.scores != null && b.scores != null ? a.hashCode.compareTo(b.hashCode) : 0);
   }
 
   Future<void> showPredictions() async {
     ///creating a list to add all of the predictions
-    hintsCounter = 0;
+    predictionsPage = 0;
     predictions.clear();
     hintsValues.clear();
 
@@ -135,72 +136,35 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
 
-    predictions = distinct(predictions);
+    predictions = buildPredictions(predictions);
+    maxPredictionsPage = (predictions.length / 5).round().abs();
+    debugPrint('max predictions page is $maxPredictionsPage');
 
-    hintsCounter++;
     notifyListeners();
-
-    final cache = cacheResponse.results!.toList();
-    final main = mainResponse.results!.where((mainPredict) => !cache.any((cachePredict) => cachePredict!.name == mainPredict!.name!)).toList();
-
-    int lastCache = 0;
-    int lastMain = 0;
-
-    for (var i = 0; i < 4; i++) {
-      try {
-        if (i % 2 == 0) {
-          hintsValues.add(cache[lastCache]);
-          lastCache++;
-        } else {
-          hintsValues.add(main[lastMain]);
-          lastMain++;
-        }
-      } catch (e) {
-        continue;
-      }
-    }
+    if (predictions.isNotEmpty) hintsValues.addAll(predictions.sublist(0, predictions.length.clamp(predictions.length < 4 ? predictions.length : 1, 4)));
   }
 
   void updateHints() {
-    if (predictions.length == hintsCounter * 4) {
-      return;
+    if (predictions.isEmpty) return;
+
+    if (predictionsPage == maxPredictionsPage) {
+      predictionsPage = 0;
+    } else {
+      predictionsPage++;
     }
-    if (predictions.length > hintsCounter * 4) {
-      // if (predictions.length % (hintsCounter * 3) == 1) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = '';
-      //   hintsValues[2] = '';
-      // } else if (predictions.length - (hintsCounter * 3) == 2) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
-      //   hintsValues[2] = '';
-      // } else if (predictions.length - (hintsCounter * 3) == 3) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
-      //   hintsValues[2] = predictions[(hintsCounter * 3) + 3];
-      // }
+
+    hintsValues.clear();
+
+    for (var i = 0; i < 4; i++) {
       try {
-        hintsValues[0] = predictions[(hintsCounter * 4)];
-        if (predictions.length > (hintsCounter * 4) + 1) {
-          hintsValues[1] = predictions[(hintsCounter * 4) + 1];
-        } else {
-          hintsValues.removeAt(1);
-        }
-        if (predictions.length > (hintsCounter * 4) + 2) {
-          hintsValues[2] = predictions[(hintsCounter * 4) + 2];
-        } else {
-          hintsValues.removeAt(2);
-        }
-        if (predictions.length > (hintsCounter * 4) + 3) {
-          hintsValues[3] = predictions[(hintsCounter * 4) + 3];
-        } else {
-          hintsValues.removeAt(3);
-        }
+        hintsValues.add(predictions[i + (predictionsPage * 4)]);
       } catch (e) {
-        debugPrintStack();
+        if (hintsValues.contains(predictions.last)) continue;
+        hintsValues.add(predictions.last);
+        continue;
       }
     }
-    hintsCounter++;
+
     notifyListeners();
   }
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:keyboard/app/themes/app_theme.dart';
 
-class ButtonWidget extends StatelessWidget {
+class ButtonWidget extends StatefulWidget {
   const ButtonWidget({
     Key? key,
     required this.child,
@@ -19,29 +19,56 @@ class ButtonWidget extends StatelessWidget {
   final double borderWidth;
 
   @override
+  State<ButtonWidget> createState() => _ButtonWidgetState();
+}
+
+class _ButtonWidgetState extends State<ButtonWidget> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 1000),
+  )..repeat(reverse: true);
+
+  late final Animation<double> _boundingAnimation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeInOut,
+  );
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8),
-          border: borderColor != null ? Border.all(color: borderColor!, width: borderWidth) : null,
-        ),
+      child: AnimatedBuilder(
+        animation: _boundingAnimation,
+        builder: (context, child) {
+          return Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              border: widget.borderColor != null ? Border.all(color: widget.borderColor!.withOpacity(_boundingAnimation.value), width: widget.borderWidth) : null,
+            ),
+            child: child,
+          );
+        },
         child: Material(
           type: MaterialType.button,
-          color: color ?? const Color(0xff1E1E1E),
+          color: widget.color ?? const Color(0xff1E1E1E),
           borderOnForeground: true,
           borderRadius: BorderRadius.circular(8),
           child: InkWell(
-            highlightColor: highlightColor ?? kPrimaryMaterialColor.shade100,
-            splashColor: splashColor ?? Colors.white,
-            onTap: onTap != null
+            highlightColor: widget.highlightColor ?? kPrimaryMaterialColor.shade100,
+            splashColor: widget.splashColor ?? Colors.white,
+            onTap: widget.onTap != null
                 ? () {
                     HapticFeedback.heavyImpact();
-                    onTap?.call();
+                    widget.onTap?.call();
                   }
                 : null,
-            child: Center(child: child),
+            child: Center(child: widget.child),
           ),
         ),
       ),
