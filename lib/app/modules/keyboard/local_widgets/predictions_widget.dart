@@ -15,7 +15,7 @@ class PredictionsWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: PredictionWidget(
-                    isCached: hint?.scores == null,
+                    isCached: hint?.isCached ?? false,
                     text: hint?.name ?? '',
                     onTap: hint?.name?.trim().isEmpty ?? true
                         ? null

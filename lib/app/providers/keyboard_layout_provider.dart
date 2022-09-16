@@ -15,8 +15,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   String selectedString = '';
   bool muteOrNot = false;
   final HttpClient httpClient = HttpClient();
-  late PredictResponse mainResponse;
-  late PredictResponse cacheResponse;
+  late PredictResponse predictionResponse;
   List<Result?> hintsValues = [];
   List<Result> predictions = [];
   late ModelTypeModel modelTypeModel;
@@ -79,16 +78,14 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       },
       url: '$kServerUrl/predict',
     );
+
     debugPrint(response);
+
     Map<String, dynamic> data = jsonDecode(response);
 
     debugPrint(data.toString());
 
-    final mainDecoded = data['main'];
-    final cacheDecoded = data['cache'];
-
-    mainResponse = PredictResponse(source: 'main', results: mainDecoded.map<Result>((e) => Result.fromJson(e)).toList());
-    cacheResponse = PredictResponse(source: 'cache', results: cacheDecoded.map<Result>((e) => Result.fromJson(e)).toList());
+    predictionResponse = PredictResponse(data: data['data'].map<Result>((e) => Result.fromJson(e)).toList());
   }
 
   Future<void> addSpace() async {
@@ -104,7 +101,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   List<Result> buildPredictions(List<Result> i) {
-    return i.toSet().toList(growable: true)..sort((a, b) => a.scores != null && b.scores != null ? a.hashCode.compareTo(b.hashCode) : 0);
+    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : a.hashCode.compareTo(b.hashCode));
   }
 
   Future<void> showPredictions() async {
@@ -113,34 +110,24 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     predictions.clear();
     hintsValues.clear();
 
-    if (cacheResponse.results!.isEmpty) {
-      debugPrint('there is not any cache response');
+    if (predictionResponse.data!.isEmpty) {
+      debugPrint('there is not any response');
     } else {
-      debugPrint('Cache response is not empty');
-      predictions.addAll(cacheResponse.results!.map((e) => e!).toList());
+      debugPrint('Response is not empty');
+      predictions.addAll(predictionResponse.data!.map((e) => e!).toList());
     }
 
-    if (mainResponse.results!.isEmpty) {
-      debugPrint('there is not any main response');
-    } else {
-      debugPrint('Main response is not empty');
-      predictions.addAll(mainResponse.results!.map((e) => e!).toList());
-    }
     debugPrint('length is ${predictions.length}');
-    // final pre = distinct(predictions);
-    // predictions.clear();
-    // predictions = pre;
-    // final ids = Set();
-    // predictions.retainWhere((x) => ids.add(x));
-    // debugPrint(predictions.toSet().toList().length);
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
 
     predictions = buildPredictions(predictions);
     maxPredictionsPage = (predictions.length / 5).round().abs();
+
     debugPrint('max predictions page is $maxPredictionsPage');
 
     notifyListeners();
+
     if (predictions.isNotEmpty) hintsValues.addAll(predictions.sublist(0, predictions.length.clamp(predictions.length < 4 ? predictions.length : 1, 4)));
   }
 
