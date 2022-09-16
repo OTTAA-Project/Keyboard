@@ -41,8 +41,13 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   void onChangedDropDownMenu({required String value}) {
-    modelType = value;
-    notifyListeners();
+    if (value != modelType) {
+      modelType = value;
+      hintsValues.clear();
+      predictions.clear();
+      receivePredictedWords(qwertyController.text).then((value) => showPredictions());
+      notifyListeners();
+    }
   }
 
   void onChangeKeyboardLayout(KeyboardLayout layout) {
@@ -64,7 +69,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   Future<void> receivePredictedWords(String text) async {
     const uid = "0001";
-    final sentence = qwertyController.text;
+    final sentence = text;
     final model = modelType == "" ? "test" : modelType;
     const lng = 'es';
     // var data = jsonEncode(map);
