@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/data/enums/keyboard_layout.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/local_widgets.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/local_widgets.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/predictions_widget.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/speaking_icon.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/emojis_layout.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/numbers_layout.dart';
 import 'package:keyboard/app/modules/keyboard_layouts/qwerty_layout.dart';
@@ -20,57 +22,41 @@ class KeyboardLayoutScreen extends StatelessWidget {
     final verticalSize = size.height;
     final horizontalSize = size.width;
 
-    final layoutProvider = context.watch<KeyboardLayoutProvider>();
-    final firstHint = layoutProvider.hintsValues[0];
-    final secondHint = layoutProvider.hintsValues[1];
-    final thirdHint = layoutProvider.hintsValues[2];
-    final fourthHint = layoutProvider.hintsValues[3];
     return Scaffold(
-      // drawer: Padding(
-      //   padding: EdgeInsets.symmetric(vertical: verticalSize * 0.03),
-      //   child: Container(
-      //     decoration: BoxDecoration(
-      //       color: Colors.white,
-      //       borderRadius: BorderRadius.only(
-      //         topRight: Radius.circular(horizontalSize * 0.02),
-      //         bottomRight: Radius.circular(horizontalSize * 0.02),
-      //       ),
-      //     ),
-      //     height: verticalSize,
-      //     width: horizontalSize * 0.4,
-      //     child: Column(
-      //       children: [
-      //         ListTile(
-      //           leading: const Icon(Icons.settings),
-      //           title: const Text('Settings'),
-      //           onTap: () {
-      //             Navigator.pushNamed(context, '/settings');
-      //           },
-      //         )
-      //       ],
-      //     ),
-      //   ),
-      // ),
-      drawer: const DrawerWidget(),
       resizeToAvoidBottomInset: false,
-      backgroundColor: kPrimaryMaterialColor.shade700,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      drawerEnableOpenDragGesture: true,
+      backgroundColor: kPrimaryBG,
+      appBar: AppBar(),
+      drawer: const DrawerWidget(),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 24,
           ),
-          child: Row(
+          child: Flex(
+            direction: Axis.horizontal,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
             children: [
               Expanded(
                 flex: 10,
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
-                    TextInputWidget(
-                      controller: context.watch<KeyboardLayoutProvider>().qwertyController,
-                      height: verticalSize,
+                    SizedBox(
                       width: horizontalSize,
-                      // focusNode: context.read<QwertyLayoutProvider>().focusNode,
+                      child: TextInputWidget(
+                        controller: context.watch<KeyboardLayoutProvider>().qwertyController,
+                        height: verticalSize,
+                        width: horizontalSize,
+                        // focusNode: context.read<QwertyLayoutProvider>().focusNode,
+                      ),
                     ),
                     keyboardLayouts[context.watch<KeyboardLayoutProvider>().currentLayout.index],
                     SizedBox(
@@ -186,7 +172,7 @@ class KeyboardLayoutScreen extends StatelessWidget {
                           const SizedBox(
                             width: 10,
                           ),
-                          // //todo: arrowForward onTap
+                          //todo: arrowForward onTap
                           Expanded(
                             flex: 2,
                             child: ButtonWidget(
@@ -246,83 +232,21 @@ class KeyboardLayoutScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(
-                width: 30,
+                width: 10,
               ),
-
-              //Prediction
               Expanded(
                 flex: 2,
-                child: Flex(
-                  direction: Axis.vertical,
+                child: Column(
                   children: [
-                    Flexible(
-                      flex: 1,
-                      child: ButtonWidget(
-                        onTap: () async {
-                          await context.read<KeyboardLayoutProvider>().speakSentenceAndSendItToLearn();
-                        },
-                        child: Icon(
-                          Icons.volume_up_sharp,
-                          color: Colors.white54,
-                          size: verticalSize * 0.09,
-                        ),
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                        maxHeight: (verticalSize * 0.2),
                       ),
+                      child: const SpeakingIcon(),
                     ),
                     const SizedBox(height: 20),
-
-                    /// first one
-                    // firstHint.isNotEmpty
-                    Expanded(
-                      child: PredictionWidget(
-                        text: firstHint,
-                        onTap: firstHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: firstHint,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    /// second value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: secondHint,
-                        onTap: secondHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: secondHint,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    ///third value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: thirdHint,
-                        onTap: thirdHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: thirdHint,
-                                ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-
-                    ///fourth value
-                    Expanded(
-                      child: PredictionWidget(
-                        text: fourthHint,
-                        onTap: fourthHint.trim().isEmpty
-                            ? null
-                            : () async => context.read<KeyboardLayoutProvider>().addHintToSentence(
-                                  text: fourthHint,
-                                ),
-                      ),
-                    ),
+                    const Expanded(child: PredictionsWidget()),
                     const SizedBox(height: 20),
                   ],
                 ),

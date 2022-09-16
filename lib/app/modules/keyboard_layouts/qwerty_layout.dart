@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:keyboard/app/modules/keyboard_keyboard/local_widgets/key_row_widget.dart';
+import 'package:keyboard/app/modules/keyboard/local_widgets/key_row_widget.dart';
 import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +10,9 @@ class QwertyLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisSize: MainAxisSize.max,
       children: [
         const SizedBox(height: 20),
         KeyRowWidget(rowElements: kLetters.sublist(0, 10), selectedValue: context.watch<KeyboardLayoutProvider>().selectedString),

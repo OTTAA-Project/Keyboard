@@ -10,13 +10,13 @@ import 'package:keyboard/firebase_options.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  // await Future.delayed(const Duration(milliseconds: 1000));
+  await Future.delayed(const Duration(milliseconds: 1000));
   WidgetsFlutterBinding.ensureInitialized();
+
+  await dotenv.load(fileName: "dotenv");
 
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
   await SystemChrome.setPreferredOrientations([DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
-
-  await dotenv.load(fileName: "dotenv");
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -27,12 +27,12 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: ProvidersList.providers,
       child: MaterialApp(
+        title: "OTTAA Keyboard",
         theme: kAppTheme,
         debugShowCheckedModeBanner: false,
         initialRoute: AppRoutes.splash,

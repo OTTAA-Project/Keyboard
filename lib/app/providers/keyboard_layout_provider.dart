@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:emojis/emoji.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:keyboard/app/data/enums/keyboard_layout.dart';
 import 'package:keyboard/app/data/models/model_type_model.dart';
 import 'package:keyboard/app/data/models/predict_response_model.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
+import 'package:keyboard/app/utils/constants.dart';
 import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,17 +15,21 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   String selectedString = '';
   bool muteOrNot = false;
   final HttpClient httpClient = HttpClient();
-  late PredictResponse mainResponse;
-  late PredictResponse cacheResponse;
-  List<String> hintsValues = ['', '', '', ''];
-  List<String> predictions = [];
+  late PredictResponse predictionResponse;
+  List<Result?> hintsValues = [];
+  List<Result> predictions = [];
   late ModelTypeModel modelTypeModel;
   String modelType = '';
   bool isModelTypeDataLoaded = false;
-  int hintsCounter = 0;
+  int predictionsPage = 0;
+  int maxPredictionsPage = 0;
   late TTSController ttsController;
 
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
+
+  final auth = FirebaseAuth.instance;
+
+  bool isSpeaking = false;
 
   KeyboardLayoutProvider({required BuildContext context}) {
     inIt(context: context);
@@ -48,7 +54,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     muteOrNot = !muteOrNot;
     ttsController.setVolume = muteOrNot ? 0.8 : 0.0;
     notifyListeners();
-    print(ttsController.volume);
+    debugPrint(ttsController.volume.toString());
   }
 
   Future<void> predictNextValue(String value) async {
@@ -57,34 +63,36 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> receivePredictedWords(String text) async {
-    final map = {
-      'sentence': text,
-      'userName': 'user',
-      'model': modelType == '' ? 'test' : modelType,
-      'language': 'es',
-    };
+    const uid = "0001";
+    final sentence = qwertyController.text;
+    final model = modelType == "" ? "test" : modelType;
+    const lng = 'es';
     // var data = jsonEncode(map);
     // debugPrint(data);
     final response = await httpClient.postPredict(
-      data: map,
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/predict',
+      data: {
+        "sentence": sentence,
+        "uid": uid,
+        "model": model,
+        "language": lng,
+      },
+      url: '$kServerUrl/predict',
     );
+
     debugPrint(response);
-    final data = jsonDecode(response);
+
+    Map<String, dynamic> data = jsonDecode(response);
+
     debugPrint(data.toString());
-    final cacheSource = jsonEncode(data[0]);
-    final mainSource = jsonEncode(data[1]);
-    final mainDecoded = jsonDecode(mainSource);
-    final cacheDecoded = jsonDecode(cacheSource);
-    mainResponse = PredictResponse.fromJson(mainDecoded);
-    cacheResponse = PredictResponse.fromJson(cacheDecoded);
+
+    predictionResponse = PredictResponse(data: data['data'].map<Result>((e) => Result.fromJson(e)).toList());
   }
 
   Future<void> addSpace() async {
     qwertyController.text = qwertyController.text + ' ';
-    print(qwertyController.text);
+    debugPrint(qwertyController.text);
     final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
-    print(searchTerm);
+    debugPrint(searchTerm);
     if (searchTerm.trim().isNotEmpty) {
       await receivePredictedWords(searchTerm);
       await showPredictions();
@@ -92,112 +100,58 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  Iterable distinct(Iterable i) {
-    var set = <dynamic>{};
-    return i.where((e) {
-      var isNew = !set.contains(e);
-      set.add(e);
-      return isNew;
-    });
+  List<Result> buildPredictions(List<Result> i) {
+    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : a.hashCode.compareTo(b.hashCode));
   }
 
   Future<void> showPredictions() async {
     ///creating a list to add all of the predictions
-    hintsCounter = 0;
-    predictions = [];
-    hintsValues = ['', '', '', ''];
-    if (cacheResponse.results!.isEmpty) {
-      debugPrint('result is empty');
-    } else {
-      debugPrint('we have something');
-      for (var element in cacheResponse.results!) {
-        predictions.add(element!.name!);
-      }
-      // int i = 0;
-      // for (var el in predictions) {
-      //   if (predictions.length < i) {
-      //     hintsValues[i] = '';
-      //   }
-      //   hintsValues[i] = predictions[i];
-      //   i++;
-      // }
-    }
-    if (mainResponse.results!.isEmpty) {
-      debugPrint('empty data');
-    } else {
-      debugPrint('we got it');
-      // if (cacheResponse.results!.isEmpty) {
-      //   predictions = [];
-      // }
-      for (var element in mainResponse.results!) {
-        predictions.add(element!.name!);
-      }
-      // int i = predictions.length;
-      // for (var el in hintsValues) {
-      //   hintsValues[i] = predictions[i];
-      //   i++;
-      // }
-    }
-    print('length is ${predictions.length}');
-    final pre = distinct(predictions).toList() as List<String>;
+    predictionsPage = 0;
     predictions.clear();
-    predictions = pre;
-    // final ids = Set();
-    // predictions.retainWhere((x) => ids.add(x));
-    // print(predictions.toSet().toList().length);
-    print(predictions.toList());
-    print('length is ${predictions.length}');
-    int i = 0;
-    int counter = 0;
-    if (predictions.length >= 4) {
-      counter = 4;
+    hintsValues.clear();
+
+    if (predictionResponse.data!.isEmpty) {
+      debugPrint('there is not any response');
     } else {
-      counter = predictions.length - 1;
+      debugPrint('Response is not empty');
+      predictions.addAll(predictionResponse.data!.map((e) => e!).toList());
     }
-    while (i < counter) {
-      hintsValues[i] = predictions[i];
-      i++;
-    }
-    hintsCounter++;
+
+    debugPrint('length is ${predictions.length}');
+    debugPrint(predictions.toList().toString());
+    debugPrint('length is ${predictions.length}');
+
+    predictions = buildPredictions(predictions);
+    maxPredictionsPage = (predictions.length / 5).round().abs();
+
+    debugPrint('max predictions page is $maxPredictionsPage');
+
     notifyListeners();
+
+    if (predictions.isNotEmpty) hintsValues.addAll(predictions.sublist(0, predictions.length.clamp(predictions.length < 4 ? predictions.length : 1, 4)));
   }
 
   void updateHints() {
-    if (predictions.length == hintsCounter * 4) {
-      return;
+    if (predictions.isEmpty) return;
+
+    if (predictionsPage == maxPredictionsPage) {
+      predictionsPage = 0;
+    } else {
+      predictionsPage++;
     }
-    if (predictions.length > hintsCounter * 4) {
-      // if (predictions.length % (hintsCounter * 3) == 1) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = '';
-      //   hintsValues[2] = '';
-      // } else if (predictions.length - (hintsCounter * 3) == 2) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
-      //   hintsValues[2] = '';
-      // } else if (predictions.length - (hintsCounter * 3) == 3) {
-      //   hintsValues[0] = predictions[(hintsCounter * 3) + 1];
-      //   hintsValues[1] = predictions[(hintsCounter * 3) + 2];
-      //   hintsValues[2] = predictions[(hintsCounter * 3) + 3];
-      // }
-      hintsValues[0] = predictions[(hintsCounter * 4)];
-      if (predictions.length > (hintsCounter * 4) + 1) {
-        hintsValues[1] = predictions[(hintsCounter * 4) + 1];
-      } else {
-        hintsValues[1] = '';
-      }
-      if (predictions.length > (hintsCounter * 4) + 2) {
-        hintsValues[2] = predictions[(hintsCounter * 4) + 2];
-      } else {
-        hintsValues[2] = '';
-      }
-      if (predictions.length > (hintsCounter * 4) + 3) {
-        hintsValues[3] = predictions[(hintsCounter * 4) + 3];
-      } else {
-        hintsValues[3] = '';
+
+    hintsValues.clear();
+
+    for (var i = 0; i < 4; i++) {
+      try {
+        hintsValues.add(predictions[i + (predictionsPage * 4)]);
+      } catch (e) {
+        if (hintsValues.contains(predictions.last)) continue;
+        hintsValues.add(predictions.last);
+        continue;
       }
     }
-    hintsCounter++;
+
     notifyListeners();
   }
 
@@ -207,10 +161,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
-      hintsValues = ['', '', '', ''];
+      hintsValues.clear();
     } else {
       qwertyController.text = qwertyController.text.substring(0, qwertyController.text.length - 1);
-      hintsValues = ['', '', '', ''];
+      hintsValues.clear();
     }
     final char = qwertyController.text.characters;
 
@@ -227,35 +181,62 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> deleteWholeSentence() async {
-    await sendSentenceForLearning();
     qwertyController.text = '';
     selectedString = '';
-    hintsValues = ['', '', '', ''];
+    hintsValues.clear();
     notifyListeners();
   }
 
   Future<void> speakSentenceAndSendItToLearn() async {
-    ttsController.speak(qwertyController.text);
+    isSpeaking = true;
+    notifyListeners();
+    await sendSentenceForLearning();
+    await ttsController.speak(qwertyController.text);
+    isSpeaking = false;
     await deleteWholeSentence();
   }
 
   Future<void> sendSentenceForLearning() async {
+    const uid = "0001";
+    final sentence = qwertyController.text;
+    final model = modelType == "" ? "test" : modelType;
+    const lng = 'es';
+
+    if (sentence.trim().isEmpty) return;
+
     final ans = await httpClient.post(
       /// change values after testing
-      data: {"sentence": qwertyController.text, "userName": "user", "model": modelType == '' ? 'test' : modelType, "language": "es"},
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/learn',
+      data: {
+        "sentence": sentence,
+        "uid": uid,
+        "model": model,
+        "language": lng,
+      },
+      url: '$kServerUrl/users/learn',
     );
     debugPrint(ans.toString());
   }
 
   Future<void> getTheModelsList() async {
+    const uid = "0001"; //auth.currentUser!.uid;
+    const currentLng = "es";
+    //TODO: Current language is hardcoded && uid is hardcoded
     final response = await httpClient.getRequest(
-      url: 'https://us-central1-keyboard-98820.cloudfunctions.net/viterbi/models?language=es',
+      url: '$kServerUrl/users/models?uid=$uid&language=$currentLng',
     );
-    final json = jsonDecode(response);
-    modelTypeModel = ModelTypeModel.fromJson(json);
+
+    Map<String, dynamic> json = jsonDecode(response);
+
+    if (json.containsKey("error")) {
+      return;
+    }
+
+    ModelTypeModel models = ModelTypeModel(name: currentLng, value: List<String>.of((json["models"] as List<dynamic>).map((e) => e as String)));
+
+    modelTypeModel = models;
     modelType = modelTypeModel.value[0];
     isModelTypeDataLoaded = true;
+
     debugPrint(modelTypeModel.value.toString());
     notifyListeners();
   }

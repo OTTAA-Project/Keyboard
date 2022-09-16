@@ -16,8 +16,7 @@ class AuthProvider extends ChangeNotifier {
   Future<auth.UserCredential> signInWithGoogle() async {
     await _googleSignIn.signOut();
     final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser!.authentication;
+    final GoogleSignInAuthentication googleAuth = await googleUser!.authentication;
     final name = googleUser.displayName!;
     debugPrint('name from the google auth');
     debugPrint(name);
@@ -25,14 +24,16 @@ class AuthProvider extends ChangeNotifier {
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
-    UserCredential userCredentials =
-        await _firebaseAuth.signInWithCredential(credential);
+    UserCredential userCredentials = await _firebaseAuth.signInWithCredential(credential);
     if (userCredentials.user != null) {
       debugPrint(userCredentials.user.toString());
       debugPrint(userCredentials.user!.email);
     }
     debugPrint('name from the firebae auth');
     debugPrint(userCredentials.user!.displayName);
+
+    notifyListeners();
+
     return userCredentials;
   }
 

@@ -5,13 +5,11 @@ part 'predict_response_model.g.dart';
 @JsonSerializable()
 class PredictResponse {
   PredictResponse({
-    required this.source,
-    this.results,
+    this.data,
   });
 
-  String source;
-  @JsonKey(name: 'results', includeIfNull: true)
-  List<Result?>? results;
+  @JsonKey(name: 'data', includeIfNull: true)
+  List<Result?>? data;
 
   factory PredictResponse.fromJson(Map<String, dynamic> json) => _$PredictResponseFromJson(json);
 
@@ -23,14 +21,25 @@ class Result {
   Result({
     this.name,
     this.value,
-    this.scores,
+    required this.isCached,
   });
 
   String? name;
   double? value;
-  List<double>? scores;
+  bool isCached;
 
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
 
   Map<String, dynamic> toJson() => _$ResultToJson(this);
+
+  @override
+  String toString() {
+    return 'Result{name: $name, value: $value}';
+  }
+
+  @override
+  bool operator ==(Object other) => identical(this, other) || other is Result && runtimeType == other.runtimeType && name == other.name;
+
+  @override
+  int get hashCode => name.hashCode ^ value.hashCode;
 }

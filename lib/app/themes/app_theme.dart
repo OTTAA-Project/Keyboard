@@ -69,7 +69,6 @@ MaterialColor kPrimaryMaterialColor = const MaterialColor(
 
 ThemeData kAppTheme = ThemeData(
   textTheme: GoogleFonts.poppinsTextTheme(),
-  backgroundColor: const Color(0xff1d2129),
   scaffoldBackgroundColor: const Color(0xff1d2129),
   primaryColor: const Color(0xff040811),
   buttonTheme: ButtonThemeData(
@@ -80,7 +79,8 @@ ThemeData kAppTheme = ThemeData(
     ),
   ),
   colorScheme: ColorScheme.fromSwatch(
-    primarySwatch: kPrimaryMaterialColor,    
+    primarySwatch: kPrimaryMaterialColor,
+    backgroundColor: const Color(0xff1d2129),
   ),
   primarySwatch: kPrimaryMaterialColor,
   elevatedButtonTheme: ElevatedButtonThemeData(

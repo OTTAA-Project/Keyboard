@@ -9,6 +9,8 @@ const Color kButtonColor = Color(0xff1E1E1E);
 
 const String isLoggedInString = 'is_logged_in';
 
+const String kServerUrl = "https://us-central1-keyboard-98820.cloudfunctions.net/viterbi";
+
 const List<String> kLetters = [
   'q',
   'w',

@@ -105,7 +105,7 @@ class TTSController extends ChangeNotifier {
     _initTTS();
   }
 
-  _initTTS()async{
+  _initTTS() async {
     _flutterTTS = FlutterTts();
     availableTTS = await _flutterTTS.getLanguages;
 
