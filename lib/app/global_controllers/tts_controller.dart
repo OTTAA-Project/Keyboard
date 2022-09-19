@@ -3,13 +3,16 @@ import 'dart:io' show Platform;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:keyboard/app/utils/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum TTSState { playing, stopped, paused, continued }
 
 class TTSController extends ChangeNotifier {
   late FlutterTts _flutterTTS;
-  String _language = 'es-AR';
+  String _language = 'es-ES';
   late List<dynamic> availableTTS;
+  late List<dynamic> enabledTTS;
 
   String get languaje => _language;
 
@@ -18,14 +21,6 @@ class TTSController extends ChangeNotifier {
   }
 
   // String? _engine;
-
-  late bool _isEnglish;
-
-  bool get isEnglish => _isEnglish;
-
-  set isEnglish(value) {
-    _isEnglish = value;
-  }
 
   bool _isCustomTTSEnable = false;
 
@@ -106,8 +101,18 @@ class TTSController extends ChangeNotifier {
   }
 
   _initTTS() async {
+    final shared = await SharedPreferences.getInstance();
     _flutterTTS = FlutterTts();
+
+    if (!shared.containsKey('language')) {
+      await shared.setString('language', 'es');
+    }
+
+    final clientLanguage = shared.getString('language') ?? 'es';
+
     availableTTS = await _flutterTTS.getLanguages;
+    enabledTTS = availableTTS.where((lng) => lng.toString().startsWith(clientLanguage)).toList();
+    enabledTTS.sort();
 
     if (isAndroid) {
       _getDefaultEngine();

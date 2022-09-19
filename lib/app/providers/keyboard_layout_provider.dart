@@ -9,6 +9,7 @@ import 'package:keyboard/app/utils/constants.dart';
 import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KeyboardLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
@@ -24,6 +25,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   int predictionsPage = 0;
   int maxPredictionsPage = 0;
   late TTSController ttsController;
+  late final SharedPreferences shared;
 
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
 
@@ -37,6 +39,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   void inIt({required BuildContext context}) async {
     ttsController = context.read<TTSController>();
+    shared = await SharedPreferences.getInstance();
     await getTheModelsList();
   }
 
@@ -66,7 +69,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     const uid = "0001";
     final sentence = qwertyController.text;
     final model = modelType == "" ? "test" : modelType;
-    const lng = 'es';
+    final lng = shared.getString('language') ?? 'es';
     // var data = jsonEncode(map);
     // debugPrint(data);
     final response = await httpClient.postPredict(
@@ -200,7 +203,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     const uid = "0001";
     final sentence = qwertyController.text;
     final model = modelType == "" ? "test" : modelType;
-    const lng = 'es';
+    final lng = shared.getString('language') ?? 'es';
 
     if (sentence.trim().isEmpty) return;
 
@@ -219,7 +222,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   Future<void> getTheModelsList() async {
     const uid = "0001"; //auth.currentUser!.uid;
-    const currentLng = "es";
+    final currentLng = shared.getString('language') ?? 'es';
     //TODO: Current language is hardcoded && uid is hardcoded
     final response = await httpClient.getRequest(
       url: '$kServerUrl/users/models?uid=$uid&language=$currentLng',
