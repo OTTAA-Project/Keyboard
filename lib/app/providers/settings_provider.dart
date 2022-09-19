@@ -7,8 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsProvider extends ChangeNotifier {
   late TTSController _ttsController;
   late String language;
+  late String keyboardLayout;
+  late SharedPreferences _sharedPref;
   late String clientLanguage;
-
   String get languageName => kLanguages.firstWhere((element) => element['code'] == clientLanguage)['name'] ?? 'Español';
 
   TTSController get ttsController => _ttsController;
@@ -21,21 +22,29 @@ class SettingsProvider extends ChangeNotifier {
   }
 
   void _inIt({BuildContext? context}) async {
-    final shared = await SharedPreferences.getInstance();
+    _sharedPref = await SharedPreferences.getInstance();
     _ttsController = context!.read<TTSController>();
     language = _ttsController.languaje;
 
-    if (!shared.containsKey('language')) {
-      await shared.setString('language', 'es');
+    if (!_sharedPref.containsKey('language')) {
+      await _sharedPref.setString('language', 'es');
     }
 
-    clientLanguage = shared.getString('language') ?? 'es';
+    clientLanguage = _sharedPref.getString('language') ?? 'es';
 
-    // final res = _ttsController.availableTTS.contains(language);
-    // if (res) {
-    // } else {
-    //   language = _ttsController.availableTTS.first;
-    // }
+    final String? layoutShared = _sharedPref.getString('keyboardLayout');
+    if (layoutShared == null) {
+      await _sharedPref.setString('keyboardLayout', 'Qwerty');
+    }
+
+    keyboardLayout = _sharedPref.getString('keyboardLayout')!;
+    notifyListeners();
+  }
+
+  void updateKeyboardLayout(String? layout) async {
+    keyboardLayout = layout!;
+    await _sharedPref.setString('keyboardLayout', layout);
+    notifyListeners();
   }
 
   void changeLanguage({required String newValue}) {

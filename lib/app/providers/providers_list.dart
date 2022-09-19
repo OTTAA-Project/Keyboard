@@ -14,19 +14,16 @@ class ProvidersList {
       create: (_) {
         return SharedPreferencesController();
       },
-      lazy: false,
     ),
     ChangeNotifierProvider(
       create: (_) {
         return AuthProvider();
       },
-      lazy: false,
     ),
     ChangeNotifierProvider(
       create: (_) {
         return TTSController();
       },
-      lazy: false,
     ),
     // ChangeNotifierProxyProvider<FlutterTTS, SettingsProvider>(
     //   update: (context, flutterTTS, settingsProvider) => settingsProvider(null),
@@ -36,25 +33,21 @@ class ProvidersList {
       create: (_) {
         return SplashProvider();
       },
-      lazy: false,
     ),
     ChangeNotifierProvider(
       create: (context) {
         return LoginProvider(context: context);
       },
-      lazy: true,
     ),
     ChangeNotifierProvider(
       create: (context) {
         return KeyboardLayoutProvider(context: context);
       },
-      lazy: true,
     ),
     ChangeNotifierProvider(
       create: (context) {
         return SettingsProvider(context: context);
       },
-      lazy: false,
     ),
   ];
 }
