@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard/app/global_controllers/tts_controller.dart';
 import 'package:keyboard/app/providers/settings_provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
@@ -45,16 +46,14 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                 elevation: 16,
                 underline: Container(),
                 onChanged: (newValue) {
-                  context
-                      .read<SettingsProvider>()
-                      .changeLanguage(newValue: newValue!);
+                  context.read<SettingsProvider>().changeLanguage(newValue: newValue!);
                 },
-                items: const [
-                  DropdownMenuItem<String>(
-                    value: 'es-AR',
-                    child: Text('es'),
-                  )
-                ],
+                items: context.read<TTSController>().enabledTTS.map<DropdownMenuItem<String>>((dynamic value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
               ),
               const Divider(),
               const Text(
@@ -70,56 +69,30 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               ),
               SwitchListTile(
                 activeColor: kColorAppbar,
-                value: context
-                    .watch<SettingsProvider>()
-                    .ttsController
-                    .isCustomTTSEnable,
+                value: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable,
                 onChanged: (bool value) {
-                  context
-                      .read<SettingsProvider>()
-                      .toggleIsCustomTTSEnable(value);
+                  context.read<SettingsProvider>().toggleIsCustomTTSEnable(value);
                 },
                 title: const Text('Enable custom TTS'),
-                subtitle: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomTTSEnable
-                    ? const Text('ON')
-                    : const Text('OFF'),
+                subtitle: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable ? const Text('ON') : const Text('OFF'),
               ),
               const Divider(),
               ListTile(
                 onTap: () {},
                 title: const Text('Speech Rate'),
-                subtitle: Text(context
-                    .watch<SettingsProvider>()
-                    .ttsController
-                    .rate
-                    .toString()),
+                subtitle: Text(context.watch<SettingsProvider>().ttsController.rate.toString()),
                 enabled: false,
               ),
               Slider(
-                activeColor: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomTTSEnable
-                    ? kColorAppbar
-                    : Colors.grey,
+                activeColor: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable ? kColorAppbar : Colors.grey,
                 inactiveColor: Colors.grey,
                 value: context.read<SettingsProvider>().ttsController.rate,
                 min: 0.0,
                 max: 1.0,
                 divisions: 10,
-                label: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .rate
-                    .toString(),
+                label: context.read<SettingsProvider>().ttsController.rate.toString(),
                 onChanged: (double value) {
-                  if (context
-                      .read<SettingsProvider>()
-                      .ttsController
-                      .isCustomTTSEnable) {
+                  if (context.read<SettingsProvider>().ttsController.isCustomTTSEnable) {
                     context.read<SettingsProvider>().setRate(value);
                   }
                 },
@@ -128,35 +101,19 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               ListTile(
                 onTap: () {},
                 title: const Text('Speech Pitch'),
-                subtitle: Text(context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .pitch
-                    .toString()),
+                subtitle: Text(context.read<SettingsProvider>().ttsController.pitch.toString()),
                 enabled: false,
               ),
               Slider(
-                activeColor: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomTTSEnable
-                    ? kColorAppbar
-                    : Colors.grey,
+                activeColor: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable ? kColorAppbar : Colors.grey,
                 inactiveColor: Colors.grey,
                 value: context.read<SettingsProvider>().ttsController.pitch,
                 min: 0.0,
                 max: 1.0,
                 divisions: 10,
-                label: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .pitch
-                    .toString(),
+                label: context.read<SettingsProvider>().ttsController.pitch.toString(),
                 onChanged: (double value) {
-                  if (context
-                      .read<SettingsProvider>()
-                      .ttsController
-                      .isCustomTTSEnable) {
+                  if (context.read<SettingsProvider>().ttsController.isCustomTTSEnable) {
                     context.read<SettingsProvider>().setPitch(value);
                   }
                 },
@@ -175,89 +132,44 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               SwitchListTile(
                 activeColor: kColorAppbar,
                 title: const Text('Customized subtitle'),
-                subtitle: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomSubtitle
-                    ? const Text('ON')
-                    : const Text('OFF'),
+                subtitle: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? const Text('ON') : const Text('OFF'),
                 onChanged: (bool value) {
-                  context
-                      .read<SettingsProvider>()
-                      .toggleIsCustomSubtitle(value);
+                  context.read<SettingsProvider>().toggleIsCustomSubtitle(value);
                 },
-                value: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .isCustomSubtitle,
+                value: context.read<SettingsProvider>().ttsController.isCustomSubtitle,
               ),
               const Divider(),
               ListTile(
                 onTap: () {},
                 title: const Text('Size'),
-                subtitle: Text(context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .subtitleSize
-                    .toString()),
+                subtitle: Text(context.read<SettingsProvider>().ttsController.subtitleSize.toString()),
                 enabled: false,
               ),
               Slider(
-                activeColor: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomSubtitle
-                    ? kColorAppbar
-                    : Colors.grey,
+                activeColor: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? kColorAppbar : Colors.grey,
                 inactiveColor: Colors.grey,
-                value: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .subtitleSize
-                    .toDouble(),
+                value: context.read<SettingsProvider>().ttsController.subtitleSize.toDouble(),
                 min: 1.0,
                 max: 4.0,
                 divisions: 3,
-                label: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .subtitleSize
-                    .toString(),
+                label: context.read<SettingsProvider>().ttsController.subtitleSize.toString(),
                 onChanged: (double value) {
-                  if (context
-                      .read<SettingsProvider>()
-                      .ttsController
-                      .isCustomSubtitle) {
-                    context
-                        .read<SettingsProvider>()
-                        .setSubtitleSize(value.toInt());
+                  if (context.read<SettingsProvider>().ttsController.isCustomSubtitle) {
+                    context.read<SettingsProvider>().setSubtitleSize(value.toInt());
                   }
                 },
               ),
               const Divider(),
               SwitchListTile(
-                activeColor: context
-                        .watch<SettingsProvider>()
-                        .ttsController
-                        .isCustomSubtitle
-                    ? kColorAppbar
-                    : Colors.grey,
+                activeColor: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? kColorAppbar : Colors.grey,
                 title: const Text('Uppercase'),
                 subtitle: const Text('It allows uppercase subtitles.'),
                 onChanged: (bool value) {
-                  if (context
-                      .read<SettingsProvider>()
-                      .ttsController
-                      .isCustomSubtitle) {
-                    context
-                        .read<SettingsProvider>()
-                        .toggleIsSubtitleUppercase(value);
+                  if (context.read<SettingsProvider>().ttsController.isCustomSubtitle) {
+                    context.read<SettingsProvider>().toggleIsSubtitleUppercase(value);
                   }
                 },
-                value: context
-                    .read<SettingsProvider>()
-                    .ttsController
-                    .isSubtitleUppercase,
+                value: context.read<SettingsProvider>().ttsController.isSubtitleUppercase,
               ),
               const Divider(),
             ],

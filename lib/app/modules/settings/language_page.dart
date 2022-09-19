@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:keyboard/app/providers/settings_provider.dart';
+import 'package:keyboard/app/utils/constants.dart';
+import 'package:provider/provider.dart';
 import 'local_widgets/build_app_bar.dart';
 
 class LanguagePage extends StatelessWidget {
@@ -29,27 +32,18 @@ class LanguagePage extends StatelessWidget {
               color: Colors.grey[700],
             ),
             DropdownButton<String>(
-              isExpanded: true,
-              // value: _.isEnglish.value ? 'English' : 'Spanish',
-              value: 'Spanish',
-              iconSize: 20,
-              elevation: 16,
-              underline: Container(),
-              onChanged: (newValue) {
-                //todo: set value
-                // _.isEnglish.value = !_.isEnglish.value;
-              },
-              items: const [
-                // DropdownMenuItem(
-                //   child: Text('English'),
-                //   value: 'English',
-                // ),
-                DropdownMenuItem(
-                  child: Text('Spanish'),
-                  value: 'Spanish',
-                ),
-              ],
-            ),
+                isExpanded: true,
+                value: context.watch<SettingsProvider>().clientLanguage,
+                iconSize: 20,
+                elevation: 16,
+                underline: Container(),
+                onChanged: context.watch<SettingsProvider>().changeClientLanguage,
+                items: kLanguages
+                    .map((e) => DropdownMenuItem(
+                          child: Text(e['name']!),
+                          value: e['code'],
+                        ))
+                    .toList()),
           ],
         ),
       ),

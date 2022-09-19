@@ -9,6 +9,7 @@ import 'package:keyboard/app/utils/constants.dart';
 import 'package:keyboard/app/utils/http_client.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class KeyboardLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
@@ -24,6 +25,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   int predictionsPage = 0;
   int maxPredictionsPage = 0;
   late TTSController ttsController;
+  late final SharedPreferences shared;
 
   KeyboardLayout currentLayout = KeyboardLayout.qwerty;
 
@@ -37,12 +39,18 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   void inIt({required BuildContext context}) async {
     ttsController = context.read<TTSController>();
+    shared = await SharedPreferences.getInstance();
     await getTheModelsList();
   }
 
   void onChangedDropDownMenu({required String value}) {
-    modelType = value;
-    notifyListeners();
+    if (value != modelType) {
+      modelType = value;
+      hintsValues.clear();
+      predictions.clear();
+      receivePredictedWords(qwertyController.text).then((value) => showPredictions());
+      notifyListeners();
+    }
   }
 
   void onChangeKeyboardLayout(KeyboardLayout layout) {
@@ -64,9 +72,9 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   Future<void> receivePredictedWords(String text) async {
     final uid = auth.currentUser!.uid;
-    final sentence = qwertyController.text;
+    final sentence = text;
     final model = modelType == "" ? "test" : modelType;
-    const lng = 'es';
+    final lng = shared.getString('language') ?? 'es';
     // var data = jsonEncode(map);
     // debugPrint(data);
     final response = await httpClient.postPredict(
@@ -101,11 +109,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   List<Result> buildPredictions(List<Result> i) {
-    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : a.hashCode.compareTo(b.hashCode));
+    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : b.value!.compareTo(a.value!));
   }
 
   Future<void> showPredictions() async {
-    ///creating a list to add all of the predictions
     predictionsPage = 0;
     predictions.clear();
     hintsValues.clear();
@@ -118,12 +125,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     }
 
     debugPrint('length is ${predictions.length}');
+    predictions = buildPredictions(predictions);
+    maxPredictionsPage = (predictions.length > 4) ? (predictions.length / 5).ceil().abs() : 0;
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
-
-    predictions = buildPredictions(predictions);
-    maxPredictionsPage = (predictions.length / 5).round().abs();
-
     debugPrint('max predictions page is $maxPredictionsPage');
 
     notifyListeners();
@@ -200,7 +205,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     final uid = auth.currentUser!.uid;
     final sentence = qwertyController.text;
     final model = modelType == "" ? "test" : modelType;
-    const lng = 'es';
+    final lng = shared.getString('language') ?? 'es';
 
     if (sentence.trim().isEmpty) return;
 
@@ -219,7 +224,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   Future<void> getTheModelsList() async {
     final uid = auth.currentUser!.uid;
-    const currentLng = "es";
+    final currentLng = shared.getString('language') ?? 'es';
+    //TODO: Current language is hardcoded && uid is hardcoded
     final response = await httpClient.getRequest(
       url: '$kServerUrl/users/models?uid=$uid&language=$currentLng',
     );

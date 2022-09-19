@@ -8,7 +8,7 @@ import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
-class ProvidersList{
+class ProvidersList {
   static final List<SingleChildWidget> providers = [
     ChangeNotifierProvider(
       create: (_) {
@@ -54,7 +54,7 @@ class ProvidersList{
       create: (context) {
         return SettingsProvider(context: context);
       },
-      lazy: true,
+      lazy: false,
     ),
   ];
 }

@@ -59,6 +59,8 @@ class LoginProvider extends ChangeNotifier {
 
         signIn = true;
         _sharedPref.setBool(isLoggedInString, true);
+        _sharedPref.setString("language", "es");
+
         debugPrint('yes');
       }
     } catch (e) {
