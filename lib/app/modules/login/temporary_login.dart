@@ -3,16 +3,22 @@ import 'package:keyboard/app/providers/login_provider.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:keyboard/app/themes/app_theme.dart';
 import 'package:keyboard/app/utils/constants.dart';
+import 'package:keyboard/app/widgets/jumping_dots.dart';
 import 'package:provider/provider.dart';
 
-class TemporaryLogin extends StatelessWidget {
+class TemporaryLogin extends StatefulWidget {
   const TemporaryLogin({Key? key}) : super(key: key);
 
+  @override
+  State<TemporaryLogin> createState() => _TemporaryLoginState();
+}
+
+class _TemporaryLoginState extends State<TemporaryLogin> {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final size = MediaQuery.of(context).size;
-
+    final isLoading = context.read<LoginProvider>().isLoading;
     return Scaffold(
       body: SizedBox.fromSize(
         size: size,
@@ -48,48 +54,17 @@ class TemporaryLogin extends StatelessWidget {
 
                   // GOOGLE BUTTON
                   GestureDetector(
-                    onTap: () async {
-                      await context.read<LoginProvider>().trySignIn();
-                      if (context.read<LoginProvider>().signIn) {
-                        Navigator.popAndPushNamed(
-                          context,
-                          AppRoutes.keyboard,
-                        );
-                        debugPrint('here');
-                      }
-                      //todo: add the login procedure here
-                      /*log('Google Button Tapped');
-                        if (true) {
-                          try {
-                            //todo: add the login here
-                            // bool isDone = await cAuth.login();
-                            // isDone ? Get.off(() => MainView()) : null;
-                          } catch (e) {
-                            log('====ERROR OCCURED $e');
-                          }
-                        } else {
-                          //todo: add the snackbar here
-                         */ /* Get.snackbar(
-                            '${cAuth.currentUser.value?.displayName}',
-                            'You are already LoggedIn',
-                            backgroundColor: Colors.green,
-                            colorText: Colors.white,
-                            snackPosition: SnackPosition.BOTTOM,
-                            mainButton: TextButton(
-                              onPressed: () {
-                                //todo: add the login here
-                              },
-                              child: const Text(
-                                'Goto Main Screen',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          );*/ /*
-                        }*/
-                    },
+                    onTap: isLoading
+                        ? null
+                        : () async {
+                            await context.read<LoginProvider>().trySignIn();
+                            if (mounted && context.read<LoginProvider>().signIn) {
+                              Navigator.popAndPushNamed(
+                                context,
+                                AppRoutes.keyboard,
+                              );
+                            }
+                          },
                     child: Container(
                       height: 50,
                       width: 250,
@@ -99,23 +74,25 @@ class TemporaryLogin extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                       child: Row(
-                        children: [
-                          Expanded(
-                            child: Image.asset('assets/images/gIcon.png'),
-                          ),
-                          const SizedBox(width: 20),
-                          const Expanded(
-                            flex: 4,
-                            child: Text(
-                              'Acceder con Google',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        ],
+                        children: isLoading
+                            ? [Expanded(child: JumpingDotsProgressIndicator())]
+                            : [
+                                Expanded(
+                                  child: Image.asset('assets/images/gIcon.png'),
+                                ),
+                                const SizedBox(width: 20),
+                                const Expanded(
+                                  flex: 4,
+                                  child: Text(
+                                    'Acceder con Google',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                )
+                              ],
                       ),
                     ),
                   )
