@@ -34,12 +34,12 @@ class Result {
 
   @override
   String toString() {
-    return 'Result{name: $name, value: $value}';
+    return name ?? '';
   }
 
   @override
   bool operator ==(Object other) => identical(this, other) || other is Result && runtimeType == other.runtimeType && name == other.name;
 
   @override
-  int get hashCode => name.hashCode ^ value.hashCode;
+  int get hashCode => name.hashCode;
 }
