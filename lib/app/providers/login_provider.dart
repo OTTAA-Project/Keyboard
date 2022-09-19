@@ -12,6 +12,7 @@ class LoginProvider extends ChangeNotifier {
 
   late AuthProvider _authProvider;
   bool signIn = false;
+  bool isLoading = false;
 
   // LoginProvider() {
   //   _inIt();
@@ -29,7 +30,9 @@ class LoginProvider extends ChangeNotifier {
   }
 
   Future<void> trySignIn() async {
-    final SharedPreferences _sharedPref = await SharedPreferences.getInstance();
+    isLoading = true;
+    notifyListeners();
+    final SharedPreferences sharedPref = await SharedPreferences.getInstance();
     try {
       final userCredentials = await _authProvider.signInWithGoogle();
       // if ok firebase will return a user else will throw an exception
@@ -58,15 +61,17 @@ class LoginProvider extends ChangeNotifier {
         }
 
         signIn = true;
-        _sharedPref.setBool(isLoggedInString, true);
-        _sharedPref.setString("language", "es");
-        _sharedPref.setString('keyboardLayout', 'QWERTY');
+        sharedPref.setBool(isLoggedInString, true);
+        sharedPref.setString("language", "es");
+        sharedPref.setString('keyboardLayout', 'QWERTY');
         debugPrint('yes');
       }
     } catch (e) {
       debugPrint(e.toString());
       signIn = false;
+      isLoading = false;
       debugPrint('no');
     }
+    notifyListeners();
   }
 }
