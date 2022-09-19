@@ -41,13 +41,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   void onChangedDropDownMenu({required String value}) {
-    if (value != modelType) {
-      modelType = value;
-      hintsValues.clear();
-      predictions.clear();
-      receivePredictedWords(qwertyController.text).then((value) => showPredictions());
-      notifyListeners();
-    }
+    modelType = value;
+    notifyListeners();
   }
 
   void onChangeKeyboardLayout(KeyboardLayout layout) {
@@ -69,7 +64,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   Future<void> receivePredictedWords(String text) async {
     const uid = "0001";
-    final sentence = text;
+    final sentence = qwertyController.text;
     final model = modelType == "" ? "test" : modelType;
     const lng = 'es';
     // var data = jsonEncode(map);
@@ -106,11 +101,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   List<Result> buildPredictions(List<Result> i) {
-    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : a.hashCode.compareTo(b.hashCode));
+    return i.toSet().toList(growable: true)..sort((a, b) => a.isCached ? 0 : b.value!.compareTo(a.value!));
   }
 
   Future<void> showPredictions() async {
-    ///creating a list to add all of the predictions
     predictionsPage = 0;
     predictions.clear();
     hintsValues.clear();
@@ -123,12 +117,10 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     }
 
     debugPrint('length is ${predictions.length}');
+    predictions = buildPredictions(predictions);
+    maxPredictionsPage = (predictions.length > 4) ? (predictions.length / 5).ceil().abs() : 0;
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
-
-    predictions = buildPredictions(predictions);
-    maxPredictionsPage = (predictions.length / 5).round().abs();
-
     debugPrint('max predictions page is $maxPredictionsPage');
 
     notifyListeners();
