@@ -45,7 +45,7 @@ class LoginProvider extends ChangeNotifier {
       //   // Get.offAllNamed(AppRoutes.ONBOARDING);
       // }
       if (userCredentials.user != null) {
-        const uid = '0001'; //userCredentials.user!.uid;
+        final uid = userCredentials.user!.uid;
         final response = await httpClient.post(url: '$kServerUrl/users', data: {"uid": uid});
 
         Map<String, dynamic> json = jsonDecode(response);
