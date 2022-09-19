@@ -39,9 +39,10 @@ class KeyboardPage extends StatelessWidget {
                 subtitle: Text(kKeyboardLayouts[layoutKey]!),
                 value: layoutKey,
                 groupValue: provider.keyboardLayout,
-                onChanged: (String? value) {
+                onChanged: layoutKey == 'Keypad'?null:(String? value) {
                   if (value != null && value != provider.keyboardLayout) {
                     provider.updateKeyboardLayout(value);
+
                   }
                 },
               );
