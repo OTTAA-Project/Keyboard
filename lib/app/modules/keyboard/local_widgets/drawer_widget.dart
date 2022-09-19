@@ -75,7 +75,7 @@ class DrawerWidget extends StatelessWidget {
                     children: [
                       ListTileWidget(
                         icon: Icons.info_outline,
-                        title: 'About Questions',
+                        title: 'About Keyboard',
                         onTap: () {},
                       ),
                       ListTileWidget(
