@@ -17,6 +17,17 @@ const String isLoggedInString = 'is_logged_in';
 
 const String kServerUrl = "https://us-central1-keyboard-98820.cloudfunctions.net/viterbi";
 
+const kLanguages = [
+  {
+    "name": "English",
+    "code": "en",
+  },
+  {
+    "name": "Español",
+    "code": "es",
+  }
+];
+
 const List<String> kQWERTYLayout = [
   'q',
   'w',
