@@ -71,7 +71,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> receivePredictedWords(String text) async {
-    const uid = "0001";
+    final uid = auth.currentUser!.uid;
     final sentence = text;
     final model = modelType == "" ? "test" : modelType;
     final lng = shared.getString('language') ?? 'es';
@@ -202,7 +202,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> sendSentenceForLearning() async {
-    const uid = "0001";
+    final uid = auth.currentUser!.uid;
     final sentence = qwertyController.text;
     final model = modelType == "" ? "test" : modelType;
     final lng = shared.getString('language') ?? 'es';
@@ -223,7 +223,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> getTheModelsList() async {
-    const uid = "0001"; //auth.currentUser!.uid;
+    final uid = auth.currentUser!.uid;
     final currentLng = shared.getString('language') ?? 'es';
     //TODO: Current language is hardcoded && uid is hardcoded
     final response = await httpClient.getRequest(

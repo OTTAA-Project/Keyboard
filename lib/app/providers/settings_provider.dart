@@ -7,9 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SettingsProvider extends ChangeNotifier {
   late TTSController _ttsController;
   late String language;
-  late String keyboardLayout;
+  late String keyboardLayout = 'QWERTY';
   late SharedPreferences _sharedPref;
-  late String clientLanguage;
+  late String clientLanguage = 'es';
   String get languageName => kLanguages.firstWhere((element) => element['code'] == clientLanguage)['name'] ?? 'Español';
 
   TTSController get ttsController => _ttsController;
@@ -34,7 +34,7 @@ class SettingsProvider extends ChangeNotifier {
 
     final String? layoutShared = _sharedPref.getString('keyboardLayout');
     if (layoutShared == null) {
-      await _sharedPref.setString('keyboardLayout', 'Qwerty');
+      await _sharedPref.setString('keyboardLayout', 'QWERTY');
     }
 
     keyboardLayout = _sharedPref.getString('keyboardLayout')!;

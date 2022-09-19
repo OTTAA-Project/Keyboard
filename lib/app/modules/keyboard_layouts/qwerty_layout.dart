@@ -13,7 +13,7 @@ class QwertyLayout extends StatelessWidget {
       case 'Keypad':
       case 'ABC':
         return kABCLayout;
-      case 'Qwerty':
+      case 'QWERTY':
       default:
         return kQWERTYLayout;
     }
