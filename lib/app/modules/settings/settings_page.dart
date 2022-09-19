@@ -54,6 +54,17 @@ class SettingsPage extends StatelessWidget {
                 title: const Text('Language'),
               ),
               const Divider(),
+              ListTile(
+                leading: const Icon(
+                  Icons.keyboard,
+                  color: kOTTAAOrangeNew,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.settingsKeyboard);
+                  // Get.to(LanguagePage());
+                },
+                title: const Text('Keyboard'),
+              ),
             ],
           ),
         ),

@@ -60,7 +60,7 @@ class LoginProvider extends ChangeNotifier {
         signIn = true;
         _sharedPref.setBool(isLoggedInString, true);
         _sharedPref.setString("language", "es");
-
+        _sharedPref.setString('keyboardLayout', 'Qwerty');
         debugPrint('yes');
       }
     } catch (e) {
