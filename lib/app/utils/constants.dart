@@ -7,11 +7,17 @@ const Color kPrimaryFont = Colors.white;
 const Color kBorderColor = Colors.pink;
 const Color kButtonColor = Color(0xff1E1E1E);
 
+const kKeyboardLayouts = {
+  'QWERTY': 'Layout based on the QWERTY keyboard, the most common keyboard layout in the world.',
+  'ABC': 'Layout based on the alphabet. The letters are arranged in alphabetical order.',
+  'Keypad': 'Layout based on old phones. The letters are grouped on groups of 3 and are arranged in aplhabetical order.',
+};
+
 const String isLoggedInString = 'is_logged_in';
 
 const String kServerUrl = "https://us-central1-keyboard-98820.cloudfunctions.net/viterbi";
 
-const List<String> kLetters = [
+const List<String> kQWERTYLayout = [
   'q',
   'w',
   'e',
@@ -75,4 +81,37 @@ const List<String> kNumeric = [
   '+',
   '=',
   '_',
+];
+
+const List<String> kABCLayout = [
+  'a',
+  'b',
+  'c',
+  'd',
+  'e',
+  'f',
+  'g',
+  'h',
+  'i',
+  'j',
+  'k',
+  'l',
+  'm',
+  'n',
+  'ñ',
+  'o',
+  'p',
+  'q',
+  'r',
+  's',
+  't',
+  'u',
+  'v',
+  'w',
+  'x',
+  'y',
+  'z',
+  '.',
+  ',',
+  '?',
 ];

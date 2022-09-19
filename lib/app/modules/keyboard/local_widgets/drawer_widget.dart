@@ -114,6 +114,7 @@ class DrawerWidget extends StatelessWidget {
                         title: 'Sign out',
                         onTap: () async {
                           await context.read<AuthProvider>().logout();
+                          Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
                         },
                       ),
                     ],

@@ -37,6 +37,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   void inIt({required BuildContext context}) async {
     ttsController = context.read<TTSController>();
+
     await getTheModelsList();
   }
 

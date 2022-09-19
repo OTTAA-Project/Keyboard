@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/global_controllers/tts_controller.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsProvider extends ChangeNotifier {
   late TTSController _ttsController;
   late String language;
+  late String keyboardLayout;
+  late SharedPreferences _sharedPref;
 
   TTSController get ttsController => _ttsController;
 
@@ -19,11 +22,20 @@ class SettingsProvider extends ChangeNotifier {
   void _inIt({BuildContext? context}) async {
     _ttsController = context!.read<TTSController>();
     language = _ttsController.languaje;
-    // final res = _ttsController.availableTTS.contains(language);
-    // if (res) {
-    // } else {
-    //   language = _ttsController.availableTTS.first;
-    // }
+    _sharedPref = await SharedPreferences.getInstance();
+    final String? layoutShared = _sharedPref.getString('keyboardLayout');
+    if (layoutShared == null) {
+      await _sharedPref.setString('keyboardLayout', 'Qwerty');
+    }
+
+    keyboardLayout = _sharedPref.getString('keyboardLayout')!;
+    notifyListeners();
+  }
+
+  void updateKeyboardLayout(String? layout) async {
+    keyboardLayout = layout!;
+    await _sharedPref.setString('keyboardLayout', layout);
+    notifyListeners();
   }
 
   void changeLanguage({required String newValue}) {
