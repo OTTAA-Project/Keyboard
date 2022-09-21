@@ -3,10 +3,10 @@
   "short_name": "Keyboard",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0175C2",
-  "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
-  "orientation": "portrait-primary",
+  "background_color": "#FF6900",
+  "theme_color": "#FF6900",
+  "description": "An open-source predictive keyboard to foster children writing capabilities.",
+  "orientation": "landscape",
   "prefer_related_applications": false,
   "icons": [
     {

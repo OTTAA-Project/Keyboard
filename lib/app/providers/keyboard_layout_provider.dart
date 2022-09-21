@@ -16,7 +16,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   String selectedString = '';
   bool muteOrNot = false;
   final HttpClient httpClient = HttpClient();
-  late PredictResponse predictionResponse;
+  PredictResponse? predictionResponse;
   List<Result?> hintsValues = [];
   List<Result> predictions = [];
   late ModelTypeModel modelTypeModel;
@@ -71,6 +71,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> receivePredictedWords(String text) async {
+    debugPrint('text: $text');
     final uid = auth.currentUser!.uid;
     final sentence = text;
     final model = modelType == "" ? "test" : modelType;
@@ -87,17 +88,16 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       url: '$kServerUrl/predict',
     );
 
-    debugPrint(response);
-
     Map<String, dynamic> data = jsonDecode(response);
 
-    debugPrint(data.toString());
-
-    predictionResponse = PredictResponse(data: data['data'].map<Result>((e) => Result.fromJson(e)).toList());
+    if (data.containsKey('data')) {
+      predictionResponse = PredictResponse(data: data['data'].map<Result>((e) => Result.fromJson(e)).toList());
+    }
+    notifyListeners();
   }
 
   Future<void> addSpace() async {
-    qwertyController.text = qwertyController.text + ' ';
+    qwertyController.text = '${qwertyController.text} ';
     debugPrint(qwertyController.text);
     final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
     debugPrint(searchTerm);
@@ -113,31 +113,41 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> showPredictions() async {
+    if (predictionResponse == null) {
+      return;
+    }
+
     predictionsPage = 0;
     predictions.clear();
     hintsValues.clear();
 
-    if (predictionResponse.data!.isEmpty) {
+    if (predictionResponse!.data!.isEmpty) {
       debugPrint('there is not any response');
     } else {
       debugPrint('Response is not empty');
-      predictions.addAll(predictionResponse.data!.map((e) => e!).toList());
+      predictions.addAll(predictionResponse!.data!.map((e) => e!).toList());
     }
 
     debugPrint('length is ${predictions.length}');
     predictions = buildPredictions(predictions);
-    maxPredictionsPage = (predictions.length > 4) ? (predictions.length / 5).ceil().abs() : 0;
+    maxPredictionsPage = (predictions.length > 4) ? (predictions.length / 4).floor().abs() : 0;
     debugPrint(predictions.toList().toString());
     debugPrint('length is ${predictions.length}');
     debugPrint('max predictions page is $maxPredictionsPage');
 
-    notifyListeners();
-
     if (predictions.isNotEmpty) hintsValues.addAll(predictions.sublist(0, predictions.length.clamp(predictions.length < 4 ? predictions.length : 1, 4)));
+    notifyListeners();
   }
 
-  void updateHints() {
-    if (predictions.isEmpty) return;
+  void updateHints() async {
+    if (predictions.isEmpty) {
+      final keyboardText = qwertyController.text;
+      final last = keyboardText.substring(keyboardText.length - 1);
+
+      await receivePredictedWords(qwertyController.text.replaceFirst(last, ''));
+      await showPredictions();
+      return;
+    }
 
     if (predictionsPage == maxPredictionsPage) {
       predictionsPage = 0;
@@ -145,32 +155,43 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       predictionsPage++;
     }
 
-    hintsValues.clear();
-
-    for (var i = 0; i < 4; i++) {
-      try {
-        hintsValues.add(predictions[i + (predictionsPage * 4)]);
-      } catch (e) {
-        if (hintsValues.contains(predictions.last)) continue;
-        hintsValues.add(predictions.last);
-        continue;
-      }
+    if (maxPredictionsPage == 0) {
+      return;
     }
+
+    int index = (predictionsPage * 4);
+    if (index > predictions.length) {
+      index = predictions.length;
+    }
+
+    int endIndex = (index + 4);
+
+    if (endIndex > predictions.length) {
+      endIndex = predictions.length;
+    }
+
+    hintsValues.clear();
+    hintsValues.addAll(predictions.sublist(index, endIndex));
 
     notifyListeners();
   }
 
   void deleteLastCharacter() async {
     if (qwertyController.text.trim().isEmpty) {
-      // hintsValues = ['', '', '', ''];
+      selectedString = '';
+      predictions.clear();
+      hintsValues.clear();
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
+      predictions.clear();
       hintsValues.clear();
     } else {
       qwertyController.text = qwertyController.text.substring(0, qwertyController.text.length - 1);
+      predictions.clear();
       hintsValues.clear();
     }
+
     final char = qwertyController.text.characters;
 
     final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
@@ -247,7 +268,17 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   void addHintToSentence({required String text}) async {
-    qwertyController.text = qwertyController.text + text;
+    final keyboardText = qwertyController.text;
+
+    if (keyboardText.endsWith(' ') && keyboardText.trim().isNotEmpty) {
+      qwertyController.text = '$keyboardText$text';
+    } else if (keyboardText.trim().isNotEmpty) {
+      final lastWord = keyboardText.split(' ').last;
+      qwertyController.text = keyboardText.replaceFirst(lastWord, text);
+    } else {
+      qwertyController.text = '$keyboardText$text';
+    }
+
     await addSpace();
     notifyListeners();
   }
