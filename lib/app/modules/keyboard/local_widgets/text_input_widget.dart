@@ -17,6 +17,7 @@ class TextInputWidget extends StatelessWidget {
   // final FocusNode focusNode;
   @override
   Widget build(BuildContext context) {
+    final textScale = MediaQuery.of(context).textScaleFactor;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: width,
@@ -96,9 +97,13 @@ class IconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaleFactor = MediaQuery.of(context).textScaleFactor;
+    final size = MediaQuery.of(context).size;
+
     return IconButton(
       onPressed: onTap,
       splashRadius: 1,
+      iconSize: scaleFactor * size.aspectRatio * 20,
       icon: Icon(
         iconData,
         color: Colors.white,
