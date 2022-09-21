@@ -71,6 +71,7 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   Future<void> receivePredictedWords(String text) async {
+    debugPrint('text: $text');
     final uid = auth.currentUser!.uid;
     final sentence = text;
     final model = modelType == "" ? "test" : modelType;
@@ -87,11 +88,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
       url: '$kServerUrl/predict',
     );
 
-    debugPrint(response);
-
     Map<String, dynamic> data = jsonDecode(response);
 
-    debugPrint(data.toString());
     if (data.containsKey('data')) {
       predictionResponse = PredictResponse(data: data['data'].map<Result>((e) => Result.fromJson(e)).toList());
     }
@@ -141,8 +139,15 @@ class KeyboardLayoutProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateHints() {
-    if (predictions.isEmpty) return;
+  void updateHints() async {
+    if (predictions.isEmpty) {
+      final keyboardText = qwertyController.text;
+      final last = keyboardText.substring(keyboardText.length - 1);
+
+      await receivePredictedWords(qwertyController.text.replaceFirst(last, ''));
+      await showPredictions();
+      return;
+    }
 
     if (predictionsPage == maxPredictionsPage) {
       predictionsPage = 0;
@@ -173,15 +178,20 @@ class KeyboardLayoutProvider extends ChangeNotifier {
 
   void deleteLastCharacter() async {
     if (qwertyController.text.trim().isEmpty) {
-      // hintsValues = ['', '', '', ''];
+      selectedString = '';
+      predictions.clear();
+      hintsValues.clear();
     } else if (qwertyController.text.length == 1) {
       qwertyController.text = '';
       selectedString = '';
+      predictions.clear();
       hintsValues.clear();
     } else {
       qwertyController.text = qwertyController.text.substring(0, qwertyController.text.length - 1);
+      predictions.clear();
       hintsValues.clear();
     }
+
     final char = qwertyController.text.characters;
 
     final searchTerm = qwertyController.text.replaceAll(emojiRegex, '');
@@ -258,7 +268,17 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   void addHintToSentence({required String text}) async {
-    qwertyController.text = qwertyController.text + text;
+    final keyboardText = qwertyController.text;
+
+    if (keyboardText.endsWith(' ') && keyboardText.trim().isNotEmpty) {
+      qwertyController.text = '$keyboardText$text';
+    } else if (keyboardText.trim().isNotEmpty) {
+      final lastWord = keyboardText.split(' ').last;
+      qwertyController.text = keyboardText.replaceFirst(lastWord, text);
+    } else {
+      qwertyController.text = '$keyboardText$text';
+    }
+
     await addSpace();
     notifyListeners();
   }
