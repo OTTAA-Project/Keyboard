@@ -129,3 +129,4 @@ app.*.symbols
 GoogleService-Info.plist
 
 dotenv
+.firebase
