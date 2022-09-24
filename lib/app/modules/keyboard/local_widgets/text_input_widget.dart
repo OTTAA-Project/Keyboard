@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
+import 'package:keyboard/app/providers/settings_provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
@@ -9,15 +10,26 @@ class TextInputWidget extends StatelessWidget {
     required this.height,
     required this.width,
     required this.controller,
-    // required this.focusNode,
   }) : super(key: key);
 
   final double height, width;
   final TextEditingController controller;
-  // final FocusNode focusNode;
+
+  double iconSizeMultiplier(double index) {
+    switch (index.toString()) {
+      case "0.0":
+        return 12;
+      case "1.0":
+        return 54;
+      case "0.5":
+      default:
+        return 24;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final textScale = MediaQuery.of(context).textScaleFactor;
+    final settingsProvider = Provider.of<SettingsProvider>(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: width,
@@ -56,26 +68,35 @@ class TextInputWidget extends StatelessWidget {
                     await context.read<KeyboardLayoutProvider>().addSpace();
                   },
                   iconData: Icons.space_bar_outlined,
+                  iconSize: iconSizeMultiplier(settingsProvider.buttonActionsSize),
                 ),
+                const SizedBox(width: 10),
                 IconWidget(
                   onTap: () {
                     context.read<KeyboardLayoutProvider>().deleteLastCharacter();
                   },
                   iconData: Icons.backspace_outlined,
+                  iconSize: iconSizeMultiplier(settingsProvider.buttonActionsSize),
                 ),
+                const SizedBox(width: 10),
                 IconWidget(
                   onTap: () async {
                     await context.read<KeyboardLayoutProvider>().deleteWholeSentence();
                   },
+                  iconSize: iconSizeMultiplier(settingsProvider.buttonActionsSize),
                   iconData: Icons.delete,
                 ),
+                const SizedBox(width: 10),
                 IconWidget(
                   onTap: () {},
                   iconData: Icons.arrow_back_ios_outlined,
+                  iconSize: iconSizeMultiplier(settingsProvider.buttonActionsSize),
                 ),
+                const SizedBox(width: 10),
                 IconWidget(
                   onTap: () {},
                   iconData: Icons.arrow_forward_ios_outlined,
+                  iconSize: iconSizeMultiplier(settingsProvider.buttonActionsSize),
                 ),
               ],
             ),
@@ -91,19 +112,18 @@ class IconWidget extends StatelessWidget {
     Key? key,
     required this.onTap,
     required this.iconData,
+    required this.iconSize,
   }) : super(key: key);
   final void Function()? onTap;
   final IconData iconData;
+  final double iconSize;
 
   @override
   Widget build(BuildContext context) {
-    final scaleFactor = MediaQuery.of(context).textScaleFactor;
-    final size = MediaQuery.of(context).size;
-
     return IconButton(
       onPressed: onTap,
       splashRadius: 1,
-      iconSize: scaleFactor * size.aspectRatio * 20,
+      iconSize: iconSize,
       icon: Icon(
         iconData,
         color: Colors.white,

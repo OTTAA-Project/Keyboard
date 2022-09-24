@@ -11,7 +11,7 @@ class LanguagePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: buildAppBar('Language'),
+      appBar: buildAppBar('Idioma'),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
@@ -21,7 +21,7 @@ class LanguagePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'LANGUAGE',
+              'Idioma',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,

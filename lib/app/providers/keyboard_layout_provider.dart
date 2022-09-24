@@ -14,7 +14,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class KeyboardLayoutProvider extends ChangeNotifier {
   final TextEditingController qwertyController = TextEditingController();
   String selectedString = '';
-  bool muteOrNot = false;
+  bool isMuted = false;
   final HttpClient httpClient = HttpClient();
   PredictResponse? predictionResponse;
   List<Result?> hintsValues = [];
@@ -59,8 +59,8 @@ class KeyboardLayoutProvider extends ChangeNotifier {
   }
 
   void muteFunction() {
-    muteOrNot = !muteOrNot;
-    ttsController.setVolume = muteOrNot ? 0.8 : 0.0;
+    isMuted = !isMuted;
+    ttsController.setVolume = isMuted ? 0.0 : 0.8;
     notifyListeners();
     debugPrint(ttsController.volume.toString());
   }
