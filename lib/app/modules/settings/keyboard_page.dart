@@ -12,7 +12,7 @@ class KeyboardPage extends StatelessWidget {
     final provider = context.watch<SettingsProvider>();
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: buildAppBar('Keyboard'),
+      appBar: buildAppBar('Teclado'),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 30,
@@ -39,12 +39,13 @@ class KeyboardPage extends StatelessWidget {
                 subtitle: Text(kKeyboardLayouts[layoutKey]!),
                 value: layoutKey,
                 groupValue: provider.keyboardLayout,
-                onChanged: layoutKey == 'Keypad'?null:(String? value) {
-                  if (value != null && value != provider.keyboardLayout) {
-                    provider.updateKeyboardLayout(value);
-
-                  }
-                },
+                onChanged: layoutKey == 'Keypad'
+                    ? null
+                    : (String? value) {
+                        if (value != null && value != provider.keyboardLayout) {
+                          provider.updateKeyboardLayout(value);
+                        }
+                      },
               );
             })
           ],

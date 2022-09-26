@@ -23,7 +23,7 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'VOZ',
+                'Voz',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -57,7 +57,7 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               ),
               const Divider(),
               const Text(
-                'TEXT-TO-SPEECH-ENGINE',
+                'Motor de texto a voz',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -73,13 +73,13 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                 onChanged: (bool value) {
                   context.read<SettingsProvider>().toggleIsCustomTTSEnable(value);
                 },
-                title: const Text('Enable custom TTS'),
-                subtitle: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable ? const Text('ON') : const Text('OFF'),
+                title: const Text('TTS personalizado'),
+                subtitle: context.watch<SettingsProvider>().ttsController.isCustomTTSEnable ? const Text('ACTIVO') : const Text('APAGADO'),
               ),
               const Divider(),
               ListTile(
                 onTap: () {},
-                title: const Text('Speech Rate'),
+                title: const Text('Velocidad de lectura'),
                 subtitle: Text(context.watch<SettingsProvider>().ttsController.rate.toString()),
                 enabled: false,
               ),
@@ -100,7 +100,7 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               const Divider(),
               ListTile(
                 onTap: () {},
-                title: const Text('Speech Pitch'),
+                title: const Text('Tono de voz'),
                 subtitle: Text(context.read<SettingsProvider>().ttsController.pitch.toString()),
                 enabled: false,
               ),
@@ -119,7 +119,7 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
                 },
               ),
               const Text(
-                'SUBTITLE',
+                'Subtitulos',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -131,8 +131,8 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               ),
               SwitchListTile(
                 activeColor: kColorAppbar,
-                title: const Text('Customized subtitle'),
-                subtitle: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? const Text('ON') : const Text('OFF'),
+                title: const Text('Subtitulos Personalizados'),
+                subtitle: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? const Text('ACTIVO') : const Text('APAGADO'),
                 onChanged: (bool value) {
                   context.read<SettingsProvider>().toggleIsCustomSubtitle(value);
                 },
@@ -141,7 +141,7 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               const Divider(),
               ListTile(
                 onTap: () {},
-                title: const Text('Size'),
+                title: const Text('Tamaño'),
                 subtitle: Text(context.read<SettingsProvider>().ttsController.subtitleSize.toString()),
                 enabled: false,
               ),
@@ -162,8 +162,8 @@ class VoiceAndSubtitlesPage extends StatelessWidget {
               const Divider(),
               SwitchListTile(
                 activeColor: context.watch<SettingsProvider>().ttsController.isCustomSubtitle ? kColorAppbar : Colors.grey,
-                title: const Text('Uppercase'),
-                subtitle: const Text('It allows uppercase subtitles.'),
+                title: const Text('Mayusculas'),
+                subtitle: const Text('El texto se mostrara en mayusculas'),
                 onChanged: (bool value) {
                   if (context.read<SettingsProvider>().ttsController.isCustomSubtitle) {
                     context.read<SettingsProvider>().toggleIsSubtitleUppercase(value);

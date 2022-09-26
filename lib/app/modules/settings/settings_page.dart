@@ -17,7 +17,7 @@ class SettingsPage extends StatelessWidget {
           },
         ),
         title: const Text(
-          'Settings',
+          'Ajustes',
         ),
         // leading: Placeholder(),
         centerTitle: false,
@@ -39,7 +39,7 @@ class SettingsPage extends StatelessWidget {
                 onTap: () {
                   Navigator.pushNamed(context, AppRoutes.settingsVoice);
                 },
-                title: const Text('Voice and Subtitles'),
+                title: const Text('Voz y Subtitulos'),
               ),
               const Divider(),
               ListTile(
@@ -51,7 +51,18 @@ class SettingsPage extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.settingsLang);
                   // Get.to(LanguagePage());
                 },
-                title: const Text('Language'),
+                title: const Text('Idioma'),
+              ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(
+                  Icons.accessibility,
+                  color: kOTTAAOrangeNew,
+                ),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.settingsAccessibility);
+                },
+                title: const Text('Accesibilidad'),
               ),
               const Divider(),
               ListTile(
@@ -63,7 +74,7 @@ class SettingsPage extends StatelessWidget {
                   Navigator.pushNamed(context, AppRoutes.settingsKeyboard);
                   // Get.to(LanguagePage());
                 },
-                title: const Text('Keyboard'),
+                title: const Text('Teclado'),
               ),
             ],
           ),

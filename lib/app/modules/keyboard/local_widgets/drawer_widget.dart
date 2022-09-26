@@ -56,8 +56,8 @@ class DrawerWidget extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       ListTileWidget(
-                        icon: context.watch<KeyboardLayoutProvider>().muteOrNot ? Icons.volume_up : Icons.volume_off,
-                        title: 'Mute',
+                        icon: context.watch<KeyboardLayoutProvider>().isMuted ? Icons.volume_up : Icons.volume_off,
+                        title: context.watch<KeyboardLayoutProvider>().isMuted ? 'Activar sonido' : 'Silenciar',
                         onTap: () async {
                           context.read<KeyboardLayoutProvider>().muteFunction();
                         },
@@ -75,14 +75,13 @@ class DrawerWidget extends StatelessWidget {
                     children: [
                       ListTileWidget(
                         icon: Icons.info_outline,
-                        title: 'About Keyboard',
+                        title: 'Acerca de',
                         onTap: () {},
                       ),
                       ListTileWidget(
                         icon: Icons.settings,
-                        title: 'Settings',
+                        title: 'Ajustes',
                         onTap: () async {
-                          Navigator.pop(context);
                           Navigator.pushNamed(context, AppRoutes.settings);
                         },
                       ),
@@ -111,7 +110,7 @@ class DrawerWidget extends StatelessWidget {
                       // ),
                       ListTileWidget(
                         icon: Icons.exit_to_app,
-                        title: 'Sign out',
+                        title: 'Cerrar sesión',
                         onTap: () async {
                           await context.read<AuthProvider>().logout();
                           Navigator.pushNamedAndRemoveUntil(context, AppRoutes.login, (route) => false);
