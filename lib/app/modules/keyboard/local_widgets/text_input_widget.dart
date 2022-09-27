@@ -4,6 +4,12 @@ import 'package:keyboard/app/providers/settings_provider.dart';
 import 'package:keyboard/app/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+const sizeMultiplierMap = {
+  "0": 12.0,
+  "0.5": 24.0,
+  "1": 54.0,
+};
+
 class TextInputWidget extends StatelessWidget {
   const TextInputWidget({
     Key? key,
@@ -15,21 +21,11 @@ class TextInputWidget extends StatelessWidget {
   final double height, width;
   final TextEditingController controller;
 
-  double iconSizeMultiplier(double index) {
-    switch (index.toString()) {
-      case "0.0":
-        return 12;
-      case "1.0":
-        return 54;
-      case "0.5":
-      default:
-        return 24;
-    }
-  }
+  double iconSizeMultiplier(double index) => sizeMultiplierMap[index.toString()] ?? 24;
 
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = Provider.of<SettingsProvider>(context);
+    final settingsProvider = context.watch<SettingsProvider>();
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       width: width,
