@@ -3,51 +3,41 @@ import 'package:keyboard/app/providers/splash_provider.dart';
 import 'package:keyboard/app/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      bool isLogged = await context.read<SplashProvider>().isUserLogIn;
+      if (!mounted) return;
+      if (!isLogged) {
+        Navigator.of(context).pushReplacementNamed(AppRoutes.login);
+        return;
+      }
+      Navigator.of(context).pushReplacementNamed(AppRoutes.keyboard);
+      return;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder<bool>(
-        future: context.read<SplashProvider>().isUserLogIn,
-        builder: (context, snapshot) {
-          if (snapshot.data != null) {
-            if (snapshot.hasData && snapshot.data! == true) {
-              Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.keyboard);
-              });
-            }
-            if (snapshot.data! == false && snapshot.hasData) {
-              Future.delayed(const Duration(milliseconds: 500), () {
-                Navigator.of(context).pushReplacementNamed(AppRoutes.login);
-              });
-              // Navigator.of(context).pushReplacementNamed('/login');
-            }
-          } else {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            );
-          }
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        Center(
+          child: CircularProgressIndicator(
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ));
   }
 }

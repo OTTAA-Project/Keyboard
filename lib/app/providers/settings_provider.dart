@@ -10,7 +10,9 @@ class SettingsProvider extends ChangeNotifier {
   late String keyboardLayout = 'QWERTY';
   late SharedPreferences _sharedPref;
   late String clientLanguage = 'es';
+  late double buttonActionsSize = .5;
   String get languageName => kLanguages.firstWhere((element) => element['code'] == clientLanguage)['name'] ?? 'Español';
+  final Map<double, String> buttonActionsSizes = {0: 'Pequeño', 0.5: 'Mediano', 1: 'Grande'};
 
   TTSController get ttsController => _ttsController;
 
@@ -50,6 +52,12 @@ class SettingsProvider extends ChangeNotifier {
   void changeLanguage({required String newValue}) {
     ttsController.languaje = newValue;
     language = newValue;
+    notifyListeners();
+  }
+
+  void changeCurrentButtonActionsSize(double index) {
+    print(index);
+    buttonActionsSize = index;
     notifyListeners();
   }
 

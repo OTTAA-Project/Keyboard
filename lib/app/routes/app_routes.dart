@@ -7,4 +7,5 @@ class AppRoutes {
   static const settingsLang = "/settings_lang";
   static const settingsVoice = "/settings_voice";
   static const settingsKeyboard = "/settings_keyboard";
+  static const settingsAccessibility = "/settings_accessibility";
 }
