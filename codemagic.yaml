@@ -38,7 +38,7 @@ workflows:
         storePassword=$FCI_KEYSTORE_PASSWORD
         keyPassword=$FCI_KEY_PASSWORD
         keyAlias=$FCI_KEY_ALIAS
-        storeFile=/tmp/keystore.keystore
+        storeFile=/tmp/keyboardkey.jks
         EOF
       - |
         # set up local properties
