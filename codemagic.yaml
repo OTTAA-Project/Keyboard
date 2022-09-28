@@ -43,7 +43,7 @@ workflows:
       - |
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-        echo $DOTENV | base64 --decode > $FCI_BUILD_DIR
+      - echo $DOTENV | base64 --decode > $FCI_BUILD_DIR
       - flutter pub get
       - flutter pub run build_runner build
       - flutter packages pub get
