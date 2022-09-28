@@ -56,8 +56,8 @@ workflows:
 
         flutter pub run build_runner build
       - flutter build appbundle --release
-      - find . -name "Podfile" -execdir pod install \;
-      - flutter build ios --release --no-codesign
+      #- find . -name "Podfile" -execdir pod install \;
+      #- flutter build ios --release --no-codesign
       - |
         # build web
         flutter build web --release
