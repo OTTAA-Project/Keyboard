@@ -1,5 +1,8 @@
 # Keyboard
 An open-source predictive keyboard to foster children writing capabilities.
+
+[![Codemagic build status](https://api.codemagic.io/apps/63347f270c4aeb81fb498a6d/63347f270c4aeb81fb498a6c/status_badge.svg)](https://codemagic.io/apps/63347f270c4aeb81fb498a6d/63347f270c4aeb81fb498a6c/latest_build)
+
 # Project Info #
 *[creating models]
 
