@@ -73,7 +73,7 @@ class DefaultFirebaseOptions {
     projectId: 'keyboard-98820',
     databaseURL: 'https://keyboard-98820-default-rtdb.firebaseio.com',
     storageBucket: 'keyboard-98820.appspot.com',
-    androidClientId: '703376507167-1212t1i04pjrgfrphekt117grnp8m4ft.apps.googleusercontent.com',
+    androidClientId: '703376507167-0ljh9t92rqcqaei5bbuct8iinn1f7u38.apps.googleusercontent.com',
     iosClientId: '703376507167-t61ndb3o586kvjsg6kbsi99hu29ca151.apps.googleusercontent.com',
     iosBundleId: 'com.stonfacesoft.keyboards',
   );

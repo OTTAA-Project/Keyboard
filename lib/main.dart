@@ -4,12 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:keyboard/app/providers/providers_list.dart';
-import 'package:keyboard/app/routes/app_pages.dart';
-import 'package:keyboard/app/routes/app_routes.dart';
-import 'package:keyboard/app/themes/app_theme.dart';
+import 'package:keyboard/application/application.dart';
+import 'package:keyboard/application/injector.dart';
+import 'package:keyboard/application/locator.dart';
 import 'package:keyboard/firebase_options.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
   await Future.delayed(const Duration(milliseconds: 1000));
@@ -28,23 +26,11 @@ void main() async {
     await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
   }
 
-  runApp(const MyApp());
-}
+  await setup();
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: ProvidersList.providers,
-      child: MaterialApp(
-        title: "OTTAA Keyboard",
-        theme: kAppTheme,
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.splash,
-        routes: AppPages.pages,
-      ),
-    );
-  }
+  runApp(
+    const Injector(
+      application: Application(),
+    ),
+  );
 }
