@@ -10,3 +10,7 @@ An open-source predictive keyboard to foster children writing capabilities.
 
 # Run in web
 - run `flutter run -d chrome --web-port 3000` to run the project in web.
+# Web Testing 
+- install chromedriver
+- run `chromedriver --port = 4444`
+- run `flutter drive \ --driver=test_driver/integration_test.dart \ --target=integration_test/login_test.dart \ -d chrome`
