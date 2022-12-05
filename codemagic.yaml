@@ -42,6 +42,7 @@ workflows:
         flutter.versionCode=$BUILD_NUMBER
         EOF
       - |
+        #setting in the environment
       - flutter packages pub get
       - flutter config --enable-web
       - |
