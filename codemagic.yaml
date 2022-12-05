@@ -31,8 +31,7 @@ workflows:
         keyAlias=$FCI_KEY_ALIAS
         storeFile=/tmp/keystore.keystore
         EOF
-      - |
-      - |
+
         # set up local properties
         echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
         cat >> "$FCI_BUILD_DIR/android/local.properties" <<EOF
