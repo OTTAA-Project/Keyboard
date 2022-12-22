@@ -9,12 +9,30 @@ import 'package:keyboard/app/modules/keyboard_layouts/qwerty_layout.dart';
 import 'package:keyboard/app/providers/keyboard_layout_provider.dart';
 import 'package:keyboard/app/themes/app_theme.dart';
 import 'package:keyboard/app/utils/constants.dart';
+import 'package:keyboard/app/widgets/message_dialog.dart';
 import 'package:provider/provider.dart';
 
 const keyboardLayouts = [QwertyLayout(), EmojisLayout(), NumbersLayout()];
 
-class KeyboardLayoutScreen extends StatelessWidget {
+class KeyboardLayoutScreen extends StatefulWidget {
   const KeyboardLayoutScreen({Key? key}) : super(key: key);
+
+  @override
+  State<KeyboardLayoutScreen> createState() => _KeyboardLayoutScreenState();
+}
+
+class _KeyboardLayoutScreenState extends State<KeyboardLayoutScreen> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      MessageDialog.show(
+        context,
+        "Importante",
+        "Tu período de prueba gratis comenzó, cuando este expire no tendrás más acceso a la herramienta. Para continuar utilizando la herramienta, deberas acceder a la versión Premium paga, contactate con nosotros a info@ottaaproject.com",
+      );
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
