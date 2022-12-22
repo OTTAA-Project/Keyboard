@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:keyboard/application/consumer/dio_consumer.dart';
 import 'package:keyboard/application/database/hive_database.dart';
@@ -17,7 +18,7 @@ Future<void> setup() async {
   final Consumer consumer = DioConsumer();
   await consumer.init();
 
-  final LocalDatabase localDatabase = HiveDatabase();
+  final LocalDatabase  localDatabase = HiveDatabase();
 
   await localDatabase.init();
 

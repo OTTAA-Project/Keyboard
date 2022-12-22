@@ -23,23 +23,23 @@ class DioConsumer implements Consumer {
 
   @override
   Future<void> init() async {
-    // CacheStore store;
-    // if (!kIsWeb) {
-    //   var dir = await getTemporaryDirectory();
-    //   store = HiveCacheStore(dir.path);
-    // } else {
-    //   store = MemCacheStore();
-    // }
+    CacheStore store;
+    if (!kIsWeb) {
+      var dir = await getTemporaryDirectory();
+      store = HiveCacheStore(dir.path);
+    } else {
+      store = MemCacheStore();
+    }
 
-    // CacheOptions options = CacheOptions(
-    //   store: store,
-    //   policy: CachePolicy.request,
-    //   hitCacheOnErrorExcept: [],
-    //   priority: CachePriority.normal,
-    //   allowPostMethod: false,
-    // );
+    CacheOptions options = CacheOptions(
+      store: store,
+      policy: CachePolicy.request,
+      hitCacheOnErrorExcept: [],
+      priority: CachePriority.normal,
+      allowPostMethod: false,
+    );
 
-    // _dio.interceptors.add(DioCacheInterceptor(options: options));
+    _dio.interceptors.add(DioCacheInterceptor(options: options));
   }
 
   @override
