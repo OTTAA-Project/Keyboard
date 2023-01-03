@@ -24,13 +24,13 @@ workflows:
     scripts:
       - name: Set up key.properties
         script: | 
-        echo $FCI_KEYSTORE | base64 --decode > $FCI_KEYSTORE_PATH
-        cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
-        storePassword=$FCI_KEYSTORE_PASSWORD
-        keyPassword=$FCI_KEY_PASSWORD
-        keyAlias=$FCI_KEY_ALIAS
-        storeFile=/tmp/keystore.keystore
-        EOF
+          echo $FCI_KEYSTORE | base64 --decode > $FCI_KEYSTORE_PATH
+          cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
+          storePassword=$FCI_KEYSTORE_PASSWORD
+          keyPassword=$FCI_KEY_PASSWORD
+          keyAlias=$FCI_KEY_ALIAS
+          storeFile=/tmp/keystore.keystore
+          EOF
 
       - name: Setting up the environment
         script: |
@@ -42,7 +42,7 @@ workflows:
       - name: Building
         script: |
           flutter pub run build_runner build
-          flutter build appbundle --release --build-name=1.0.$BUILD_NUMBER --build-number=$BUILD_NUMBER
+          flutter build appbundle --release --build-name=1.0.$(($BUILD_NUMBER + 1)) --build-number=$(($BUILD_NUMBER + 1))
           flutter build web --release
           cd build/web
           7z a -r ../web.zip ./*
