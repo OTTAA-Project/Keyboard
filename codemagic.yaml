@@ -22,8 +22,8 @@ workflows:
         - pattern: '*'
           include: true
     scripts:
-      - |
-        # set up key.properties
+      - name: Set up key.properties
+        script: | 
         echo $FCI_KEYSTORE | base64 --decode > $FCI_KEYSTORE_PATH
         cat >> "$FCI_BUILD_DIR/android/key.properties" <<EOF
         storePassword=$FCI_KEYSTORE_PASSWORD
@@ -32,31 +32,24 @@ workflows:
         storeFile=/tmp/keystore.keystore
         EOF
 
-      - |
-        #setting in the environment
-      - flutter packages pub get
-      - flutter config --enable-web
-      - |
-        echo $DOTENV1 | base64 --decode > $FCI_BUILD_DIR/dotenv
+      - name: Setting up the environment
+        script: |
+          flutter packages pub get
+          flutter config --enable-web
+          echo $DOTENV1 | base64 --decode > $FCI_BUILD_DIR/dotenv
+          echo $GOOGLE_SERVICES_JSON | base64 --decode > $FCI_BUILD_DIR/android/app/google-services.json
+          flutter pub get
+      - name: Building
+        script: |
+          flutter pub run build_runner build
+          flutter build appbundle --release --build-name=1.0.$BUILD_NUMBER --build-number=$BUILD_NUMBER
+          flutter build web --release
+          cd build/web
+          7z a -r ../web.zip ./*
+      - name: Deploy to web
+        script:
+          firebase deploy --token "$FIREBASE_TOKEN"
 
-        echo $GOOGLE_SERVICES_JSON | base64 --decode > $FCI_BUILD_DIR/android/app/google-services.json
-
-        ls
-
-        flutter pub get
-
-        flutter pub run build_runner build
-      - flutter build appbundle --release \
-        --build-name=1.0.$BUILD_NUMBER \
-        --build-number=$BUILD_NUMBER
-      - find . -name "Podfile" -execdir pod install \;
-      - flutter build ios --release --no-codesign
-      - |
-        # build web
-        flutter build web --release
-        cd build/web
-        7z a -r ../web.zip ./*
-      - firebase deploy --token "$FIREBASE_TOKEN"
     artifacts:
       - build/**/outputs/apk/**/*.apk
       - build/**/outputs/bundle/**/*.aab
@@ -67,6 +60,7 @@ workflows:
       - '*.snap'
       - build/windows/**/*.msix
       - flutter_drive.log
+
     publishing:
       email:
         recipients:
