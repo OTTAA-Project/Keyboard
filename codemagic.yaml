@@ -32,15 +32,6 @@ workflows:
         storeFile=/tmp/keystore.keystore
         EOF
 
-        # set up local properties
-        echo "flutter.sdk=$HOME/programs/flutter" > "$FCI_BUILD_DIR/android/local.properties"
-        cat >> "$FCI_BUILD_DIR/android/local.properties" <<EOF
-        sdk.dir=/Users/anastasia/Library/Android/sdk
-        flutter.sdk=/Users/anastasia/FlutterDev/flutter
-        flutter.buildMode=release
-        flutter.versionName=1.0.2
-        flutter.versionCode=$BUILD_NUMBER
-        EOF
       - |
         #setting in the environment
       - flutter packages pub get
@@ -55,7 +46,10 @@ workflows:
         flutter pub get
 
         flutter pub run build_runner build
-      - flutter build appbundle --release
+      - BUILD_NUMBER=$(($(google-play get-latest-build-number --package-name "com.stonefacesoft.keyboard" --tracks="internal") + 1))
+      - flutter build appbundle --release \
+        --build-name=1.0.$BUILD_NUMBER \
+        --build-number=$BUILD_NUMBER
       - find . -name "Podfile" -execdir pod install \;
       - flutter build ios --release --no-codesign
       - |
